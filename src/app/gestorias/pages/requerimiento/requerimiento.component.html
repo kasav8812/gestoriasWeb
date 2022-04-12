@@ -1,0 +1,190 @@
+<div class="row m-4">
+  <div class="col-12">
+      <h4>Nuevo Requerimiento</h4>
+  </div>
+  <div class="col-12 card shadow mt-4">
+      <div class="card-header pb-0" style="background-color: #fff;">
+         <div class="row">
+             <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
+              Informaci&oacute;n del requerimiento
+            </div>
+            <div class="offset-5 col-1" >
+                <button class="btn radiu-tp btn-outline-tp tm">Guardar</button>
+            </div>
+            <div class="offset-1 col-2" >
+                <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
+            </div>
+         </div>
+      </div>
+      <div class="card-body">
+        <!-- Componente requerimiento -->
+        <app-dtos-requerimiento></app-dtos-requerimiento>
+        <!-- Fin componente requerimiento -->
+        <div class="col-12">
+          <h6 class="text-gris">Informacion Adicional</h6>
+        </div>
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+          <form autocomplete="off" class="row">
+            <div class="row">
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Folio de Factura</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Importe</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Fecha de pago</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">Registro contable</label>
+                  <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Nombre de contacto</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Nombre de proveedor/tramitado</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Sistema</label>
+                    <select id="inputState" class="form-select">
+                      <option selected></option>
+                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
+                    </select>
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Tipo de Solicitud</label>
+                    <select id="inputState" class="form-select">
+                      <option selected></option>
+                      <option *ngFor="let item of tipoSolicitud;"  value="{{item.id}}">{{item.descripcion}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Folio egreso</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">&Aacute;rea</label>
+                    <select id="inputState" class="form-select">
+                      <option selected disabled></option>
+                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
+                    </select>
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">CC</label>
+                  <input type="text" class="form-control">
+              </div>
+              <div class="mb-3 col-3 form-control-sm">
+                <label for="exampleInputEmail1" class="form-label">Nombre CC</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Posfin</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                    <label for="exampleInputEmail1" class="form-label">Incluido en permiso</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-3 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">Horario de permiso</label>
+                  <div class="grid2">
+                    <select id="inputState" class="form-select grid-col-6">
+                      <option selected>Seleccionar</option>
+                      <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
+                    </select>
+                    <select id="inputState" class="form-select grid-col-6">
+                      <option selected>Seleccionar</option>
+                      <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>
+                    </select>
+                  </div>
+              </div>
+              <div class="mb-3 col-3 form-control-sm">
+                <label for="exampleInputEmail1" class="form-label">Permiso/Negociaci&oacute;n</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-3 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">Cantidad de permisos</label>
+                  <input type="text" class="form-control">
+              </div>
+              <div class="mb-3 col-3 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">Vigencia</label>
+                  <div class="grid2">
+                    <input type="number">
+                    <select id="inputState" class="form-select grid-col-6">
+                      <option selected>Seleccionar</option>
+                      <option *ngFor="let item of unidad" value="{{item}}">{{item.descripcion}}</option>
+                    </select>
+                  </div>
+              </div>
+              <div class="mb-3 col-3 form-control-sm">
+                <label for="exampleInputEmail1" class="form-label">Forma de pago</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="mb-3 col-3 form-control-sm">
+              <label for="exampleInputEmail1" class="form-label">Cobertura</label>
+              <select id="inputState" class="form-select">
+                <option selected></option>
+                <option *ngFor="let item of cobertura;"  value="{{item.id}}">{{item.descripcion}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        </blockquote>
+        <div class="col-12">
+          <h6 class="text-gris">Actividades</h6>
+        </div>
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+          <form autocomplete="off" class="row">
+            <div class="row">
+              <div class="col-6 form-control-sm">
+                <label for="exampleInputEmail1" class="form-label">Tipo de actividad</label>
+                <div class="row">
+                  <div class="mb-3 col-6 form-control-sm">
+                    <select id="inputState" class="form-select">
+                      <option selected>Selecciona</option>
+                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
+                    </select>
+                  </div>
+                  <div class="col-6 form-control-sm">
+                    <button class="btn radiu-tp btn-tp col-6 ">Enviar a aprobaci&oacute;n</button>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 col-6 form-control-sm">
+                <label for="exampleInputEmail1" class="form-label">Descripci&oacute;n de actividades</label>
+                <input type="text" class="form-control mt-5">
+              </div>
+              <div class="row">
+                <div class="col-6 form-control-sm">
+                  <label for="exampleInputEmail1" class="form-label">Otras actividades</label>
+                  <div class="row">
+                    <div class="mb-3 col-6 form-control-sm">
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="col-6 form-control-sm">
+                      <button class="btn radiu-tp btn-tp col-6 ">Agregar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </blockquote>
+      </div>
+  </div>
+
+</div>

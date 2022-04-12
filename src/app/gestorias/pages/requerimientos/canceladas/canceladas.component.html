@@ -1,0 +1,25 @@
+<div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="text-gris">Folio</th>
+          <th class="text-gris">Tipo de permiso</th>
+          <th class="text-gris">Estado</th>
+          <th class="text-gris">Nombre Municipio o Alcad&iacute;a</th>
+          <th class="text-gris">Fecha de creaci&oacute;n</th>
+          <th class="text-gris">&Aacute;rea solicitante</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of requerimientos">
+          <th><a [routerLink]="['/gestorias/requerimiento']"  (click)="editRequrimineto(item)">{{item.id}}</a></th>
+          <th>{{item.permiso}}</th>
+          <th>{{item.ubicacion}} </th>
+          <th>{{item.municipio}} </th>
+          <th>{{item.fechareq}}</th>
+          <th>{{item.area}}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,0 +1,51 @@
+<div class="col-12">
+  <h6 class="text-gris">Datos de requerimiento</h6>
+</div>
+<blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+  <form autocomplete="off" class="row">
+    <div class="row">
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >Venta</label
+        >
+        <p><strong>{{requerimiento.permiso}}</strong></p>
+      </div>
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label">Estado</label>
+        <p><strong>{{requerimiento.ubicacion | uppercase }}</strong></p>
+      </div>
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >Municipio o Alcald&iacute;a</label
+        >
+        <p><strong>{{requerimiento.municipio | uppercase }}</strong></p>
+      </div>
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >&Aacute;rea solicitante</label
+        >
+        <p><strong>{{requerimiento.area}}</strong></p>
+      </div>
+      </div>
+      <div class="row">
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >Vigencia del permiso</label
+        >
+        <p><input type="date" class="form-control" style="width: 80%;"></p>
+      </div>
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >Fecha requerimiento</label
+        >
+        <p><strong>{{requerimiento.fechareq}}</strong></p>
+      </div>
+      <div class="mb-3 col-3 form-control-sm">
+        <label for="exampleInputEmail1" class="form-label"
+          >Fecha Vencimiento</label
+        >
+        <p><strong>{{requerimiento.fechavencimiento}}</strong></p>
+      </div>
+    </div>
+  </form>
+</blockquote>

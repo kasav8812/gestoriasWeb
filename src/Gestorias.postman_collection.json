@@ -1,0 +1,839 @@
+{
+	"info": {
+		"_postman_id": "e27d4fd6-a5bb-457a-b08c-db40cc0b2352",
+		"name": "Gestorias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autentificacion",
+			"item": [
+				{
+					"name": "Auth",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:10443/totalplay/gestorias-auth/v1/auth",
+							"host": [
+								"localhost"
+							],
+							"port": "10443",
+							"path": [
+								"totalplay",
+								"gestorias-auth",
+								"v1",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "crear usuarios (dsi)",
+			"item": [
+				{
+					"name": "user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDAyMTE3ODksImV4cCI6MTY0MDIxNTM4OSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.T7nygccs-lDvvnrq9WVETcevQpJfju67_ktQ8cSDafk0uMhjFN_rBP2-9YYm4lCPnvtywFrnmRDdDfdZOhp9F-UITZ24Ye3sl1VJ2NCLFPPuNSlggDyVcAxebKcbgYrLhkXo43D-EiNEFHAt6iLC4fh2ueGOmT2IgsEwZbMDKsACCCZNGpmjBEN8Abx8gandapsGh9bywxtlFhJCWOqPTBrBl3HVeUxbznDBDMlhxrM7Y3JNqbaMNGUXhm_VbK2aPTWsTFqOVseaC0YxNaET9wPHo5nW3UL05mmK-8a6gijQ6WkDRKDjzwN_xlJCgVm37N2hYQpNUHUIeAjsFDHW8A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10445/totalplay/gestorias-usuarios/v1/user/22",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10445",
+							"path": [
+								"totalplay",
+								"gestorias-usuarios",
+								"v1",
+								"user",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDI4OTY2ODQsImV4cCI6MTY0MjkwMDI4NCwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6W119.OA0g2XJtW76jB9GxueaC3p9O5Atl9Yy7QyQiiEXUQzrQOotb6qAqQjcK8q6krVbmD0ARUTBl0keAm7uY_YeXw_25gmDbeZXo4Vh33kOoXUfvaUL5U09f0Ms6P_w-vG1MrHYimgcXYbXMxwoWKt-7IgxipLqWW2z7FPrghsv559bjzQKExGCzsIuRCUscAw74WTFMxA9qyn1ee-3BLUfHizMvuQ05g7t1Y7mjXW7Qyu1M12GyrnWrdc0GG7_aeS36PYGc3wsbYIzvwP0H2jEKdD3kzG0FKD5aSgjkCNLewgPSWhQnv08miWTthPhqSUpsBcUdyMdQZqDeng31Mpw64w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"CESAR ANGUIANO ROSALES\",\r\n    \"username\": \"1009958\",\r\n    \"password\": \"1009958\",\r\n    \"rol\":[1]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10445/totalplay/gestorias-usuarios/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10445",
+							"path": [
+								"totalplay",
+								"gestorias-usuarios",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rol",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDAxNDQ1ODUsImV4cCI6MTY0MDE0ODE4NSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.lKKlt1aEuE6SEt8pIvSZCyjG2tVs_k2ZjPIWFMMoz4gryJpzhJwMfXfVPzc38qCTl_iu4Gzhgmn72cp3JUDdrGauKP5jKWpcaTB_fe5WnHUS3PddEQkkU9OOzMAq-LfAFj31Prv_hHKkKgu7gbp-9KJ8knpZfAKoRS_lxEwmRZQIgw6KO0piw44MKEHPyYsprw5Or0zBCxNDmtRQF1aGQocwGkfzYvD-zYss5GDIz8b4Q2JmGkAjiOzj3WryTOEFLGDIiEQdbRCO4kITmkQCmF9TE6HMgPrq8QcEF1g4DWJq3tPiktsGgmG3XMDqa5hortS82OB0KkZlgA8qo6OS-g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10445/totalplay/gestorias-usuarios/v1/rol",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10445",
+							"path": [
+								"totalplay",
+								"gestorias-usuarios",
+								"v1",
+								"rol"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDAxNDQ1ODUsImV4cCI6MTY0MDE0ODE4NSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.lKKlt1aEuE6SEt8pIvSZCyjG2tVs_k2ZjPIWFMMoz4gryJpzhJwMfXfVPzc38qCTl_iu4Gzhgmn72cp3JUDdrGauKP5jKWpcaTB_fe5WnHUS3PddEQkkU9OOzMAq-LfAFj31Prv_hHKkKgu7gbp-9KJ8knpZfAKoRS_lxEwmRZQIgw6KO0piw44MKEHPyYsprw5Or0zBCxNDmtRQF1aGQocwGkfzYvD-zYss5GDIz8b4Q2JmGkAjiOzj3WryTOEFLGDIiEQdbRCO4kITmkQCmF9TE6HMgPrq8QcEF1g4DWJq3tPiktsGgmG3XMDqa5hortS82OB0KkZlgA8qo6OS-g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10445/totalplay/gestorias-usuarios/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10445",
+							"path": [
+								"totalplay",
+								"gestorias-usuarios",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "funcionalidad",
+			"item": [
+				{
+					"name": "catalogo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/catalogo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"catalogo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/catalogo/municipio/1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/catalogo/municipio/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"catalogo",
+								"municipio",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "requerimiento/1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIwNDY5MjQsImV4cCI6MTY0MjA1MDUyNCwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.LvMHmAdvcoWeOCAQ5MPOPlqOEll5qst-_GKBGEqolyA8oqjOII7D-RFp2vVsm5XC80_JrCHTf7CcvgTkYp1UjvtjxLSjN75DOzR05MxWcvC2ZSI8_zVgd0HiMIQ-Oxqv-pdZIPACfKW1AehMY1Zsgp7Lj7C2wwCWXYnVTxgtsf52uv6o_A8ClYpp_oASJs4byoMW72ImDbhaq1hEBTX9Uef9ZRWnIkzDVwoktDx7UeIpnV7nxYY7mf3tQQuzKPzv7bz51OnXQwqRw1mYSniniUThCnUKvCN15sR6XsaYsIBvc_jgKR3K7UyRRMZqmFBMkaAs6F_A7kvWLvEzafDLqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10446/totalplay/requerimiento/v1/requerimiento/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10446",
+							"path": [
+								"totalplay",
+								"requerimiento",
+								"v1",
+								"requerimiento",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "requerimiento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIwNDY5MjQsImV4cCI6MTY0MjA1MDUyNCwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.LvMHmAdvcoWeOCAQ5MPOPlqOEll5qst-_GKBGEqolyA8oqjOII7D-RFp2vVsm5XC80_JrCHTf7CcvgTkYp1UjvtjxLSjN75DOzR05MxWcvC2ZSI8_zVgd0HiMIQ-Oxqv-pdZIPACfKW1AehMY1Zsgp7Lj7C2wwCWXYnVTxgtsf52uv6o_A8ClYpp_oASJs4byoMW72ImDbhaq1hEBTX9Uef9ZRWnIkzDVwoktDx7UeIpnV7nxYY7mf3tQQuzKPzv7bz51OnXQwqRw1mYSniniUThCnUKvCN15sR6XsaYsIBvc_jgKR3K7UyRRMZqmFBMkaAs6F_A7kvWLvEzafDLqg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10446/totalplay/requerimiento/v1/requerimiento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10446",
+							"path": [
+								"totalplay",
+								"requerimiento",
+								"v1",
+								"requerimiento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "requerimiento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDM4NjA1MjMsImV4cCI6MTY0Mzg2NDEyMywic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6W119.q3gq6zTvIkD1LzzHjM735OqyZrgc521NzvdOA9aAznpGtq0Y-wIiPax92h-eBAcOJdvvlm-Tpnjd93bdV9OpE_qRgwn92Tv8slrAFsHdf0npoyuST3sa4IkZgAEUCsVpdf2REzD3NCxCLxah_p53A_GBUCYHpqzdsZ917m7VTIVGBPnR3TmTkaN7_ovUkMWMXMSw2BCRee3l_kQ_aLyCNSX2Uif92BBfbMbfNPTdf5BrToQLBTybw6S385g4PFJsTO9THc7--LJwc4A3DkxpGdzx2FfAYKU8PPpHIqb4stLcYcaGGQ4hFTWqjXoLqN6ZeYKR2s0vUsLTYdlHoMQ36Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tipoRequerimineto\":3,\r\n    \"ubicacionEstado\":  9,\r\n    \"municipio\": 9012,\r\n    \"vigencia\":\"1\",\r\n    \"umedida\": 1,\r\n    \"fechaRequermineto\":\"12/01/2022\",\r\n    \"fechaVencimineto\":\"19/01/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10446/totalplay/gestoria-requerimiento/v1/requerimiento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10446",
+							"path": [
+								"totalplay",
+								"gestoria-requerimiento",
+								"v1",
+								"requerimiento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/area-solitante",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/area-solitante",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"area-solitante"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/estado-requerimiento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/estado-requerimiento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"estado-requerimiento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tipo-permiso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/tipo-permiso",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"tipo-permiso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/unidad-medida",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/unidad-medida",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"unidad-medida"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/area-solitante",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \"id\": 21,\r\n       \r\n        \"activo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/area-solitante",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"area-solitante"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/area-solitante",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \"descripcion\": \"ADMINISTRACION TPE\",\r\n    \"comentario\":\"totalplay empresarial\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/area-solitante",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"area-solitante"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/estado-requerimiento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 6,\r\n        \"descripcion\": \"DOCUMENTACIÓN\",\r\n        \"comentario\":\"En documentacion\",\r\n        \"enabled\": false\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/estado-requerimiento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"estado-requerimiento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tipo-permiso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n   \r\n        \"descripcion\": \"EVENTO test\",\r\n        \"comentario\": \"Evento\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/tipo-permiso",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"tipo-permiso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tipo-permiso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODM1MzUsImV4cCI6MTY0MjM4NzEzNSwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.K-UbFaHAogXwumcyaGeGXtYOGw-pIfhKxY-9C2Kuuf7tZ-4G-y7Nk_A7gTWcZDXFGRWaY5t6suCJHj5bczn1lts1s3r-o4_-vAhgf7GkCHI9kleIPqVIFUNmcg7L54mRx_puRJzfp2c8C5C5pm7q8v6Z5HM8nWp4PmN-a0YpGbiMhmkY1RCS43srXAe48iqRnJ-bpq9r1AfHqyg3soheA6KTa89-eb5RDKq_JF_39r5-xBmjlmNrnu73pjtCtjpkv_TfpgJAviEYrI2507G9WzQ-AAjQ4520nbNEHg6zVwcpaTU_7PE9DsCwWA3vU0cQLBALPNcwgY1Bw19In7rAEw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n        \"id\": 22,\r\n        \"activo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/tipo-permiso",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"tipo-permiso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/unidad-medida",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODc0NjAsImV4cCI6MTY0MjM5MTA2MCwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.tfV6n3X4zdxyZ2t9V-IyWsOBKJ-Uy_U2HKsWAQheU_L7NKDqhCfW0bluiWtk9ZN16oC1JxvAljS7FH5_SMJjaAu2ojBlNY9WzL_KGvKxuhd9Y7PHuo5Gj-SJrxOBn39BQOsMnzFTbGhEau5_1Lubw_eWIl3uoesplPtyeZ3Mo8iW7f5-iMHk0MuPWg94GPbjpRCjakpzIEPYTIazZKGGB0iS-rWsNQIdDJzI2kTpQCjKTllnal-PiT-kqgwlmloZqyea3CWRyTYBUSrYUlE9cOuMNZvpbPh1yXgozMDygk_qu7XYdhtLSdIbBGFCmtzzgdwzdUVnllWBR6VgodhuWw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"descripcion\": \"semestre\",\r\n        \"comentario\": \"6 meses\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/unidad-medida",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"unidad-medida"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/unidad-medida",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2NDIzODc0NjAsImV4cCI6MTY0MjM5MTA2MCwic3ViIjoiMzgwMzgxMCIsIm5hbWUiOiJCUkFOQ0hCSVQiLCJyb2xlcyI6WyJST0xFX0NPTkZJR1VSQUNJT04iXX0.tfV6n3X4zdxyZ2t9V-IyWsOBKJ-Uy_U2HKsWAQheU_L7NKDqhCfW0bluiWtk9ZN16oC1JxvAljS7FH5_SMJjaAu2ojBlNY9WzL_KGvKxuhd9Y7PHuo5Gj-SJrxOBn39BQOsMnzFTbGhEau5_1Lubw_eWIl3uoesplPtyeZ3Mo8iW7f5-iMHk0MuPWg94GPbjpRCjakpzIEPYTIazZKGGB0iS-rWsNQIdDJzI2kTpQCjKTllnal-PiT-kqgwlmloZqyea3CWRyTYBUSrYUlE9cOuMNZvpbPh1yXgozMDygk_qu7XYdhtLSdIbBGFCmtzzgdwzdUVnllWBR6VgodhuWw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 21,\r\n        \"descripcion\": \"semestre\",\r\n        \"comentario\": \"6 meses\",\r\n        \"activo\":0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:10444/totalplay/gestoria-catalogos/v1/unidad-medida",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10444",
+							"path": [
+								"totalplay",
+								"gestoria-catalogos",
+								"v1",
+								"unidad-medida"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "superAdmin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "3803810",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "3803810"
+		},
+		{
+			"key": "password",
+			"value": "superAdmin"
+		}
+	]
+}

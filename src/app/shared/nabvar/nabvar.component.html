@@ -1,0 +1,110 @@
+<app-spinner></app-spinner>
+<div class="collapse" id="navbarToggleExternalContent">
+  <div class="bg-dark p-4">
+    <h5 class="text-white h4">Collapsed content</h5>
+    <span class="text-muted">Toggleable via the navbar brand.</span>
+  </div>
+</div>
+<nav class="navbar bd-subnavbar py-2">
+  <div class="container-fluid">
+    <img src="/assets/img/totalplay/tpgris.svg" />
+    <form class="d-flex col-3" [formGroup]="buscarForm" (ngSubmit)="buscar()">
+      <div class="input-group col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar"
+          aria-label="Buscar"
+          aria-describedby="buscar"
+          formControlName="buscar"
+        />
+        <button class="btn btn-outline-secondary" type="submit" id="buscar">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.49"
+            height="17.49"
+            viewBox="0 0 17.49 17.49"
+          >
+            <path
+              id="Path_6701"
+              data-name="Path 6701"
+              d="M15.5,14h-.79l-.28-.27a6.51,6.51,0,1,0-.7.7l.27.28v.79l5,4.99L20.49,19Zm-6,0A4.5,4.5,0,1,1,14,9.5,4.494,4.494,0,0,1,9.5,14Z"
+              transform="translate(-3 -3)"
+              fill="#9a9cba"
+            />
+          </svg>
+        </button>
+      </div>
+    </form>
+    <div class="d-flex">
+      <svg
+        (click)="inicio()"
+        class="me-2 mt-1"
+        id="home-24px_1_"
+        data-name="home-24px (1)"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          id="Path_287"
+          data-name="Path 287"
+          d="M10,20V14h4v6h5V12h3L12,3,2,12H5v8Z"
+          fill="#9a9cba"
+        />
+        <path
+          id="Path_288"
+          data-name="Path 288"
+          d="M0,0H24V24H0Z"
+          fill="none"
+        />
+      </svg>
+      <svg
+        class="me-4 mt-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="15.092"
+        height="18.393"
+        viewBox="0 0 15.092 18.393"
+      >
+        <path
+          id="Icon_material-notifications"
+          data-name="Icon material-notifications"
+          d="M13.546,22.143a1.892,1.892,0,0,0,1.886-1.886H11.659A1.886,1.886,0,0,0,13.546,22.143Zm5.659-5.659V11.767c0-2.9-1.547-5.32-4.244-5.961V5.165a1.415,1.415,0,1,0-2.83,0v.641c-2.707.641-4.244,3.056-4.244,5.961v4.716L6,18.37v.943H21.092V18.37Z"
+          transform="translate(-6 -3.75)"
+          fill="#9a9cba"
+        />
+      </svg>
+      <label class="ms-3 me-2 mt-1" style="color: #8296ba">{{
+        username
+      }}</label>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="34.875"
+        height="34.875"
+        viewBox="0 0 34.875 34.875"
+      >
+        <path
+          id="Icon_awesome-user-circle"
+          data-name="Icon awesome-user-circle"
+          d="M17.438.563A17.438,17.438,0,1,0,34.875,18,17.434,17.434,0,0,0,17.438.563Zm0,6.75A6.188,6.188,0,1,1,11.25,13.5,6.188,6.188,0,0,1,17.438,7.313Zm0,24.188a13.474,13.474,0,0,1-10.3-4.8,7.839,7.839,0,0,1,6.926-4.2,1.72,1.72,0,0,1,.5.077,9.309,9.309,0,0,0,2.876.485,9.274,9.274,0,0,0,2.876-.485,1.72,1.72,0,0,1,.5-.077,7.839,7.839,0,0,1,6.926,4.2A13.474,13.474,0,0,1,17.438,31.5Z"
+          transform="translate(0 -0.563)"
+          fill="#9a9cba"
+        />
+      </svg>
+      <button mat-button class="border" [matMenuTriggerFor]="menu">
+        <img src="assets/img/nabvar/btn_desp_menu.svg" alt="" />
+      </button>
+      <mat-menu #menu="matMenu">
+        <button class="border" mat-menu-item (click)="cerrarSesion()">
+          Cerrar sesi&oacute;n
+        </button>
+      </mat-menu>
+
+      <label
+        class="ms-3 me-2 mt-1"
+        style="color: #8296ba; cursor: pointer"
+      ></label>
+    </div>
+  </div>
+</nav>

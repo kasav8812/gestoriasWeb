@@ -1,0 +1,126 @@
+<app-spinner></app-spinner>
+<div class="row m-4">
+  <div class="col-12">
+    <h4>Nuevo Requerimiento</h4>
+  </div>
+  <div class="col-12 card shadow mt-4">
+    <div class="card-header pb-0 bg-white">
+      <div class="row">
+        <div class="bg-tp col-2 text-light p-2 rt">
+          Informaci&oacute;n del requerimiento
+        </div>
+        <div class="offset-8 col-2">
+          <button
+            class="btn btn-tp radiu-tp ps-4 pe-4 fw-bold"
+            mat-button
+            (click)="guardar()"
+          >
+            Enviar y generar folio
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body row">
+      <div class="col-12">
+        <h6 class="text-gris">Datos de requerimiento</h6>
+      </div>
+      <blockquote class="blockquote col-8 p-4 m-2 bg-gris">
+        <form autocomplete="off" class="row" [formGroup]="crearForm">
+          <div class="row">
+            <div class="mb-3 col-4 form-control-sm">
+              <label for="tipoPermiso" class="form-label">Tipo de permiso</label><br>
+              <select name="" class="mt-3" formControlName="tipoPermiso" style="width: 90%;">
+                <option disabled selected>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of tipoPermiso">{{item.descripcion}}</option>
+              </select>
+              
+            </div>
+            <div class="col-4 form-control-sm">
+              <label for="estado" class="form-label">Estado</label><br>
+              <select name="" class="mt-3" formControlName="estado" style="width: 90%;" (change)="getMunicipio()">
+                <option disabled selected>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of estado">{{item.descripcion}}</option>
+              </select>
+            </div>
+            <div class="col-4 form-control-sm">
+              <label for="municipio" class="form-label"
+                >Municipio o Alcald&iacute;a</label
+              >
+              <select name="" class="mt-3" formControlName="municipio" style="width: 90%;">
+                <option disabled  selected>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of municipio">{{item.descripcion}}</option>
+              </select>
+
+              <span class="form-text text-danger"
+                *ngIf="fechaInvalida('municipio')">
+                fada
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="row">
+                <div class="mb-3 col-7 form-control-sm" style="padding-right: 0;">
+                  <label for="vigencia" class="form-label"
+                    >Vigencia del permiso</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="vigencia"
+                    aria-describedby="emailHelp"
+                    formControlName="vigencia"
+                  />
+                </div>
+                <div class="mb-3 col-2 form-control-sm" style="padding-left: 0;">                  
+                  <select name="" class="mt-5" formControlName="unidad" style="margin-top: 3.2em!important;">
+                    <option disabled selected>Seleccionar</option>
+                    <option value="{{item.id}}" *ngFor="let item of unidad">{{item.descripcion}}</option>
+                  </select> 
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 col-4 form-control-sm">
+              <label for="fechaRequerimiento" class="form-label"
+                >Fecha requerimiento</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="fechaRequerimiento"
+                aria-describedby="fechaRequerimiento"
+                formControlName="fechaRequerimiento"
+              />
+              <span class="form-text text-danger"
+                *ngIf="fechaInvalida('fechaRequerimiento')">
+                La fecha debe de ser mayor a la fecha actual
+              </span>
+            </div>
+            <div class="mb-3 col-4 form-control-sm">
+              <label for="fechaVencimeinto" class="form-label"
+                >Fecha Vencimiento</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="fechaVencimeinto"
+                aria-describedby="fechaVencimeinto"
+                formControlName="fechaVencimeinto"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-4 form-control-sm">
+              <label for="area" class="form-label">&Aacute;rea solicitante</label><br>
+              <select name="" class="mt-3" formControlName="area" style="width: 90%;">
+                <option disabled selected>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of areaSolicitate">{{item.descripcion}}</option>
+              </select>                
+            </div>
+          </div>
+        </form>
+      </blockquote>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<app-spinner></app-spinner>
+<div class="row m-4">
+  <div class="col-12">
+    <h4>Configuraci&oacute;n Catalogos</h4>
+  </div>
+  <div class="col-12 card shadow mt-4">
+    <div class="card-header pb-0 bg-white">
+      <div class="row">
+        <div class="bg-tp col-2 text-light p-2 rt">
+          Catalogos de sistema
+        </div>
+      </div>
+    </div>
+    <div class="card-body row">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" >
+              <button class="nav-link"
+                [routerLink]="['estadorequerimineto']"
+                [routerLinkActiveOptions]="{ exact: true }"
+                routerLinkActive="active">Estado requerimiento</button>
+            </li>
+            <li class="nav-item" >
+              <button class="nav-link"
+              routerLink="unidadMedida"
+
+              routerLinkActive="active">Unidad Medida</button>
+            </li>
+            <li class="nav-item" >
+              <button class="nav-link"
+
+                routerLink="areaSolictante"
+                routerLinkActive="active">&Aacute;rea Solictante</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+
+                    routerLink="tipoPermiso"
+                    routerLinkActive="active">Tipo Permiso</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+
+                    routerLink="sistema"
+                    routerLinkActive="active">Sistema</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+
+                    routerLink="tipoSolicitud"
+                    routerLinkActive="active">Tipo Solicitud</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+
+                    routerLink="cobertura"
+                    routerLinkActive="active">Cobertura</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link"
+
+                    routerLink="tipoDeActividad"
+                    routerLinkActive="active">Tipo de Actividad</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <router-outlet></router-outlet>
+          </div>
+    </div>
+  </div>
+</div>
+
