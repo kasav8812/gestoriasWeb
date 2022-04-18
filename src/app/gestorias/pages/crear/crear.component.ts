@@ -27,14 +27,15 @@ export class CrearComponent implements OnInit {
   unidad: Catalogo[];
   res: any;
   jsonCrear: any;
+  submitted=false;
 
   crearForm: FormGroup = this.fb.group({
-    tipoPermiso: ['', Validators.required],
+    tipoPermiso: [, [Validators.required]],
     estado: ['', Validators.required],
     municipio: ['', Validators.required],
-    vigencia: ['', Validators.required],
-    fechaRequerimiento: ['', Validators.required],
-    fechaVencimeinto: ['', Validators.required],
+    vigencia: [''],
+    fechaRequerimiento: [''],
+    fechaVencimeinto: [''],
     area: ['', Validators.required],
     unidad: ['', Validators.required]
   })
@@ -59,6 +60,21 @@ export class CrearComponent implements OnInit {
       }
     )
   }
+
+  get f() { return this.crearForm.controls; }
+  onSubmit() {
+    console.log("Entra a submitted",this.f);
+    console.log("his.crearForm.invalid=",this.crearForm.invalid);
+    this.submitted=true;
+        // stop here if form is invalid
+        if (this.crearForm.invalid) {
+            return;
+        }else{
+          console.log("Campos completos");
+          this.submitted=false;
+          this.guardar();
+        }
+    }
 
   campoNovalido(campo: string) {
 
@@ -87,6 +103,7 @@ export class CrearComponent implements OnInit {
     }*/
   }
   guardar() {
+    console.log("Datos del form",this.crearForm);
     this.jsonCrear = {
       tipoRequerimineto: this.crearForm.value.tipoPermiso,
       ubicacionEstado: this.crearForm.value.estado,
@@ -97,9 +114,9 @@ export class CrearComponent implements OnInit {
       fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
       fechaVencimiento: this.crearForm.value.fechaVencimeinto
       
-  }
+    }
   
-  this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
+    this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
         response => {
           const dialogRef = this.dialog.open(AlertComponent, {
             disableClose: true,

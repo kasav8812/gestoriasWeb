@@ -13,7 +13,7 @@
           <button
             class="btn btn-tp radiu-tp ps-4 pe-4 fw-bold"
             mat-button
-            (click)="guardar()"
+            (click)="onSubmit()"
           >
             Enviar y generar folio
           </button>
@@ -25,15 +25,18 @@
         <h6 class="text-gris">Datos de requerimiento</h6>
       </div>
       <blockquote class="blockquote col-8 p-4 m-2 bg-gris">
-        <form autocomplete="off" class="row" [formGroup]="crearForm">
+        <form autocomplete="off" class="row" [formGroup]="crearForm" action="onSubmit()">
           <div class="row">
             <div class="mb-3 col-4 form-control-sm">
               <label for="tipoPermiso" class="form-label">Tipo de permiso</label><br>
-              <select name="" class="mt-3" formControlName="tipoPermiso" style="width: 90%;">
+              <select name="" class="mt-3" formControlName="tipoPermiso" style="width: 90%;" required>
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of tipoPermiso">{{item.descripcion}}</option>
               </select>
-              
+              <div *ngIf="submitted && f.tipoPermiso.errors"
+                  class="alert alert-danger">
+                  Tipo de permiso es requerido.               
+              </div>
             </div>
             <div class="col-4 form-control-sm">
               <label for="estado" class="form-label">Estado</label><br>
@@ -41,6 +44,10 @@
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of estado">{{item.descripcion}}</option>
               </select>
+              <div *ngIf="submitted && f.estado.errors"
+                  class="alert alert-danger">
+                  Estado es requerido.               
+              </div>
             </div>
             <div class="col-4 form-control-sm">
               <label for="municipio" class="form-label"
@@ -50,11 +57,11 @@
                 <option disabled  selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of municipio">{{item.descripcion}}</option>
               </select>
-
-              <span class="form-text text-danger"
-                *ngIf="fechaInvalida('municipio')">
-                fada
-              </span>
+              <div *ngIf="submitted && f.municipio.errors"
+                  class="alert alert-danger">
+                  Municipio o Alcald&iacute;a es requerido.               
+              </div>
+              
             </div>
           </div>
           <div class="row">
@@ -77,8 +84,14 @@
                     <option disabled selected>Seleccionar</option>
                     <option value="{{item.id}}" *ngFor="let item of unidad">{{item.descripcion}}</option>
                   </select> 
+
                 </div>
+                <div *ngIf="submitted && f.unidad.errors"
+                      class="alert alert-danger form-control-sm">
+                      Vigencia del permiso es requerido.               
+                  </div>
               </div>
+
             </div>
 
             <div class="mb-3 col-4 form-control-sm">
@@ -116,7 +129,11 @@
               <select name="" class="mt-3" formControlName="area" style="width: 90%;">
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of areaSolicitate">{{item.descripcion}}</option>
-              </select>                
+              </select>
+              <div *ngIf="submitted && f.area.errors"
+                  class="alert alert-danger">
+                  &Aacute;rea solicitante es requerido.               
+              </div>                
             </div>
           </div>
         </form>
