@@ -79,3 +79,37 @@
     </div>
   </form>
 </div>
+
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===4">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 89%;">{{data.title}}</h2>
+      <button  mat-button="" mat-dialog-close="" style="background-color: lightgrey;" type="button" class="close" aria-label="Close" >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="mt-5 row" >
+      <table class="table table-striped table-hover" >
+        <thead>
+          <th>Folio:</th>
+          <th>Fecha requerimiento:</th>
+          <th>Municipio</th>
+          <th>Tipo de permiso:</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data.array">
+            <td><a [routerLink]="['/gestorias/requerimiento']" (click)="editRequrimineto(item)">{{item.id}}</a></td>
+            <td>{{item.fechareq}}</td>
+            <td>{{item.municipio}}</td>
+            <td>{{item.permiso}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button">
+      <span class="mat-button-wrapper">{{data.boton}}</span>
+    </button>
+    </div>
+  </div>
+</div>

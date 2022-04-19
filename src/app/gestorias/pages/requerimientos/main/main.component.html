@@ -4,13 +4,13 @@
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Requerimiento por vencer
-      <span class="badge bg-primary abso radiu-tp">3</span>
+      Requerimientos por vencer
+      <span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarLista()">{{tam}}</span>
     </h5>
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Vencidos<span class="badge bg-primary abso radiu-tp">2</span>
+      Vencidos<span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarListaVencidos()">{{tamVencidos}}</span>
     </h5>
   </div>
   <div class="col-12 card shadow mt-4">

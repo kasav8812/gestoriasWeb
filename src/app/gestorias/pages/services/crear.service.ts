@@ -74,5 +74,22 @@ export class CrearService {
     return this.userToken;
   }
 
+  getRequeriminetoPorVencer(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/porVencer`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CrearResponse[]>(url,{headers});
+  }
+
+  getRequeriminetosVencidos(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/vencidos`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CrearResponse[]>(url,{headers});
+  }
 
 }
