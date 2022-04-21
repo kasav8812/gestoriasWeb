@@ -76,20 +76,40 @@ export class CrearService {
 
   getRequeriminetoPorVencer(): Observable<CrearResponse[]>{
     const url = `${this.baseurlreq}/requerimiento/porVencer`
+    let token=JSON.parse(sessionStorage.getItem('token'));
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
-      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+      'Authorization': 'Bearer ' + token
     });
-    return this.http.get<CrearResponse[]>(url,{headers});
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
   }
 
   getRequeriminetosVencidos(): Observable<CrearResponse[]>{
     const url = `${this.baseurlreq}/requerimiento/vencidos`
+    let token=JSON.parse(sessionStorage.getItem('token'));
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
-      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+      'Authorization': 'Bearer ' + token
     });
-    return this.http.get<CrearResponse[]>(url,{headers});
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
   }
 
+  postRequerimientoLista():Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/requerimientosEstado`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
 }

@@ -25,8 +25,8 @@ export class EnCursoComponent implements OnInit {
 
   ngOnInit(): void {
     this.links = document.querySelectorAll(".links li");
-    if(localStorage.getItem('requerimiento') == null){
-      this.requeServvice.getRequerimineto().subscribe(
+    //if(localStorage.getItem('requerimiento') == null){
+      this.requeServvice.postRequerimientoLista().subscribe(
         response => {
           this.requerimientos = response.filter(((el) => el.idestado!==4 && el.idestado!==7));
         },
@@ -34,10 +34,10 @@ export class EnCursoComponent implements OnInit {
 
         }
       )
-    }else{
+    /*}else{
       let req: CrearResponse[] = JSON.parse(localStorage.getItem('requerimiento'))
       this.requerimientos = req.filter(((el) => el.idestado==1));
-    }
+    }*/
   }
   editRequrimineto(req){
     localStorage.setItem('requerimiento', JSON.stringify(req));

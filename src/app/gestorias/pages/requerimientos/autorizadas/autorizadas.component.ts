@@ -14,8 +14,8 @@ export class AutorizadasComponent implements OnInit {
   requerimientos: CrearResponse[];
 
   ngOnInit(): void {
-    if(localStorage.getItem('requerimiento') == null){
-      this.requeServvice.getRequerimineto().subscribe(
+    //if(localStorage.getItem('requerimiento') == null){
+      this.requeServvice.postRequerimientoLista().subscribe(
         response => {
           localStorage.setItem('requerimiento', JSON.stringify(response))
           this.requerimientos = response.filter(((el) => el.idestado==5));
@@ -24,11 +24,11 @@ export class AutorizadasComponent implements OnInit {
           console.log(error);
         }
       )
-    }else{
+    /*}else{
       let req: CrearResponse[] = JSON.parse(localStorage.getItem('requerimiento'))
       this.requerimientos = req.filter(((el) => el.idestado==5));
       
-    }
+    }*/
     
   }
 
