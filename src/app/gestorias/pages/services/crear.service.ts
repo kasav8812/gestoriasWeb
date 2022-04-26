@@ -112,4 +112,34 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<CrearResponse[]>(url,param,{headers});
   }
+
+  //Obtener requerimiento completo
+  postRequerimientoCompletoLista(id: any):Observable<RequerimientoGeneric[]>{
+    const url = `${this.baseurlreq}/requerimiento/completo`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let param={"id":id}  
+    return this.http.post<RequerimientoGeneric[]>(url,param,{headers});
+  }
+  postRequerimientoRelacion(formdata: any){
+    console.log(formdata)
+    const url = `${this.baseurlreq}/requerimiento/addRelacion`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post(url,formdata,{headers});
+  }
+  requerimientoReact(id:any): Observable<CrearResponse>{
+    const url = `${this.baseurlreq}/requerimiento/reactivar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearResponse>(url,param,{headers});
+  }
 }

@@ -28,6 +28,7 @@ export class AlertComponent  {
 
   editRequrimineto(requerimiento){
     localStorage.setItem('requerimiento', JSON.stringify(requerimiento));
+    localStorage.setItem('tipo', 'Reactivar');
   }
 
   consumeArea(){
