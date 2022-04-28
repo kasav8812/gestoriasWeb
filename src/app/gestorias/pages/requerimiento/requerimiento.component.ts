@@ -70,6 +70,7 @@ export class RequerimientoComponent implements OnInit {
   })
 
   tipoAccion:any = localStorage.getItem('tipo');
+  status:any;
   constructor(
     private configuracion: ConfiguracionService,
     private router: Router,
@@ -121,6 +122,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
     console.log("Este es el id.",this.id.id);
+    this.status=this.id.estado;
     this.creaService.postRequerimientoCompletoLista(this.id.id).subscribe(
       response => {
         this.requerimiento=response[0];
