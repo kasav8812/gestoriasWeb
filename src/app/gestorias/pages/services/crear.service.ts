@@ -142,4 +142,39 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<CrearResponse>(url,param,{headers});
   }
+  getRequeriminetoId(id: any): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CrearResponse[]>(url,{headers});
+  }
+  //Autorizar requerimiento
+  autorizaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/autoriza`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+  cancelaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cancela`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+  addComentario(param: any):Observable<string>{
+    const url = `${this.baseurlreq}/comentarios/add`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<string>(url,param,{headers});
+  }
 }

@@ -5,6 +5,9 @@ import { CrearResponse } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrearService } from '../services/crear.service';
+import { AlertComponent } from '../../dialogs/alert.component';
+import { MatDialog } from '@angular/material/dialog';
+import { plantillaCorreo } from '../services/constantes.service';
 
 @Component({
   selector: 'app-requerimiento',
@@ -15,6 +18,7 @@ import { CrearService } from '../services/crear.service';
   ]
 })
 export class RequerimientoComponent implements OnInit {
+  private plantilla: string = plantillaCorreo.cambioStatus;
 
   token: any;
   rol: any;
@@ -30,7 +34,7 @@ export class RequerimientoComponent implements OnInit {
 
   id:any = JSON.parse(localStorage.getItem('requerimiento'));
   jsonCreate: any;
-  permisoEditar:Boolean=true;
+  permisoEditar:Boolean=false;
 
   actividadesForm: FormGroup= this.fb.group({
     idRequerimiento: [this.id.id, Validators.required],
@@ -70,10 +74,12 @@ export class RequerimientoComponent implements OnInit {
     private configuracion: ConfiguracionService,
     private router: Router,
     private fb: FormBuilder,
-    private creaService: CrearService
+    private creaService: CrearService,
+    public dialog: MatDialog
   )
     {
     this.token = JSON.parse(sessionStorage.getItem('token'));
+    console.log("datos token",JSON.parse(atob(this.token.split('.')[1])))
     let namespace = JSON.parse(atob(this.token.split('.')[1]));
     this.rol = namespace.roles[0];
    }
@@ -82,8 +88,8 @@ export class RequerimientoComponent implements OnInit {
     if(this.rol === "ROLE_CONFIGURACION"){
       this.router.navigateByUrl('/gestorias/configuracion');
     }
-    if(this.rol==="ROLE_OPERACIONES"){
-      this.permisoEditar=false;
+    if(this.rol==="ROLE_COMERCIAL"){
+      this.permisoEditar=true;
     }
     this.configuracion.getAreaSolicitante().subscribe(
       response => {
@@ -213,5 +219,77 @@ export class RequerimientoComponent implements OnInit {
     )
 
   }
-
+  autoriza(){
+    console.log(this.id);
+    this.creaService.autorizaRequerimiento(this.id.id).subscribe(
+       responseP=>{
+        console.log(responseP);
+        const dialogRef = this.dialog.open(AlertComponent, {
+          disableClose: true,
+          data: {
+            tipo: 5,
+            title: "Autorizar requerimiento",
+            array: [this.id]
+          }
+        })
+      },error => {
+          console.log(error);
+          console.log(error.error.text);
+          this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id)
+          if(error.error.text==="Exito"){
+            const dialogRef = this.dialog.open(AlertComponent, {
+              disableClose: true,
+              data: {
+                tipo: 5,
+                title: "Autorizar requerimiento",
+                array: [this.id]
+              }
+            })
+          }
+      }
+    )
+  }
+  rechaza(){
+    this.creaService.cancelaRequerimiento(this.id.id).subscribe(
+       responseP=>{
+        console.log(responseP);
+        const dialogRef = this.dialog.open(AlertComponent, {
+          disableClose: true,
+          data: {
+            tipo: 5,            
+            title: "Cancelar requerimiento",
+            array: [this.id]
+          }
+        })
+      },error => {
+          console.log(error);
+          if(error.error.text==="Exito"){
+            const dialogRef = this.dialog.open(AlertComponent, {
+              disableClose: true,
+              data: {
+                tipo: 5,            
+                title: "Cancelar requerimiento",
+                array: [this.id]
+              }
+            })
+          }
+      }
+    )
+  }
+  sendMail(tipo: any,user: any,accion: any, idRequerimiento: any){
+    this.plantilla=this.plantilla.replace("#Tipo",tipo);
+    this.plantilla=this.plantilla.replace("#User",user);
+    this.plantilla=this.plantilla.replace("#Accion",accion);
+    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
+    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
+    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
+    console.log("Este es la plantilla",this.plantilla);
+    /*this.creaService.sendMail(this.plantilla).subscribe(
+       response=>{
+        console.log(responseP);
+        
+      },error => {
+          console.log(error);
+      }*/
+  }
 }

@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import Swal from 'sweetalert2';
 import { Catalogo, CatGeneric } from '../pages/interfaces/configuracion.interface';
 import { ConfiguracionService } from '../pages/services/configuracion.service';
-
+import { CrearService } from '../pages/services/crear.service';
 
 @Component({
   selector: 'app-alert',
@@ -20,12 +20,23 @@ export class AlertComponent  {
     private configuracion: ConfiguracionService,
     private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialogRef<AlertComponent>
-  ) { }
+    public dialog: MatDialogRef<AlertComponent>,private creaService: CrearService
+  ) { 
+    this.token = JSON.parse(sessionStorage.getItem('token'));
+    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
+  }
 
   cat: CatGeneric;
   area: Catalogo[];
-
+  comentariosForm: FormGroup= this.formBuilder.group({
+    idUser: ['', Validators.required],
+    usuario: ['', Validators.required],
+    comentario: ['', Validators.required],
+    idRequerimiento: ['', Validators.required],
+    idComentarioReply: ['', Validators.required]
+  })
+  token:any;
+  datosUser: any;
   editRequrimineto(requerimiento){
     localStorage.setItem('requerimiento', JSON.stringify(requerimiento));
     localStorage.setItem('tipo', 'Reactivar');
@@ -256,6 +267,23 @@ export class AlertComponent  {
         break;
     }
 
+  }
+  guardaComentario(){
+    this.comentariosForm.value.idUser=this.datosUser.sub;
+    this.comentariosForm.value.usuario=this.datosUser.name;
+    this.comentariosForm.value.idRequerimiento=this.data.array[0].id;
+    this.comentariosForm.value.idComentarioReply=0;
+
+    console.log("formComentarios",this.comentariosForm.value);
+    this.creaService.addComentario(this.comentariosForm.value).subscribe(
+      response=>{
+        console.log(response);
+      },error =>{
+
+      }
+
+      )
+    
   }
 
 }

@@ -312,8 +312,8 @@
           <h6 class="text-gris">Observaciones</h6>
         </div>
         <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-        </blockquote>
-      </div>
+        
+      </blockquote>
 
       <div class="offset-0 mb-3" style="margin-left:25px;">
         <button
@@ -325,8 +325,19 @@
         <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
 
        </div>
-</div>
-
-  
+       <!--  boton de Autorizar y/o Rechazar -->
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION'">
+          <div class="row">
+            <div class="text-center mt-5">
+              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="autoriza()">
+                <span class="mat-button-wrapper">Autorizar</span>
+              </button>
+              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="rechaza()">
+                <span class="mat-button-wrapper">Rechazar</span>
+              </button>
+            </div>
+          </div>
+        </blockquote>
+  </div>
 
 </div>
