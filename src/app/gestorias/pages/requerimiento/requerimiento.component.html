@@ -8,10 +8,10 @@
              <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
               Informaci&oacute;n del requerimiento
             </div>
-            <div class="offset-5 col-1" >
-                <button class="btn radiu-tp btn-outline-tp tm">Guardar</button>
+            <div class="offset-7 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
+                <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
             </div>
-            <div class="offset-1 col-2" *ngIf="tipoAccion!='Reactivar'">
+            <div class="offset-1 col-2" *ngIf="tipoAccion!='Reactivar'" style="display: none;">
                 <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
             </div>
             <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">
@@ -270,10 +270,10 @@
                       <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                   </div>
-                  <div class="col-6 form-control-sm" *ngIf="permisoEditar">
-                    <button class="btn radiu-tp btn-tp col-6 ">Enviar a aprobaci&oacute;n</button>
+                  <div class="col-6 form-control-sm" *ngIf="permisoEditar" style="display: none;">
+                    <button class="btn radiu-tp btn-tp col-6 " style="display: none;">Enviar a aprobaci&oacute;n</button>
                   </div>
-                  <div class="col-6 form-control-sm" *ngIf="!permisoEditar">
+                  <div class="col-6 form-control-sm" *ngIf="!permisoEditar" style="display: none;">
                     <button class="btn radiu-tp btn-tp col-6 " disabled="true">Enviar a aprobaci&oacute;n</button>
                   </div>
                 </div>
@@ -308,7 +308,25 @@
             </div>
           </form>
         </blockquote>
+        <div class="col-12">
+          <h6 class="text-gris">Observaciones</h6>
+        </div>
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+        </blockquote>
       </div>
-  </div>
+
+      <div class="offset-0 mb-3" style="margin-left:25px;">
+        <button
+        class="btn radiu-tp btn-outline-tp tm"
+          type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
+           Cancelar
+        </button>
+        
+        <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
+
+       </div>
+</div>
+
+  
 
 </div>
