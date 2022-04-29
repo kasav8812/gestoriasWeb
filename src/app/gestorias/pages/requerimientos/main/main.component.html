@@ -4,13 +4,13 @@
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Requerimientos por vencer
-      <span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarLista()">{{tam}}</span>
+      Requerimiento por vencer
+      <span class="badge bg-primary abso radiu-tp">3</span>
     </h5>
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Vencidos<span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarListaVencidos()">{{tamVencidos}}</span>
+      Vencidos<span class="badge bg-primary abso radiu-tp">2</span>
     </h5>
   </div>
   <div class="col-12 card shadow mt-4">
@@ -22,7 +22,7 @@
                 [routerLinkActiveOptions]="{ exact: true }"
                 routerLinkActive="active">En curso</button>
             </li>
-            <li class="nav-item" *ngIf="rol!=='ROLE_OPERACIONES'">
+            <li class="nav-item" >
               <button class="nav-link"
               routerLink="recibidas"
               routerLinkActive="active">Recibidas</button>
@@ -30,7 +30,7 @@
             <li class="nav-item" >
               <button class="nav-link"
                  routerLink="porAutorizar"
-                routerLinkActive="active">Por autorizar</button>
+                routerLinkActive="active">Por autorizadas</button>
             </li>
             <li class="nav-item">
                 <button class="nav-link"
@@ -54,7 +54,7 @@
             </li>
             <li class="nav-item position-absolute" style="top: 0.5em !important; right: 1em !important;">
                 <button
-                *ngIf="rol !== 'ROLE_AUTORIZACION' && rol !== 'ROLE_COMERCIAL'"
+                *ngIf="rol == 'ROLE_AUTORIZACION' || rol == 'ROLE_COMERCIAL'"
                   class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp align-self-end"
                   mat-button
                   [routerLink]="['/gestorias/crear']">+ Nuevo requerimiento

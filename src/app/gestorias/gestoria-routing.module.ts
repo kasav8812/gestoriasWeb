@@ -7,7 +7,6 @@ import { MainComponent } from './pages/main/main.component';
 import { RequerimientoComponent } from './pages/requerimiento/requerimiento.component';
 import { ConfiguracionModule } from './pages/configuracion/configuracion.module';
 import { RequerimientosModule } from './pages/requerimientos/requerimientos.module';
-import { ReactivarComponent } from './pages/reactivar/reactivar.component';
 
 const routes: Routes = [{
   path: '',
@@ -22,10 +21,6 @@ const routes: Routes = [{
       {
         path: 'requerimiento',
         component: RequerimientoComponent
-      },
-      {
-        path: 'reactivar',
-        component: ReactivarComponent
       },
       {
         path: 'crear',

@@ -8,14 +8,11 @@
              <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
               Informaci&oacute;n del requerimiento
             </div>
-            <div class="offset-7 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
-                <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
+            <div class="offset-5 col-1" >
+                <button class="btn radiu-tp btn-outline-tp tm">Guardar</button>
             </div>
-            <div class="offset-1 col-2" *ngIf="tipoAccion!='Reactivar'" style="display: none;">
+            <div class="offset-1 col-2" >
                 <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
-            </div>
-            <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">
-                <button class="btn radiu-tp btn-tp tm" (click)="reactivar()">Reactivar</button>
             </div>
          </div>
       </div>
@@ -27,221 +24,179 @@
           <h6 class="text-gris">Informacion Adicional</h6>
         </div>
         <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-          <form autocomplete="off" class="row" [formGroup]="requerimientoForm" action="guardar()">
+          <form autocomplete="off" class="row">
             <div class="row">
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Folio de Factura</label>
-                    <input type="text" class="form-control" formControlName="folio" >
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Folio de Factura</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.folio}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Importe</label>
-                    <input type="text" class="form-control" formControlName="importe">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Importe</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.importe}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Fecha de pago</label>
-                    <input type="date" class="form-control" formControlName="paydate">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="date" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Fecha de pago</label>
-                    <input type="date" class="form-control" value="{{requerimientoForm.value.paydate}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">Registro contable</label>
-                  <input type="text" class="form-control" formControlName="registroContable">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                  <label for="exampleInputEmail1" class="form-label">Registro contable</label>
-                  <input type="text" class="form-control" value="{{requerimientoForm.value.registroContable}}" disabled="true">
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
+                  <input type="text" class="form-control">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Nombre de contacto</label>
-                    <input type="text" class="form-control" formControlName="nombreContacto">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Nombre de contacto</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.nombreContacto}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Nombre de proveedor/tramitado</label>
-                    <input type="text" class="form-control" formControlName="proveedor">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Nombre de proveedor/tramitado</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.proveedor}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Sistema</label>
-                    <select id="inputState" class="form-select" formControlName="sistema">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <select id="inputState" class="form-select">
                       <option selected></option>
                       <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Sistema</label>
-                    <select id="inputState" class="form-select" value="{{requerimientoForm.value.sistema}}" disabled="true">
-                      <option selected></option>
-                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Tipo de Solicitud</label>
-                    <select id="inputState" class="form-select" formControlName="tipoSolicitud">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <select id="inputState" class="form-select">
                       <option selected></option>
-                      <option *ngFor="let item of tipoSolicitud;"  value="{{item.id}}">{{item.descripcion}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Tipo de Solicitud</label>
-                    <select id="inputState" class="form-select"  value="{{requerimientoForm.value.tipoSolicitud}}" disabled="true">
                       <option *ngFor="let item of tipoSolicitud;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Folio egreso</label>
-                    <input type="text" class="form-control" formControlName="folioEgreso">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Folio egreso</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.folioEgreso}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">&Aacute;rea</label>
-                    <select id="inputState" class="form-select" formControlName="area">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <select id="inputState" class="form-select">
                       <option selected disabled></option>
                       <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">&Aacute;rea</label>
-                    <select id="inputState" class="form-select" value="{{requerimientoForm.value.area}}" disabled="true">
-                      <option selected disabled></option>
-                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">CC</label>
-                  <input type="text" class="form-control" formControlName="cc">
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
+                  <input type="text" class="form-control">
               </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                  <label for="exampleInputEmail1" class="form-label">CC</label>
-                  <input type="text" class="form-control" value="{{requerimientoForm.value.cc}}" disabled="true">
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-3 form-control-sm">
                 <label for="exampleInputEmail1" class="form-label">Nombre CC</label>
-                <input type="text" class="form-control" formControlName="nombreCc">
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                <label for="exampleInputEmail1" class="form-label">Nombre CC</label>
-                <input type="text" class="form-control" value="{{requerimientoForm.value.nombreCc}}" disabled="true">
+                <mat-icon matTooltip="texto">
+                  help_outline
+                 </mat-icon>
+                <input type="text" class="form-control">
               </div>
             </div>
             <div class="row">
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Posfin</label>
-                    <input type="text" class="form-control" formControlName="postFin">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Posfin</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.postFin}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                     <label for="exampleInputEmail1" class="form-label">Incluido en permiso</label>
-                    <input type="text" class="form-control" formControlName="incluidoPermiso">
+                    <mat-icon matTooltip="texto">
+                      help_outline
+                     </mat-icon>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                    <label for="exampleInputEmail1" class="form-label">Incluido en permiso</label>
-                    <input type="text" class="form-control" value="{{requerimientoForm.value.incluidoPermiso}}" disabled="true">
-                </div>
-                <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+                <div class="mb-3 col-3 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">Horario de permiso</label>
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
                   <div class="grid2">
-                    <select id="inputState" class="form-select grid-col-6" formControlName="horario">
+                    <select id="inputState" class="form-select grid-col-6">
                       <option selected>Seleccionar</option>
                       <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
                     </select>
-                    <!--<select id="inputState" class="form-select grid-col-6" >
+                    <select id="inputState" class="form-select grid-col-6">
                       <option selected>Seleccionar</option>
                       <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>
-                    </select>-->
-                  </div>
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                  <label for="exampleInputEmail1" class="form-label">Horario de permiso</label>
-                  <div class="grid2">
-                    <select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.horario}}" disabled="true">
-                      <option selected>Seleccionar</option>
-                      <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
                     </select>
                   </div>
               </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-3 form-control-sm">
                 <label for="exampleInputEmail1" class="form-label">Permiso/Negociaci&oacute;n</label>
-                <input type="text" class="form-control" formControlName="perNeg">
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                <label for="exampleInputEmail1" class="form-label">Permiso/Negociaci&oacute;n</label>
-                <input type="text" class="form-control" value="{{requerimientoForm.value.perNeg}}" disabled="true">
+                <mat-icon matTooltip="texto">
+                  help_outline
+                 </mat-icon>
+                <input type="text" class="form-control">
               </div>
             </div>
             <div class="row">
-              <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-3 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">Cantidad de permisos</label>
-                  <input type="text" class="form-control" formControlName="catidad">
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
+                  <input type="text" class="form-control">
               </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                  <label for="exampleInputEmail1" class="form-label">Cantidad de permisos</label>
-                  <input type="text" class="form-control" value="{{requerimientoForm.value.catidad}}" disabled="true">
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-3 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">Vigencia</label>
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
                   <div class="grid2">
-                    <input type="number" formControlName="vigencia">
-                    <select id="inputState" class="form-select grid-col-6" formControlName="medida">
+                    <input type="number">
+                    <select id="inputState" class="form-select grid-col-6">
                       <option selected>Seleccionar</option>
-                      <option *ngFor="let item of unidad" value="{{item.id}}">{{item.descripcion}}</option>
+                      <option *ngFor="let item of unidad" value="{{item}}">{{item.descripcion}}</option>
                     </select>
                   </div>
               </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                  <label for="exampleInputEmail1" class="form-label">Vigencia</label>
-                  <div class="grid2">
-                    <input type="number" value="{{requerimientoForm.value.vigencia}}" disabled="true">
-                    <select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.medida}}" disabled="true">
-                      <option selected>Seleccionar</option>
-                      <option *ngFor="let item of unidad" value="{{item.id}}">{{item.descripcion}}</option>
-                    </select>
-                  </div>
-              </div>
-              <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-3 form-control-sm">
                 <label for="exampleInputEmail1" class="form-label">Forma de pago</label>
-                <input type="text" class="form-control" formControlName="formaPago">
+                <mat-icon matTooltip="texto">
+                  help_outline
+                 </mat-icon>
+                <input type="text" class="form-control">
             </div>
-            <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-                <label for="exampleInputEmail1" class="form-label">Forma de pago</label>
-                <input type="text" class="form-control" value="{{requerimientoForm.value.formaPago}}" disabled="true">
-            </div>
-            <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+            <div class="mb-3 col-3 form-control-sm">
               <label for="exampleInputEmail1" class="form-label">Cobertura</label>
-              <select id="inputState" class="form-select" formControlName="cobertura">
-                <option selected></option>
-                <option *ngFor="let item of cobertura;"  value="{{item.id}}">{{item.descripcion}}</option>
-              </select>
-            </div>
-            <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Cobertura</label>
-              <select id="inputState" class="form-select" value="{{requerimientoForm.value.cobertura}}" disabled="true">
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>
+              <select id="inputState" class="form-select">
                 <option selected></option>
                 <option *ngFor="let item of cobertura;"  value="{{item.id}}">{{item.descripcion}}</option>
               </select>
@@ -253,54 +208,44 @@
           <h6 class="text-gris">Actividades</h6>
         </div>
         <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-          <form autocomplete="off" class="row" [formGroup]="actividadesForm" action="addActividad()">
+          <form autocomplete="off" class="row">
             <div class="row">
               <div class="col-6 form-control-sm">
                 <label for="exampleInputEmail1" class="form-label">Tipo de actividad</label>
+                <mat-icon matTooltip="texto">
+                  help_outline
+                 </mat-icon>
                 <div class="row">
-                  <div class="mb-3 col-6 form-control-sm" *ngIf="permisoEditar">
-                    <select id="inputState" class="form-select" formControlName="actividad">
+                  <div class="mb-3 col-6 form-control-sm">
+                    <select id="inputState" class="form-select">
                       <option selected>Selecciona</option>
                       <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                   </div>
-                  <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
-                    <select id="inputState" class="form-select" value="{{actividadesForm.value.actividad}}" disabled="true">
-                      <option selected>Selecciona</option>
-                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
-                    </select>
-                  </div>
-                  <div class="col-6 form-control-sm" *ngIf="permisoEditar" style="display: none;">
-                    <button class="btn radiu-tp btn-tp col-6 " style="display: none;">Enviar a aprobaci&oacute;n</button>
-                  </div>
-                  <div class="col-6 form-control-sm" *ngIf="!permisoEditar" style="display: none;">
-                    <button class="btn radiu-tp btn-tp col-6 " disabled="true">Enviar a aprobaci&oacute;n</button>
+                  <div class="col-6 form-control-sm">
+                    <button class="btn radiu-tp btn-tp col-6 ">Enviar a aprobaci&oacute;n</button>
                   </div>
                 </div>
               </div>
-              <div class="mb-3 col-6 form-control-sm" *ngIf="permisoEditar">
+              <div class="mb-3 col-6 form-control-sm">
                 <label for="exampleInputEmail1" class="form-label">Descripci&oacute;n de actividades</label>
-                <input type="text" class="form-control mt-5" formControlName="descripcion">
-              </div>
-              <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
-                <label for="exampleInputEmail1" class="form-label">Descripci&oacute;n de actividades</label>
-                <input type="text" class="form-control mt-5" value="{{actividadesForm.value.descripcion}}" disabled="true">
+                <mat-icon matTooltip="texto">
+                  help_outline
+                 </mat-icon>
+                <input type="text" class="form-control mt-5">
               </div>
               <div class="row">
                 <div class="col-6 form-control-sm">
                   <label for="exampleInputEmail1" class="form-label">Otras actividades</label>
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>
                   <div class="row">
-                    <div class="mb-3 col-6 form-control-sm" *ngIf="permisoEditar">
+                    <div class="mb-3 col-6 form-control-sm">
                       <input type="text" class="form-control">
                     </div>
-                    <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
-                      <input type="text" class="form-control"  disabled="true">
-                    </div>
-                    <div class="col-6 form-control-sm" *ngIf="permisoEditar">
+                    <div class="col-6 form-control-sm">
                       <button class="btn radiu-tp btn-tp col-6 ">Agregar</button>
-                    </div>
-                    <div class="col-6 form-control-sm" *ngIf="!permisoEditar">
-                      <button class="btn radiu-tp btn-tp col-6 " disabled="true">Agregar</button>
                     </div>
                   </div>
                 </div>
@@ -308,52 +253,7 @@
             </div>
           </form>
         </blockquote>
-        <div class="col-12">
-          <h6 class="text-gris">Observaciones</h6>
-        </div>
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-        
-      </blockquote>
-
-      <div class="offset-0 mb-3" style="margin-left:25px;" *ngIf="rol==='ROLE_COMERCIAL'">
-        <button
-        class="btn radiu-tp btn-outline-tp tm"
-          type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-           Cancelar
-        </button>
-        
-        <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
-
-       </div>
-       <!--  boton de Autorizar y/o Rechazar -->
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION' && status==='POR AUTORIZAR'">
-          <div class="row">
-            <div class="text-center mt-5">
-              <button
-              class="btn radiu-tp btn-outline-tp tm"
-                type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-                 Cancelar
-              </button>
-              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="autoriza()">
-                <span class="mat-button-wrapper">Autorizar</span>
-              </button>
-              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="rechaza()">
-                <span class="mat-button-wrapper">Rechazar</span>
-              </button>
-            </div>
-          </div>
-        </blockquote>
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION' && status!=='POR AUTORIZAR'">
-          <div class="row">
-            <div class="text-center mt-5">
-              <button
-              class="btn radiu-tp btn-outline-tp tm"
-                type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-                 Cancelar
-              </button>
-            </div>
-          </div>
-        </blockquote>
+      </div>
   </div>
 
 </div>

@@ -32,9 +32,10 @@ export interface RequerimientoGeneric{
 	perNeg: string;
 	catidad: number;
 	vigencia: number;
-	medida: number;
+	uMedida: number;
 	formaPago: string;
 	cobertura: number;
 	actividad: string;
 	descripcion: string;
+	idEstado: number;//
 }

@@ -6,24 +6,32 @@
     <div class="row">
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label"
-          >Venta</label
-        >
+          >Venta</label>
+          <mat-icon matTooltip="texto">
+            help_outline
+           </mat-icon>          
         <p><strong>{{requerimiento.permiso}}</strong></p>
       </div>
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label">Estado</label>
+        <mat-icon matTooltip="texto">
+          help_outline
+         </mat-icon>
         <p><strong>{{requerimiento.ubicacion | uppercase }}</strong></p>
       </div>
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label"
-          >Municipio o Alcald&iacute;a</label
-        >
+          >Municipio o Alcald&iacute;a</label> <mat-icon matTooltip="texto">
+            help_outline
+           </mat-icon>
         <p><strong>{{requerimiento.municipio | uppercase }}</strong></p>
       </div>
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label"
-          >&Aacute;rea solicitante</label
-        >
+          >&Aacute;rea solicitante</label>
+          <mat-icon matTooltip="texto">
+            help_outline
+           </mat-icon>
         <p><strong>{{requerimiento.area}}</strong></p>
       </div>
       </div>
@@ -32,18 +40,27 @@
         <label for="exampleInputEmail1" class="form-label"
           >Vigencia del permiso</label
         >
+        <mat-icon matTooltip="texto">
+          help_outline
+         </mat-icon>
         <p><input type="date" class="form-control" style="width: 80%;"></p>
       </div>
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label"
           >Fecha requerimiento</label
         >
+        <mat-icon matTooltip="texto">
+          help_outline
+         </mat-icon>
         <p><strong>{{requerimiento.fechareq}}</strong></p>
       </div>
       <div class="mb-3 col-3 form-control-sm">
         <label for="exampleInputEmail1" class="form-label"
           >Fecha Vencimiento</label
         >
+        <mat-icon matTooltip="texto">
+          help_outline
+         </mat-icon>
         <p><strong>{{requerimiento.fechavencimiento}}</strong></p>
       </div>
     </div>

@@ -4,8 +4,7 @@ import { CrearResponse } from '../../interfaces/crear.interface';
 @Component({
   selector: 'app-dtos-requerimiento',
   templateUrl: './dtos-requerimiento.component.html',
-  styles: [
-  ]
+  styleUrls: ['./style.scss']
 })
 export class DtosRequerimientoComponent implements OnInit {
 

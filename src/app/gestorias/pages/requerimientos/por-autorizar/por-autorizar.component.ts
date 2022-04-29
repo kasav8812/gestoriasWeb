@@ -14,19 +14,19 @@ export class PorAutorizarComponent implements OnInit {
   requerimientos: CrearResponse[];
 
   ngOnInit(): void {
-    //if(localStorage.getItem('requerimiento') == null){ 
-      this.requeServvice.postRequerimientoLista().subscribe(
+    if(localStorage.getItem('requerimiento') == null){ 
+      this.requeServvice.getRequerimineto().subscribe(
         response => {
-          this.requerimientos = response.filter(((el) => el.idestado==3 || el.idestado==7));
+          this.requerimientos = response.filter(((el) => el.idestado==3));
         },
         error => {
           console.log(error);
         }
       )
-   /* }else{
+    }else{
       let req: CrearResponse[] = JSON.parse(localStorage.getItem('requerimiento'))
       this.requerimientos = req.filter(((el) => el.idestado==3));
-    }*/
+    }
   }
 
   editRequrimineto(req){

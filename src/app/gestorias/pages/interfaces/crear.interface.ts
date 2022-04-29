@@ -10,13 +10,3 @@ export interface CrearResponse {
   area: string;
   idestado: number;
 }
-
-export interface CrearComentario {
-  id: number;
-  idUser: number;
-  usuario: string;
-  comentario: string;
-  fechaCreacion: string;
-  idRequerimiento: number;
-  idComentarioReply: number;
-}
