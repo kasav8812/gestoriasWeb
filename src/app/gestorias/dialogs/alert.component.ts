@@ -41,7 +41,7 @@ export class AlertComponent  {
     localStorage.setItem('requerimiento', JSON.stringify(requerimiento));
     localStorage.setItem('tipo', 'Reactivar');
   }
-
+  
   consumeArea(){
     this.configuracion.getAreaSolicitante().subscribe(
       resp => {
@@ -266,7 +266,7 @@ export class AlertComponent  {
         }
         break;
     }
-
+  
   }
   guardaComentario(){
     this.comentariosForm.value.idUser=this.datosUser.sub;

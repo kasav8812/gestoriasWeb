@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MainComponent } from './pages/main/main.component';
 import { RequerimientoComponent } from './pages/requerimiento/requerimiento.component';
+import { ReactivarComponent } from './pages/reactivar/reactivar.component';
 import { GestoriaRoutingModule } from './gestoria-routing.module';
 import { CrearComponent } from './pages/crear/crear.component';
 import { SharedModule } from '../shared/nabvar/shared.module';
@@ -21,6 +22,7 @@ import { AuthModule } from '../auth/auth.module';
   declarations: [
     MainComponent,
     RequerimientoComponent,
+    ReactivarComponent,
     CrearComponent,
     DtosRequerimientoComponent,
     InfoAdicionalComponent,
