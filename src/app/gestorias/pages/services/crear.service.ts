@@ -74,5 +74,107 @@ export class CrearService {
     return this.userToken;
   }
 
+  getRequeriminetoPorVencer(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/porVencer`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
 
+  getRequeriminetosVencidos(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/vencidos`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  postRequerimientoLista():Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/requerimientosEstado`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  //Obtener requerimiento completo
+  postRequerimientoCompletoLista(id: any):Observable<RequerimientoGeneric[]>{
+    const url = `${this.baseurlreq}/requerimiento/completo`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let param={"id":id}  
+    return this.http.post<RequerimientoGeneric[]>(url,param,{headers});
+  }
+  postRequerimientoRelacion(formdata: any){
+    console.log(formdata)
+    const url = `${this.baseurlreq}/requerimiento/addRelacion`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post(url,formdata,{headers});
+  }
+  requerimientoReact(id:any): Observable<CrearResponse>{
+    const url = `${this.baseurlreq}/requerimiento/reactivar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearResponse>(url,param,{headers});
+  }
+  getRequeriminetoId(id: any): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CrearResponse[]>(url,{headers});
+  }
+  //Autorizar requerimiento
+  autorizaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/autoriza`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+  cancelaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cancela`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+  addComentario(param: any):Observable<string>{
+    const url = `${this.baseurlreq}/comentarios/add`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<string>(url,param,{headers});
+  }
 }
