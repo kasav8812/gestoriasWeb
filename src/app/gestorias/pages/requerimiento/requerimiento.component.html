@@ -312,7 +312,20 @@
           <h6 class="text-gris">Observaciones</h6>
         </div>
         <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-        
+          <div class="mt-5 row" >
+            <table class="table table-striped table-hover" >
+              <thead>
+                <th class="form-control-sm">Usuario:</th>
+                <th class="form-control-sm">Comentario:</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of comentarios">
+                  <td class="form-control-sm">{{item.usuario}}</td>
+                  <td class="form-control-sm">{{item.comentario}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div> 
       </blockquote>
 
       <div class="offset-0 mb-3" style="margin-left:25px;" *ngIf="rol==='ROLE_COMERCIAL'">

@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse } from '../interfaces/crear.interface';
+import { CrearResponse,CrearComentario } from '../interfaces/crear.interface';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -176,5 +177,14 @@ export class CrearService {
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     });
     return this.http.post<string>(url,param,{headers});
+  }
+  getComentariosId(id: any): Observable<CrearComentario[]>{
+    const url = `${this.baseurlreq}/comentarios/get`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearComentario[]>(url,param,{headers});
   }
 }

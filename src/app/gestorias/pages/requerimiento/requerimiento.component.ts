@@ -1,13 +1,15 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
-import { CrearResponse } from '../interfaces/crear.interface';
+import { CrearResponse, CrearComentario } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrearService } from '../services/crear.service';
 import { AlertComponent } from '../../dialogs/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { plantillaCorreo } from '../services/constantes.service';
+
+
 
 @Component({
   selector: 'app-requerimiento',
@@ -71,6 +73,7 @@ export class RequerimientoComponent implements OnInit {
 
   tipoAccion:any = localStorage.getItem('tipo');
   status:any;
+  comentarios: CrearComentario[];
   constructor(
     private configuracion: ConfiguracionService,
     private router: Router,
@@ -163,6 +166,7 @@ export class RequerimientoComponent implements OnInit {
         console.log(error);
       }
     )
+    this.getComentarios();
   }
 
   guardar(){
@@ -293,5 +297,15 @@ export class RequerimientoComponent implements OnInit {
       },error => {
           console.log(error);
       }*/
+  }
+  getComentarios(){
+    this.creaService.getComentariosId(this.id.id).subscribe(
+      response => {
+        console.log("Response comentarios",response);
+        this.comentarios=response;
+    },error => {
+        console.log(error);
+    }
+    )
   }
 }
