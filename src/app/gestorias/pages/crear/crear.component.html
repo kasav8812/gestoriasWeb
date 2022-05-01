@@ -20,7 +20,11 @@
         <form autocomplete="off" class="row" [formGroup]="crearForm" action="onSubmit()">
           <div class="row">
             <div class="mb-3 col-4 form-control-sm">
-              <label for="tipoPermiso" class="form-label">Tipo de permiso</label><br>
+              <label for="tipoPermiso" class="form-label">Tipo de permiso</label>
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
+              <br>
               <select name="" class="mt-3" formControlName="tipoPermiso" style="width: 90%;" required>
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of tipoPermiso">{{item.descripcion}}</option>
@@ -31,7 +35,11 @@
               </div>
             </div>
             <div class="col-4 form-control-sm">
-              <label for="estado" class="form-label">Estado</label><br>
+              <label for="estado" class="form-label">Estado</label>
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
+              <br>
               <select name="" class="mt-3" formControlName="estado" style="width: 90%;" (change)="getMunicipio()">
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of estado">{{item.descripcion}}</option>
@@ -45,6 +53,9 @@
               <label for="municipio" class="form-label"
                 >Municipio o Alcald&iacute;a</label
               >
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
               <select name="" class="mt-3" formControlName="municipio" style="width: 90%;">
                 <option disabled  selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of municipio">{{item.descripcion}}</option>
@@ -63,6 +74,9 @@
                   <label for="vigencia" class="form-label"
                     >Vigencia del permiso</label
                   >
+                  <mat-icon matTooltip="texto">
+                    help_outline
+                   </mat-icon>  
                   <input
                     type="number"
                     class="form-control"
@@ -83,6 +97,7 @@
                       class="alert alert-danger form-control-sm">
                       Vigencia del permiso es requerido.               
                   </div>
+                  
               </div>
 
             </div>
@@ -91,6 +106,9 @@
               <label for="fechaRequerimiento" class="form-label"
                 >Fecha requerimiento</label
               >
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
               <input
                 type="date"
                 class="form-control"
@@ -107,6 +125,9 @@
               <label for="fechaVencimeinto" class="form-label"
                 >Fecha Vencimiento</label
               >
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
               <input
                 type="date"
                 class="form-control"
@@ -118,7 +139,11 @@
           </div>
           <div class="row">
             <div class="mb-3 col-4 form-control-sm">
-              <label for="area" class="form-label">&Aacute;rea solicitante</label><br>
+              <label for="area" class="form-label">&Aacute;rea solicitante</label>
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>  
+              <br>
               <select name="" class="mt-3" formControlName="area" style="width: 90%;">
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of areaSolicitate">{{item.descripcion}}</option>

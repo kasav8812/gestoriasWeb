@@ -14,10 +14,7 @@ import { plantillaCorreo } from '../services/constantes.service';
 @Component({
   selector: 'app-requerimiento',
   templateUrl: './requerimiento.component.html',
-  styles: [`
-
-  `
-  ]
+  styleUrls: ['../../style.scss']
 })
 export class RequerimientoComponent implements OnInit {
   private plantilla: string = plantillaCorreo.cambioStatus;

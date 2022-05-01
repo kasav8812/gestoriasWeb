@@ -15,7 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './dialogs/alert.component';
 import { MaterialModule } from '../material-module';
 import { AuthModule } from '../auth/auth.module';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -36,7 +36,8 @@ import { AuthModule } from '../auth/auth.module';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
-    AuthModule
+    AuthModule,
+    MatTooltipModule
   ],
   exports: [MainComponent, ]
 })

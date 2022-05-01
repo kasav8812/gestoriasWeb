@@ -11,11 +11,7 @@ import { CrearResponse } from '../interfaces/crear.interface';
 @Component({
   selector: 'app-crear',
   templateUrl: './crear.component.html',
-  styles: [
-    `
-
-    `
-  ]
+  styleUrls: ['../../style.scss']
 })
 export class CrearComponent implements OnInit {
 
