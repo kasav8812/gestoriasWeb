@@ -187,4 +187,13 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<CrearComentario[]>(url,param,{headers});
   }
+  getRequerimientosId(id: any): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/getId`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
 }
