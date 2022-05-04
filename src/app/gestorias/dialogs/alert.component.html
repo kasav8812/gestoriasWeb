@@ -26,6 +26,7 @@
     </button>
   </div>
 </div>
+
 <div class="modal-2 radiu-tp" *ngIf="data.tipo ===2">
   <div class="text-center mt-4">
     <h2 class="text-gris mb-3">{{data.title}}</h2>
@@ -114,7 +115,6 @@
   </div>
 </div>
 
-
 <!-- motivos activacion/rechazo -->
 <div class="modal-2 radiu-tp"  *ngIf="data.tipo ===5">
   <form [formGroup]="comentariosForm" autocomplete="off">
@@ -167,4 +167,19 @@
     </div>
   </div>
 </form>
+</div>
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===6">
+  <div class="text-center mt-5">
+    <img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">
+  </div>
+  <div class="text-center mt-1">
+    <h2 class="text-gris"> con &eacute;xito</h2>
+    
+  </div>
+  <div class="text-center">
+    
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" [routerLink]="['/gestorias/requerimientos']"><span class="mat-button-wrapper">Bandeja de entrada</span>      
+    </button>
+  </div>
 </div>

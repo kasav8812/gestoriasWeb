@@ -8,6 +8,8 @@ import { CrearService } from '../services/crear.service';
 import { AlertComponent } from '../../dialogs/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { plantillaCorreo } from '../services/constantes.service';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -174,17 +176,105 @@ export class RequerimientoComponent implements OnInit {
     // this.jsonCreate = {
 
     // }
-
-    console.log("FormularioRequerimiento 2",this.requerimientoForm);
     this.creaService.postRequerimiento(this.requerimientoForm.value).subscribe(
       response => {
+        Swal.fire(
+          'Datos Guardados',
+          '',
+          'success'
+        )
         console.log(response)
       },error => {
+        Swal.fire(
+          'Ocurrio un error al guardar los datos',
+          '',
+          'error'
+        )
         console.log(error);
       }
     )
-
   }
+
+  cambiarStatus(){
+    console.log("FormularioRequerimiento",this.requerimientoForm);
+    console.log("FormularioRequerimiento",this.actividadesForm);
+    this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
+    this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
+    // this.jsonCreate = {
+
+    // }
+
+    console.log("FormularioRequerimiento 2",this.requerimientoForm);
+    switch(this.rol) { 
+      case "ROLE_COMERCIAL": { 
+        this.creaService.porAutorizarRequerimiento(this.requerimientoForm.value.idRequerimiento).subscribe(
+          response => {
+            console.log(response)
+          },error => {
+            this.envioCorrecto();
+            console.log(error);
+          }
+        )
+             break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+        this.creaService.recibirRequerimiento(this.requerimientoForm.value.idRequerimiento).subscribe(
+          response => {
+            console.log(response)
+          },error => {
+            this.envioCorrecto();
+            console.log(error);
+          }
+        )
+             break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+        this.creaService.autorizaRequerimiento(this.requerimientoForm.value.idRequerimiento).subscribe(
+          response => {
+            console.log(response)
+          },error => {
+            console.log(error);
+            this.envioCorrecto();
+          }
+        )
+            break; 
+     } 
+      default: { 
+         break; 
+      } 
+   } 
+  }
+
+  envioCorrecto(){
+    Swal.fire({
+      title: 'Requerimiento Enviado',
+      icon: 'success',
+      confirmButtonColor: '#7A4CF6',
+      confirmButtonText: 'Listo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigateByUrl('/gestorias/requerimientos');
+      }
+    })
+  }
+
+  confirmarEnvio(){
+    Swal.fire({
+      title: 'Desea enviar solicitud?',
+      text: "Estas seguro que deseas enviar el requerimineto a aprobación?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#7A4CF6',
+      cancelButtonColor: '#8296BA',
+      confirmButtonText: 'Enviar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cambiarStatus()
+      }
+    })
+  }
+
   reactivar(){
     let folioAnterior=this.actividadesForm.value.idRequerimiento;
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;

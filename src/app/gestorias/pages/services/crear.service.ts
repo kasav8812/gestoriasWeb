@@ -134,6 +134,7 @@ export class CrearService {
     });
     return this.http.post(url,formdata,{headers});
   }
+  
   requerimientoReact(id:any): Observable<CrearResponse>{
     const url = `${this.baseurlreq}/requerimiento/reactivar`
     let headers = new HttpHeaders({
@@ -161,6 +162,8 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<string>(url,param,{headers});
   }
+
+
   cancelaRequerimiento(id:any):Observable<string>{
     const url = `${this.baseurlreq}/status/cancela`
     let headers = new HttpHeaders({
@@ -170,6 +173,47 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<string>(url,param,{headers});
   }
+
+  cerrarRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cerrar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  recibirRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/recibir`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  cambiarStatusRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cerrar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  porAutorizarRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/porAutorizar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
   addComentario(param: any):Observable<string>{
     const url = `${this.baseurlreq}/comentarios/add`
     let headers = new HttpHeaders({
@@ -178,6 +222,7 @@ export class CrearService {
     });
     return this.http.post<string>(url,param,{headers});
   }
+
   getComentariosId(id: any): Observable<CrearComentario[]>{
     const url = `${this.baseurlreq}/comentarios/get`
     let headers = new HttpHeaders({
@@ -187,6 +232,7 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<CrearComentario[]>(url,param,{headers});
   }
+
   getRequerimientosId(id: any): Observable<CrearResponse[]>{
     const url = `${this.baseurlreq}/requerimiento/getId`
     let headers = new HttpHeaders({

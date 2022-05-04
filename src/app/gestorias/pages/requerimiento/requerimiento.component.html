@@ -5,18 +5,35 @@
   <div class="col-12 card shadow mt-4">
       <div class="card-header pb-0" style="background-color: #fff;">
          <div class="row">
-             <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
+           
+            <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
               Informaci&oacute;n del requerimiento
             </div>
-            <div class="offset-7 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
-                <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
+
+            <div class="offset-5 col-1" *ngIf="rol==='ROLE_AUTORIZACION'">
+                <button class="btn radiu-tp btn-outline-tp tm" (click)="rechaza()">Rechazar</button>
             </div>
-            <div class="offset-1 col-2" *ngIf="tipoAccion!='Reactivar'" style="display: none;">
-                <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
+
+            <div class="offset-5 col-1" *ngIf="rol!=='ROLE_AUTORIZACION'">
+              <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
+          </div>
+
+            <div class="offset-1 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
+                <button class="btn radiu-tp btn-tp tm" (click)="confirmarEnvio()">Enviar a Autorizar</button>
             </div>
+
+            <div class="offset-1 col-2" *ngIf="rol=='ROLE_OPERACIONES'">
+              <button class="btn radiu-tp btn-tp tm" (click)="confirmarEnvio()">Enviar a Aprobación</button>
+          </div>
+
+          <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION'">
+            <button class="btn radiu-tp btn-tp tm" (click)="autoriza()">Autorizar</button>
+          </div>
+
             <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">
                 <button class="btn radiu-tp btn-tp tm" (click)="reactivar()">Reactivar</button>
             </div>
+            
          </div>
       </div>
       <div class="card-body">
@@ -459,46 +476,6 @@
             </table>
           </div> 
       </blockquote>
-
-      <div class="offset-0 mb-3" style="margin-left:25px;" *ngIf="rol==='ROLE_COMERCIAL'">
-        <button
-        class="btn radiu-tp btn-outline-tp tm"
-          type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-           Cancelar
-        </button>
-        
-        <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
-
-       </div>
-       <!--  boton de Autorizar y/o Rechazar -->
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION' && status==='POR AUTORIZAR'">
-          <div class="row">
-            <div class="text-center mt-5">
-              <button
-              class="btn radiu-tp btn-outline-tp tm"
-                type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-                 Cancelar
-              </button>
-              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="autoriza()">
-                <span class="mat-button-wrapper">Autorizar</span>
-              </button>
-              <button mat-button=""  class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="rechaza()">
-                <span class="mat-button-wrapper">Rechazar</span>
-              </button>
-            </div>
-          </div>
-        </blockquote>
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION' && status!=='POR AUTORIZAR'">
-          <div class="row">
-            <div class="text-center mt-5">
-              <button
-              class="btn radiu-tp btn-outline-tp tm"
-                type="button" [routerLink]="['/gestorias/requerimientos']" style="margin-right:20px;" >
-                 Cancelar
-              </button>
-            </div>
-          </div>
-        </blockquote>
   </div>
 
 </div>
