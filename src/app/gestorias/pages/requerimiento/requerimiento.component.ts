@@ -133,6 +133,8 @@ export class RequerimientoComponent implements OnInit {
         idRequerimiento: [this.id.id, Validators.required],
         folio: [this.requerimiento.folio, Validators.required],
         importe: [this.requerimiento.importe, Validators.required],
+        folioSat: [this.requerimiento.folioSat, Validators.required],
+        folioCap:[this.requerimiento.folioCap, Validators.required],
         paydate: [this.requerimiento.paydate, Validators.required],
         registroContable: [this.requerimiento.registroContable, Validators.required],
         nombreContacto: [this.requerimiento.nombreContacto, Validators.required],

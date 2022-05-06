@@ -16,6 +16,8 @@ export interface RequerimientoGeneric{
   idRequerimiento: number;//
 	folio: string;
 	importe: string;
+	folioSat: string;
+	folioCap:string;
 	paydate: string;
 	registroContable: string;
 	nombreContacto: string;

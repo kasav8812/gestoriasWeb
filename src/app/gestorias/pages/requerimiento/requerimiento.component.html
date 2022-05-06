@@ -475,7 +475,28 @@
               </tbody>
             </table>
           </div> 
-      </blockquote>
+      </blockquote >
+      <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'">
+        <h6 class="text-gris">Folios</h6>
+      </div>
+      <blockquote class="blockquote col-12 p-4 m-2 bg-gris"  >
+        <div class="row">
+          <div class="mb-3 col-3 form-control-sm">
+              <label for="text" class="form-label">Cantidad de permisos</label>
+              <mat-icon matTooltip="texto">
+                help_outline
+               </mat-icon>
+              <input type="text" class="form-control" formControlName="folioSat">
+          </div>
+          <div class="mb-3 col-3 form-control-sm">
+            <label for="text" class="form-label">Cantidad de permisos</label>
+            <mat-icon matTooltip="texto">
+              help_outline
+             </mat-icon>
+            <input type="text" class="form-control" formControlName="folioCap">
+        </div>
+        </div>
+    </blockquote>
   </div>
 
 </div>
