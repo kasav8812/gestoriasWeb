@@ -10,6 +10,7 @@ import { GestoriaRoutingModule } from './gestoria-routing.module';
 import { CrearComponent } from './pages/crear/crear.component';
 import { SharedModule } from '../shared/nabvar/shared.module';
 import { DtosRequerimientoComponent } from './pages/components/dtos-requerimiento/dtos-requerimiento.component';
+import { DtosRequerimientoComponentStatic } from './pages/components/dtos-requerimiento-static/dtos-requerimiento-static.component';
 import { InfoAdicionalComponent } from './pages/components/info-adicional/info-adicional.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './dialogs/alert.component';
@@ -25,6 +26,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     ReactivarComponent,
     CrearComponent,
     DtosRequerimientoComponent,
+    DtosRequerimientoComponentStatic,
     InfoAdicionalComponent,
     AlertComponent,
   ],

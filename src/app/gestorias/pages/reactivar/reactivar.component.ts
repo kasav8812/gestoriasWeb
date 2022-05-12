@@ -9,14 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../dialogs/alert.component';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-reactivar',
   templateUrl: './reactivar.component.html',
-  styles: [`
-
-  `
-  ]
+  styleUrls: ['../../style.scss']
 })
 export class ReactivarComponent implements OnInit {
   folio: CrearResponse;
@@ -152,64 +148,62 @@ export class ReactivarComponent implements OnInit {
       }
     )
     console.log("Este es el id.",this.id.id);
-    this.creaService.postRequerimientoCompletoLista(this.id.id).subscribe(
-      response => {
-        this.requerimiento=response[0];
-        console.log("response",response);
-        this.requerimientoForm = this.fb.group({
-        idRequerimiento: [this.id.id, Validators.required],
-        folio: [this.requerimiento.folio, Validators.required],
-        importe: [this.requerimiento.importe, Validators.required],
-        paydate: [this.requerimiento.paydate, Validators.required],
-        registroContable: [this.requerimiento.registroContable, Validators.required],
-        nombreContacto: [this.requerimiento.nombreContacto, Validators.required],
-        proveedor: [this.requerimiento.proveedor, Validators.required],
-        sistema: [this.requerimiento.sistema, Validators.required],
-        tipoSolicitud: [this.requerimiento.tipoSolicitud, Validators.required],
-        folioEgreso: [this.requerimiento.folioEgreso, Validators.required],
-        area: [this.requerimiento.area, Validators.required],
-        cc: [this.requerimiento.cc, Validators.required],
-        nombreCc: [this.requerimiento.nombreCc, Validators.required],
-        postFin: [this.requerimiento.postFin, Validators.required],
-        incluidoPermiso: [this.requerimiento.incluidoPermiso, Validators.required],
-        horario: [this.requerimiento.horario, Validators.required],
-        perNeg: [this.requerimiento.perNeg, Validators.required],
-        catidad: [this.requerimiento.catidad, Validators.required],
-        vigencia: [this.requerimiento.vigencia, Validators.required],
-        medida: [this.requerimiento.medida, Validators.required],
-        formaPago: [this.requerimiento.formaPago, Validators.required],
-        cobertura: [this.requerimiento.cobertura, Validators.required],
-        actividad: [this.requerimiento.actividad, Validators.required],
-        descripcion: [this.requerimiento.descripcion, Validators.required],
-      })
-        this.actividadesForm= this.fb.group({
-          idRequerimiento: [this.id.id, Validators.required],
-          actividad: [this.requerimientoForm.value.actividad, Validators.required],
-          descripcion: [this.requerimientoForm.value.descripcion, Validators.required]
-        })
-        console.log("FormularioRequerimiento-init",this.requerimientoForm);
-      },error => {
-        console.log(error);
-      }
-    )
+    
+    this.req = JSON.parse(localStorage.getItem('requerimiento') );
+      console.log("Req",this.req);
+      this.creaService.getRequerimientosId(this.req.id).subscribe(
+        response => {
+          console.log("response requerimiento",response);
+          this.req=response[0];
+          this.creaService.get_catalogos().subscribe(
+            response => {
+              this.res = response;
+              this.estado = this.res.ubicacion;
+              this.tipoPermiso = this.res.tipoPermiso;
+              this.areaSolicitate = this.res.areaSolitante;
+              this.unidad = this.res.unidaMedida;
+              console.log("response catalgos",response);
+              this.inicializa();
+              
+            },
+            error => {
+            }
+          )
+        },error=>{
+  
+        }
+        )
+      console.log(this.crearForm.value);
   }
 
+ 
 
   reactivar(){
     let folioAnterior=this.actividadesForm.value.idRequerimiento;
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
     this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
  
-
+    console.log("Folio Anterior",folioAnterior);
     console.log("FormularioRequerimiento 2",this.requerimientoForm);
-    
+  
+    this.jsonCrear = {
+      tipoRequerimineto: this.crearForm.value.tipoPermiso,
+      ubicacionEstado: this.crearForm.value.estado,
+      municipio: this.crearForm.value.municipio,
+      vigencia: this.crearForm.value.vigencia,
+      umedida: this.crearForm.value.unidad,
+      area: this.crearForm.value.area,
+      fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
+      fechaVencimiento: this.crearForm.value.fechaVencimeinto
+    }
+  
     this.creaService.requerimientoReact(folioAnterior).subscribe(
       responseP=>{
         this.requerimientoForm.value.idRequerimiento=responseP.id;
-        this.creaService.postRequerimiento(this.requerimientoForm.value).subscribe(
+        console.log("nuevo Req", this.requerimientoForm.value.idRequerimiento);
+        this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
           response => {
-            this.requerimientoSalida=response[0];
-            console.log("requerimientoSalida reactivar",this.requerimientoSalida);
+            this.crearForm.reset();
             let token=JSON.parse(sessionStorage.getItem('token'));
             let tk = JSON.parse(atob(token.split('.')[1]));
             let id = tk.sub;
@@ -221,19 +215,39 @@ export class ReactivarComponent implements OnInit {
               console.log("Realiza el alta de la relacion",param);
                this.creaService.postRequerimientoRelacion(param).subscribe(
                 resp => {
+                  this.successMsg()
                   console.log("Este es el res...",resp);
                 }
               );
-          },error => {
-            console.log(error);
+          },
+          error => {
+            Swal.fire(
+              'Error',
+              'Al crear requerimiento',
+              'error'
+            )
           }
-        )
+        );
       }
     )
-
   }
 
+  successMsg(){
+    Swal.fire({
+      title: 'Se ha reactivado el requerimiento',
+      icon: 'success',
+      confirmButtonColor: '#7A4CF6',
+      confirmButtonText: 'Listo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigateByUrl('/gestorias/requerimientos');
+      }
+    })
+  }
+
+
   get f() { return this.crearForm.controls; }
+ 
   onSubmit() {
     console.log("Entra a submitted",this.f);
     console.log("his.crearForm.invalid=",this.crearForm.invalid);
@@ -244,7 +258,7 @@ export class ReactivarComponent implements OnInit {
         }else{
           console.log("Campos completos");
           this.submitted=false;
-          this.guardar();
+          this.cerrarRequerimiento();
         }
     }
 
@@ -274,27 +288,18 @@ export class ReactivarComponent implements OnInit {
       return this.crearForm.invalid;
     }*/
   }
-  /*guardar(){
-    console.log("FormularioRequerimiento",this.requerimientoForm);
-    console.log("FormularioRequerimiento",this.actividadesForm);
-    this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
-    this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
-    // this.jsonCreate = {
 
-    // }
-
-    console.log("FormularioRequerimiento 2",this.requerimientoForm);
-    this.creaService.postRequerimiento(this.requerimientoForm.value).subscribe(
+  cerrarRequerimiento(){
+    this.creaService.cerrarRequerimiento(this.actividadesForm.value.idRequerimiento).subscribe(
       response => {
-        console.log(response)
       },error => {
         console.log(error);
+        this.reactivar()
       }
     )
+  }
 
-  }*/
   guardar() {
-    console.log("Datos del form",this.crearForm);
     this.jsonCrear = {
       tipoRequerimineto: this.crearForm.value.tipoPermiso,
       ubicacionEstado: this.crearForm.value.estado,
@@ -328,6 +333,35 @@ export class ReactivarComponent implements OnInit {
       );
       
     }
-  
-
+ 
+    inicializa(){
+      console.log(this.tipoPermiso);
+      
+      this.creaService.getUbicacionMunicipio(parseInt(this.req.ubicacion)).subscribe(
+        response => {
+          this.municipio = response;
+          
+        },
+        error => {
+        }
+      )
+      console.log(this.req);
+      let f=this.req.fechareq.split("/");
+      let fecha1=f[2]+"-"+f[1]+"-"+f[0];
+      let f2=this.req.fechavencimiento.split("/");
+      let fecha2=f2[2]+"-"+f2[1]+"-"+f2[0];
+      console.log(fecha1);
+      console.log(new Date(fecha1));
+      let vigencia=this.req.vigencia.split(" ");
+      this.crearForm = this.fb.group({
+        tipoPermiso: [this.req.permiso, [Validators.required]],
+        estado: [this.req.idestado, Validators.required],
+        municipio: [this.req.municipio, Validators.required],
+        vigencia: [vigencia[0]],
+        fechaRequerimiento: [fecha1],
+        fechaVencimeinto: [fecha2],
+        area: [this.req.area, Validators.required],
+        unidad: [vigencia[1], Validators.required]
+      })
+    }
 }
