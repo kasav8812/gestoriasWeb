@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
+import { Catalogo, RequerimientoGeneric, CatGeneric } from '../interfaces/configuracion.interface';
 import { CrearResponse, CrearComentario } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +9,9 @@ import { AlertComponent } from '../../dialogs/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { plantillaCorreo } from '../services/constantes.service';
 import Swal from 'sweetalert2';
+import { FileService } from '../services/file.service';
+import { Observable } from 'rxjs';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 
 
@@ -19,8 +22,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['../../style.scss']
 })
 export class RequerimientoComponent implements OnInit {
-  private plantilla: string = plantillaCorreo.cambioStatus;
+  
 
+  private plantilla: string = plantillaCorreo.cambioStatus;
   token: any;
   rol: any;
   res: any;
@@ -28,6 +32,7 @@ export class RequerimientoComponent implements OnInit {
   tipoSolicitud: Catalogo[];
   unidad: Catalogo[];
   cobertura: Catalogo[];
+  actividades: Catalogo[];
   requerimiento: RequerimientoGeneric;
   requerimientoSalida: RequerimientoGeneric;
   req: CrearResponse;
@@ -36,6 +41,7 @@ export class RequerimientoComponent implements OnInit {
   id:any = JSON.parse(localStorage.getItem('requerimiento'));
   jsonCreate: any;
   permisoEditar:Boolean=false;
+  nomArchivo: any="Ejemplo.pdf";
 
   actividadesForm: FormGroup= this.fb.group({
     idRequerimiento: [this.id.id, Validators.required],
@@ -73,12 +79,23 @@ export class RequerimientoComponent implements OnInit {
   tipoAccion:any = localStorage.getItem('tipo');
   status:any;
   comentarios: CrearComentario[];
+  cat: CatGeneric;
+  // ARCHIVOS----
+
+  selectedFiles: FileList;
+  //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
+  progressInfo = [];
+  message = '';
+  imageName = "";
+  fileInfos: Observable<any>;
+  //FIN ARCHIVOS
   constructor(
     private configuracion: ConfiguracionService,
     private router: Router,
     private fb: FormBuilder,
     private creaService: CrearService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private uploadFilesService: FileService
   )
     {
     this.token = JSON.parse(sessionStorage.getItem('token'));
@@ -119,6 +136,13 @@ export class RequerimientoComponent implements OnInit {
         this.unidad = this.res.unidaMedida;
         console.log(this.unidad)
 
+      },
+      error => {
+      }
+    )
+    this.configuracion.getTipoActividad().subscribe(
+      response => {
+        this.actividades = response;
       },
       error => {
       }
@@ -168,6 +192,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
     this.getComentarios();
+    this.fileInfos = this.uploadFilesService.getFiles();
   }
 
   guardar(){
@@ -397,4 +422,99 @@ export class RequerimientoComponent implements OnInit {
     }
     )
   }
+
+  onFileSelected(fileInput:any) {
+    
+  }
+  
+  verDocumento(){
+    
+  }
+  addActividad(){
+    let desc=(<HTMLInputElement>document.getElementById("descripcion")).value;
+    let com=(<HTMLInputElement>document.getElementById("actividad")).value;
+    console.log(desc);
+    console.log(com);
+    this.cat = {
+      activo: 1,
+      id:0,
+      descripcion: desc,
+      comentario: com,
+    }
+    console.log(this.cat)
+    this.configuracion.setTipoActividad(this.cat).subscribe(
+      resp =>{
+        this.configuracion.getTipoActividad().subscribe(
+          response => {
+            console.log("actividades..",response);
+            this.actividades = response;
+            Swal.fire(
+              'Exito',
+              'Exito al guardar la actividad',
+              'success'
+            )
+          },
+          error => {
+
+          }
+        );
+      },error =>{
+        Swal.fire(
+          'Error',
+          'Al guardar la actividad',
+          'error'
+        )
+      }
+    );
+  }
+  //Archivos
+  selectFiles(event) {
+    this.progressInfo = [];
+    event.target.files.length == 1 ? this.imageName = event.target.files[0].name : this.imageName = event.target.files.length + " archivos";
+    this.selectedFiles = event.target.files;
+  }
+
+  upload(index, file) {
+    this.progressInfo[index] = { value: 0, fileName: file.name };
+
+    this.uploadFilesService.upload(file,this.id.id).subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.progressInfo[index].value = Math.round(100 * event.loaded / event.total);
+        } else if (event instanceof HttpResponse) {
+          console.log("si entra.....")
+          this.fileInfos = this.uploadFilesService.getFiles();
+        }
+      },
+      error => {
+        console.log("Error",error.status);
+        
+        if(error.status==200){
+          this.fileInfos = this.uploadFilesService.getFiles();
+          this.progressInfo[index].value = 100;
+        }else{
+          this.progressInfo[index].value = 0;
+          this.message = 'No se puede subir el archivo- ' + file.name;
+        }
+        
+      });
+  }
+
+  uploadFiles() {
+    this.message = '';
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      this.upload(i, this.selectedFiles[i]);
+    }
+  }
+  selectFile(ruta: any){
+    this.uploadFilesService.getFile(ruta).subscribe(
+      response=>{
+        console.log("Response",response);
+      },
+      error => {
+        console.log("Error",error);
+      }
+      );
+  }
+  //fin archivos
 }
