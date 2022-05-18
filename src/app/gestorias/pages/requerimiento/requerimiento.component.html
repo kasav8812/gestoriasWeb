@@ -16,7 +16,7 @@
 
             <div class="offset-5 col-1" *ngIf="rol!=='ROLE_AUTORIZACION'">
               <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
-          </div>
+            </div>
 
             <div class="offset-1 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
                 <button class="btn radiu-tp btn-tp tm" (click)="confirmarEnvio()">Enviar a Autorizar</button>
@@ -95,6 +95,7 @@
                    </mat-icon>
                   <input type="text" class="form-control" formControlName="registroContable">
                 </div>
+                
                 <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
                   <label for="exampleInputEmail1" class="form-label">Registro contable</label>
                   <mat-icon matTooltip="texto">

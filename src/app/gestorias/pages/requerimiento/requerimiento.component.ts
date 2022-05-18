@@ -152,7 +152,7 @@ export class RequerimientoComponent implements OnInit {
     this.creaService.postRequerimientoCompletoLista(this.id.id).subscribe(
       response => {
         this.requerimiento=response[0];
-        console.log("response",response);
+        console.log("response",response); 
         this.requerimientoForm = this.fb.group({
         idRequerimiento: [this.id.id, Validators.required],
         folio: [this.requerimiento.folio, Validators.required],

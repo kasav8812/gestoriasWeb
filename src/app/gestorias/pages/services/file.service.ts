@@ -13,6 +13,7 @@ export class FileService {
 
   private baseurl: string = environment.urlFile;
   private baseurlreq: string = environment.urlRequerimiento;
+  private baseurl1: string = environment.urlFile;
   userToken: any;
 
   constructor(
@@ -35,7 +36,7 @@ export class FileService {
     let headers = new HttpHeaders({
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     });
-    const req = new HttpRequest('POST', `${this.baseurl}/upload`, formData, {
+    const req = new HttpRequest('POST', `http://localhost:10447/totalplay/gestoria-archivos/v1/file/upload`, formData, {
       reportProgress: true,
       responseType: 'json',
       headers,

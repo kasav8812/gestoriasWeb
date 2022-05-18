@@ -8,7 +8,8 @@ export const environment = {
   urlAuth: 'http://localhost:10443/totalplay/gestorias-auth/v1/auth',
   urlRequerimiento: 'http://localhost:10446/totalplay/gestoria-requerimiento/v1',
   urlCatalogo: 'http://localhost:10444/totalplay/gestoria-catalogos/v1',
-  urlFile: 'http://localhost:10447/file'
+  urlFile: 'http://localhost:10447/file',
+  urlFiles:'http://localhost:10447/totalplay/gestoria-archivos/v1'
 
 };
 

@@ -17,6 +17,7 @@ import { AlertComponent } from './dialogs/alert.component';
 import { MaterialModule } from '../material-module';
 import { AuthModule } from '../auth/auth.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { SubirComponent } from './pages/subir/subir.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     DtosRequerimientoComponentStatic,
     InfoAdicionalComponent,
     AlertComponent,
+    SubirComponent,
   ],
   imports: [
     CommonModule,

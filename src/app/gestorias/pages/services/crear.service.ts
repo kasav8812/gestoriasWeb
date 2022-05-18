@@ -242,4 +242,9 @@ export class CrearService {
     let param={"id":id}  
     return this.http.post<CrearResponse[]>(url,param,{headers});
   }
+
+  postDocumentcion(body:FormData):Observable<any>{
+    const url= `${this.baseurlreq}/file/upload`;
+    return this.http.post(url,body);
+  }
 }

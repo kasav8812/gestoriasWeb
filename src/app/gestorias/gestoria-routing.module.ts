@@ -8,6 +8,7 @@ import { RequerimientoComponent } from './pages/requerimiento/requerimiento.comp
 import { ConfiguracionModule } from './pages/configuracion/configuracion.module';
 import { RequerimientosModule } from './pages/requerimientos/requerimientos.module';
 import { ReactivarComponent } from './pages/reactivar/reactivar.component';
+import { SubirComponent } from './pages/subir/subir.component';
 
 const routes: Routes = [{
   path: '',
@@ -30,6 +31,10 @@ const routes: Routes = [{
       {
         path: 'crear',
         component: CrearComponent
+      },
+      {
+        path: 'subir',
+        component: SubirComponent
       },
       {
         path: 'configuracion',
