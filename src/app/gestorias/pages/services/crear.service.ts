@@ -28,6 +28,15 @@ export class CrearService {
     return this.http.post<CrearResponse>(url,formdata,{headers});
   }
 
+  updateRequerimiento(formdata: CrearResponse): Observable<CrearResponse>{
+    const url = `${this.baseurlreq}/updateRequerimiento`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<CrearResponse>(url,formdata,{headers});
+  }
+
   get_catalogos(){
     const url = `${this.baseurl}/catalogo`
     let headers = new HttpHeaders({
