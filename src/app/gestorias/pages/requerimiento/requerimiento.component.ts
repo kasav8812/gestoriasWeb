@@ -302,7 +302,23 @@ export class RequerimientoComponent implements OnInit {
   confirmarEnvio(){
     Swal.fire({
       title: 'Desea enviar solicitud?',
-      text: "Estas seguro que deseas enviar el requerimineto a aprobación?",
+      text: "Estas seguro que deseas enviar el requerimiento a Aprobación?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#7A4CF6',
+      cancelButtonColor: '#8296BA',
+      confirmButtonText: 'Enviar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cambiarStatus()
+      }
+    })
+  }
+
+  confirmarAutorizacion(){
+    Swal.fire({
+      title: 'Deseas autorizar solicitud?',
+      text: "Estas seguro que deseas enviar el requerimiento a Autorizar?",
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#7A4CF6',
@@ -320,7 +336,6 @@ export class RequerimientoComponent implements OnInit {
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
     this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
  
-
     console.log("FormularioRequerimiento 2",this.requerimientoForm);
     
     this.creaService.requerimientoReact(folioAnterior).subscribe(
@@ -350,8 +365,8 @@ export class RequerimientoComponent implements OnInit {
         )
       }
     )
-
   }
+  
   autoriza(){
     console.log(this.id);
     this.creaService.autorizaRequerimiento(this.id.id).subscribe(
@@ -486,6 +501,7 @@ export class RequerimientoComponent implements OnInit {
               'Exito al guardar la actividad',
               'success'
             )
+            this.actividadesForm.reset();
           },
           error => {
 
