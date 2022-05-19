@@ -402,7 +402,7 @@
                   <div class="mb-3 col-6 form-control-sm" *ngIf="permisoEditar">
                     <select id="inputState" class="form-select" formControlName="actividad">
                       <option selected>Selecciona</option>
-                      <option *ngFor="let item of area;"  value="{{item.id}}">{{item.descripcion}}</option>
+                      <option *ngFor="let item of actividades;"  value="{{item.id}}">{{item.descripcion}}</option>
                     </select>
                   </div>
                   <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
@@ -424,7 +424,7 @@
                 <mat-icon matTooltip="texto">
                   help_outline
                  </mat-icon>
-                <input type="text" class="form-control mt-5" formControlName="descripcion">
+                <input type="text" class="form-control mt-5" formControlName="descripcion" id="descripcion" value="">
               </div>
               <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
                 <label for="exampleInputEmail1" class="form-label">Descripci&oacute;n de actividades</label>
@@ -441,13 +441,13 @@
                    </mat-icon>
                   <div class="row">
                     <div class="mb-3 col-6 form-control-sm" *ngIf="permisoEditar">
-                      <input type="text" class="form-control">
+                      <input type="text" class="form-control" id="actividad">
                     </div>
                     <div class="mb-3 col-6 form-control-sm" *ngIf="!permisoEditar">
                       <input type="text" class="form-control"  disabled="true">
                     </div>
                     <div class="col-6 form-control-sm" *ngIf="permisoEditar">
-                      <button class="btn radiu-tp btn-tp col-6 ">Agregar</button>
+                      <button class="btn radiu-tp btn-tp col-6 " (click)="addActividad()">Agregar</button>
                     </div>
                     <div class="col-6 form-control-sm" *ngIf="!permisoEditar">
                       <button class="btn radiu-tp btn-tp col-6 " disabled="true">Agregar</button>
@@ -497,7 +497,28 @@
             <input type="text" class="form-control" formControlName="folioCap">
         </div>
         </div>
-    </blockquote>
+      </blockquote>
+      <div class="col-12">
+          <h6 class="text-gris">Documentos</h6>
+        </div>
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+          <div class="mt-5 row" >
+            <ul>
+                <li *ngFor="let file of fileInfos | async">
+
+                  <div class="row">
+                    <div class="mb-3 col-3 form-control-sm">
+                        <label for="text" class="form-label">{{file.name}}</label>
+                    </div>
+                    <div class="mb-3 col-3 form-control-sm">
+                      <span data-toggle="tooltip" style="cursor: pointer;" title="Ver documento" (click)="selectFile(file.url,file.name)"><img src="../../../../assets/iconos/icono_mostrar.png"></span> 
+                    </div>
+                  </div>                    
+                </li>
+            </ul>
+          </div> 
+      </blockquote>
+
   </div>
 
 </div>

@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import { FileService } from '../services/file.service';
 import { Observable } from 'rxjs';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-
+import {MailService} from '../services/mail.service'
 
 
 
@@ -82,7 +82,7 @@ export class RequerimientoComponent implements OnInit {
   cat: CatGeneric;
   // ARCHIVOS----
 
-  selectedFiles: FileList;
+  selectedFiles: FileList[]=[];
   //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
   progressInfo = [];
   message = '';
@@ -95,7 +95,8 @@ export class RequerimientoComponent implements OnInit {
     private fb: FormBuilder,
     private creaService: CrearService,
     public dialog: MatDialog,
-    private uploadFilesService: FileService
+    private uploadFilesService: FileService,
+    private serviceMail: MailService
   )
     {
     this.token = JSON.parse(sessionStorage.getItem('token'));
@@ -192,7 +193,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
     this.getComentarios();
-    this.fileInfos = this.uploadFilesService.getFiles();
+    this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
   }
 
   guardar(){
@@ -403,14 +404,34 @@ export class RequerimientoComponent implements OnInit {
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
+    let param={
+        "to": "jgonzalezg@mcllent.com",
+        "cc": "",
+        "bcc": "",
+        "reply_to": "no-reply@totalplay.com.mx",
+        "subject": "TEST",
+        "body": this.plantilla,
+        "from_Address": "",
+        "from_Personal": ""
+    }
     console.log("Este es la plantilla",this.plantilla);
-    /*this.creaService.sendMail(this.plantilla).subscribe(
+    this.serviceMail.getToken().subscribe(
        response=>{
-        console.log(responseP);
+        console.log("Response del token___",response);        
+          this.serviceMail.sendMail(param,response.access_token).subscribe(
+             responseP=>{
+              console.log("Response del mail___",responseP);
+              
+            },error => {
+                console.log(error);
+            }
+          )
+        
         
       },error => {
           console.log(error);
-      }*/
+      }
+    )
   }
   getComentarios(){
     this.creaService.getComentariosId(this.id.id).subscribe(
@@ -483,14 +504,14 @@ export class RequerimientoComponent implements OnInit {
           this.progressInfo[index].value = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           console.log("si entra.....")
-          this.fileInfos = this.uploadFilesService.getFiles();
+          this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
         }
       },
       error => {
         console.log("Error",error.status);
         
-        if(error.status==200){
-          this.fileInfos = this.uploadFilesService.getFiles();
+        if(error.status==200){ 
+          this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
           this.progressInfo[index].value = 100;
         }else{
           this.progressInfo[index].value = 0;
@@ -506,15 +527,49 @@ export class RequerimientoComponent implements OnInit {
       this.upload(i, this.selectedFiles[i]);
     }
   }
-  selectFile(ruta: any){
+  selectFile(ruta: any,nombreA: any){
+    let tipo=nombreA.split(".")[1];
+    console.log("Tipo________",tipo);
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 7,
+        tipoFile:tipo,
+        file: ruta,
+        nombre: nombreA
+      }
+    })
+    /*
     this.uploadFilesService.getFile(ruta).subscribe(
       response=>{
         console.log("Response",response);
+        
       },
       error => {
-        console.log("Error",error);
+        console.log(error);
+        var blob = new Blob([error.error.text], {type: "application/pdf"});
+        console.log("Error",blob);
+
+        var file = window.URL.createObjectURL(error.error.text);
+        var a = document.createElement("a");
+        a.href = file;
+        a.download =  "detailPDF";
+        document.body.appendChild(a);
+        a.click();
+    */
+        /*var objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl);
+        var objectUrl = URL.createObjectURL(error.error.text);
+        window.open(objectUrl);*/
+        /*const dialogRef = this.dialog.open(AlertComponent, {
+          disableClose: true,
+          data: {
+            tipo: 7,
+            file: error.error.text
+          }
+        })
       }
-      );
+      );*/
   }
   //fin archivos
 }

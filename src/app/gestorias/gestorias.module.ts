@@ -18,7 +18,7 @@ import { MaterialModule } from '../material-module';
 import { AuthModule } from '../auth/auth.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { SubirComponent } from './pages/subir/subir.component';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,8 @@ import { SubirComponent } from './pages/subir/subir.component';
     FormsModule,
     MaterialModule,
     AuthModule,
-    MatTooltipModule
+    MatTooltipModule,
+    PdfViewerModule,
   ],
   exports: [MainComponent, ]
 })

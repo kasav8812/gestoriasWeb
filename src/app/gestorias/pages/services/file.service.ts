@@ -11,9 +11,9 @@ import { Observable } from 'rxjs';
 })
 export class FileService {
 
-  private baseurl: string = environment.urlFile;
+  private baseurl: string = environment.urlFiles;
   private baseurlreq: string = environment.urlRequerimiento;
-  private baseurl1: string = environment.urlFile;
+  private baseurl1: string = environment.urlFiles;
   userToken: any;
 
   constructor(
@@ -44,8 +44,8 @@ export class FileService {
     return this.http.request(req);
   }
 
-  getFiles(){
-    const url = `${this.baseurl}/files`
+  getFiles(idRequerimiento: any){
+    const url = `${this.baseurl}/filesRequerimiento/${idRequerimiento}`
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
@@ -55,7 +55,6 @@ export class FileService {
 
   getFile(url: any):Observable<File>{
     let headers = new HttpHeaders({
-      'Content-Type':'application/json',
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     });
     return this.http.get<File>(url,{headers});

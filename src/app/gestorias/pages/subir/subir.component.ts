@@ -148,14 +148,14 @@ export class SubirComponent implements OnInit {
     this.progressInfo[index].value = Math.round(100 * event.loaded / event.total);
     } else if (event instanceof HttpResponse) {
     console.log("si entra.....")
-    this.fileInfos = this.uploadFilesService.getFiles();
+    this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
     }
     },
     error => {
     console.log("Error",error.status);
     
     if(error.status==200){
-       this.fileInfos = this.uploadFilesService.getFiles();
+       this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
       this.progressInfo[index].value = 100;
       Swal.fire(
         { icon: 'success',
