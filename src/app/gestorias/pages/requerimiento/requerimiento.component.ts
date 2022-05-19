@@ -42,6 +42,8 @@ export class RequerimientoComponent implements OnInit {
   jsonCreate: any;
   permisoEditar:Boolean=false;
   nomArchivo: any="Ejemplo.pdf";
+  jsonCrear: any;
+
 
   actividadesForm: FormGroup= this.fb.group({
     idRequerimiento: [this.id.id, Validators.required],
@@ -201,10 +203,20 @@ export class RequerimientoComponent implements OnInit {
     console.log("FormularioRequerimiento",this.actividadesForm);
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
     this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
-    // this.jsonCreate = {
+    
+    console.log("Datos del form",this.requerimientoForm);
+    this.jsonCrear = {
+      tipoRequerimineto: this.requerimientoForm.value.tipoPermiso,
+      ubicacionEstado: this.requerimientoForm.value.estado,
+      municipio: this.requerimientoForm.value.municipio,
+      vigencia: this.requerimientoForm.value.vigencia,
+      umedida: this.requerimientoForm.value.unidad,
+      area: this.requerimientoForm.value.area,
+      fechaRequerimiento: this.requerimientoForm.value.fechaRequerimiento,
+      fechaVencimiento: this.requerimientoForm.value.fechaVencimeinto
+    }
 
-    // }
-    this.creaService.postRequerimiento(this.requerimientoForm.value).subscribe(
+    this.creaService.updateRequerimiento(this.requerimientoForm.value).subscribe(
       response => {
         Swal.fire(
           'Datos Guardados',
