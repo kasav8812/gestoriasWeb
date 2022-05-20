@@ -271,12 +271,13 @@
                   <mat-icon matTooltip="texto">
                     help_outline
                    </mat-icon>
-                  <div class="grid2">
-                    <select id="inputState" class="form-select grid-col-6" formControlName="horario">
+                  <div class="grid3">
+                    <input type="time" id="appt" name="appt" formControlName="horario"  required>
+                    <!--<select id="inputState" class="form-select grid-col-6" formControlName="horario">
                       <option selected>Seleccionar</option>
                       <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
                     </select>
-                    <!--<select id="inputState" class="form-select grid-col-6" >
+                    <select id="inputState" class="form-select grid-col-6" >
                       <option selected>Seleccionar</option>
                       <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>
                     </select>-->
@@ -287,11 +288,12 @@
                   <mat-icon matTooltip="texto">
                     help_outline
                    </mat-icon>
-                  <div class="grid2">
-                    <select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.horario}}" disabled="true">
+                  <div class="grid3">
+                    <input type="time" id="appt" class="form-select grid-col-3" name="appt" value="{{requerimientoForm.value.horario}}"  disabled>
+                    <!--<select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.horario}}" disabled="true">
                       <option selected>Seleccionar</option>   
                       <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
-                    </select>
+                    </select>-->
                   </div>
               </div>
               <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
@@ -461,20 +463,35 @@
         <div class="col-12">
           <h6 class="text-gris">Observaciones</h6>
         </div>
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+        <blockquote class=" col-12 p-4 m-2 bg-gris">
           <div class="mt-5 row" >
-            <table class="table table-striped table-hover" >
-              <thead>
-                <th class="form-control-sm">Usuario:</th>
-                <th class="form-control-sm">Comentario:</th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of comentarios">
-                  <td class="form-control-sm">{{item.usuario}}</td>
-                  <td class="form-control-sm">{{item.comentario}}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div id="body" *ngFor="let item of comentarios" class="style-scope ytd-comment-renderer" style="position: relative;display: flex;flex-direction: row;">
+              <div id="author-thumbnail" class="style-scope ytd-comment-renderer" style="position: relative;display: flex;flex-direction: row;">
+                <svg  xmlns="http://www.w3.org/2000/svg"                 
+                  viewBox="0 0 34.875 34.875"
+                  style="width: 40px; height: 40px; margin-right: 16px; border-radius: 50%; background-color: transparent; overflow: hidden;"
+                >
+                  <path
+                    id="Icon_awesome-user-circle"
+                    data-name="Icon awesome-user-circle"
+                    d="M17.438.563A17.438,17.438,0,1,0,34.875,18,17.434,17.434,0,0,0,17.438.563Zm0,6.75A6.188,6.188,0,1,1,11.25,13.5,6.188,6.188,0,0,1,17.438,7.313Zm0,24.188a13.474,13.474,0,0,1-10.3-4.8,7.839,7.839,0,0,1,6.926-4.2,1.72,1.72,0,0,1,.5.077,9.309,9.309,0,0,0,2.876.485,9.274,9.274,0,0,0,2.876-.485,1.72,1.72,0,0,1,.5-.077,7.839,7.839,0,0,1,6.926,4.2A13.474,13.474,0,0,1,17.438,31.5Z"
+                    transform="translate(0 -0.563)"
+                    fill="#9a9cba"
+                  />
+                </svg>
+              </div>
+              <div id="main" class="style-scope ytd-comment-renderer" style="min-width: 0; flex: 1; flex-basis: 0.000000001px; display: flex;flex-direction: column;">
+                <div id="header" class="style-scope ytd-comment-renderer" style="margin-bottom: -2px;">
+                      <label class="form-label" style="min-width: 0; max-width: 100%; box-sizing: border-box; padding-right: 4px;font-weight: bold;">
+                        {{item.usuario}}
+                      </label>
+                </div>
+                <div id="content" class="style-scope ytd-expander" style=" display: -webkit-box;  overflow: hidden; max-height: none; -webkit-box-orient: vertical;">
+                  <h4 id="content-text" slot="content" split-lines="" class="style-scope ytd-comment-renderer" >
+                    {{item.comentario}}</h4>
+                </div>
+              </div>
+            </div>
           </div> 
       </blockquote >
       <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'">

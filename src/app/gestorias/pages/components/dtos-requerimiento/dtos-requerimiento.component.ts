@@ -40,6 +40,7 @@ export class DtosRequerimientoComponent implements OnInit {
 
     this.requerimiento = JSON.parse(localStorage.getItem('requerimiento') );
     console.log("Req",this.requerimiento);
+    
     this.creaService.getRequerimientosId(this.requerimiento.id).subscribe(
       response => {
         console.log("response requerimiento",response);
@@ -52,8 +53,8 @@ export class DtosRequerimientoComponent implements OnInit {
             this.areaSolicitate = this.res.areaSolitante;
             this.unidad = this.res.unidaMedida;
             console.log("response catalgos",response);
-            this.inicializa();
             
+            this.getMunicipioIni();
           },
           error => {
           }
@@ -67,11 +68,23 @@ export class DtosRequerimientoComponent implements OnInit {
     
     console.log(this.crearForm.value);
   }
+  getMunicipioIni(){
+    this.creaService.getUbicacionMunicipio(parseInt(this.requerimiento.ubicacion)).subscribe(
+      response => {
+        this.municipio = response;
+        console.log("response municipio::::",this.municipio);
+        this.inicializa();
+      },
+      error => {
+      }
+    )
+  }
 
   getMunicipio() {
     this.creaService.getUbicacionMunicipio(this.crearForm.value.estado).subscribe(
       response => {
-        this.municipio = response
+        this.municipio = response;
+
       },
       error => {
       }
@@ -110,14 +123,7 @@ export class DtosRequerimientoComponent implements OnInit {
   inicializa(){
     console.log(this.tipoPermiso);
     
-    this.creaService.getUbicacionMunicipio(parseInt(this.requerimiento.ubicacion)).subscribe(
-      response => {
-        this.municipio = response;
-        
-      },
-      error => {
-      }
-    )
+    
     console.log(this.requerimiento);
     let f=this.requerimiento.fechareq.split("/");
     let fecha1=f[2]+"-"+f[1]+"-"+f[0];
@@ -128,7 +134,7 @@ export class DtosRequerimientoComponent implements OnInit {
     let vigencia=this.requerimiento.vigencia.split(" ");
     this.crearForm = this.fb.group({
       tipoPermiso: [this.requerimiento.permiso, [Validators.required]],
-      estado: [this.requerimiento.idestado, Validators.required],
+      estado: [this.requerimiento.ubicacion, Validators.required],
       municipio: [this.requerimiento.municipio, Validators.required],
       vigencia: [vigencia[0]],
       fechaRequerimiento: [fecha1],
@@ -136,5 +142,6 @@ export class DtosRequerimientoComponent implements OnInit {
       area: [this.requerimiento.area, Validators.required],
       unidad: [vigencia[1], Validators.required]
     })
+    console.log(this.crearForm.value)
   }
 }
