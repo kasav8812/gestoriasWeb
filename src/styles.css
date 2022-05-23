@@ -99,6 +99,10 @@ thead{
   background-color: var(--color-white);
 }
 
+.heightLong{
+  height: 100%;
+}
+
 .grid{
   display: grid;
   grid-row-gap: 50px;

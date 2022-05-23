@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of requerimientos">
-          <th><a [routerLink]="['/gestorias/subir']" (click)="editRequrimineto(item)">{{item.id}}</a></th>
+          <th><a [routerLink]="['/gestorias/crear']" (click)="editRequrimineto(item)">{{item.id}}</a></th>
           <th>{{item.permiso}}</th>
           <th>{{item.ubicacion}} </th>
           <th>{{item.municipio}} </th>

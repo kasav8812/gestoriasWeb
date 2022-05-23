@@ -541,9 +541,25 @@ export class RequerimientoComponent implements OnInit {
         if(error.status==200){ 
           this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
           this.progressInfo[index].value = 100;
+          Swal.fire(
+            {
+              icon: 'success',
+              title: 'Se ha enviado los documentos correctamente',
+              timer: 1500,
+              showConfirmButton: false,
+            }
+          )
         }else{
           this.progressInfo[index].value = 0;
           this.message = 'No se puede subir el archivo- ' + file.name;
+          Swal.fire(
+            {
+              icon: 'error',
+              title: 'No se puede subir el archivo ',
+              timer: 1500,
+              showConfirmButton: false,
+            }
+          )
         }
         
       });

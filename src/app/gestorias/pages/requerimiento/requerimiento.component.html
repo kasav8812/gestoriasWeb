@@ -497,7 +497,7 @@
       <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'">
         <h6 class="text-gris">Folios</h6>
       </div>
-      <blockquote class="blockquote col-12 p-4 m-2 bg-gris"  >
+      <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION'" >
         <div class="row">
           <div class="mb-3 col-3 form-control-sm">
               <label for="text" class="form-label">Folio SAP</label>
@@ -515,26 +515,73 @@
         </div>
         </div>
       </blockquote>
-      <div class="col-12">
-          <h6 class="text-gris">Documentos</h6>
-        </div>
-        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-          <div class="mt-5 row" >
-            <ul>
-                <li *ngFor="let file of fileInfos | async">
+      <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'" >
+        <h6 class="text-gris">Documentación</h6>
+      </div>
+      <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION' && status==='POR AUTORIZAR'" >
+        <div class="mt-5 row" >
+          <ul>
+              <li *ngFor="let file of fileInfos | async">
 
-                  <div class="row">
-                    <div class="mb-3 col-3 form-control-sm">
-                        <label for="text" class="form-label">{{file.name}}</label>
-                    </div>
-                    <div class="mb-3 col-3 form-control-sm">
-                      <span data-toggle="tooltip" style="cursor: pointer;" title="Ver documento" (click)="selectFile(file.url,file.name)"><img src="../../../../assets/iconos/icono_mostrar.png"></span> 
-                    </div>
-                  </div>                    
-                </li>
-            </ul>
-          </div> 
-      </blockquote>
+                <div class="row">
+                  <div class="mb-3 col-3 form-control-sm">
+                      <label for="text" class="form-label">{{file.name}}</label>
+                  </div>
+                  <div class="mb-3 col-3 form-control-sm">
+                    <span data-toggle="tooltip" style="cursor: pointer;" title="Ver documento" (click)="selectFile(file.url,file.name)"><img src="../../../../assets/iconos/icono_mostrar.png"></span> 
+                  </div>
+                </div>                    
+              </li>
+          </ul>
+        </div> 
+    </blockquote>
+    
+    <div class="row mb-3" *ngIf="(rol==='ROLE_AUTORIZACION' || rol==='ROLE_COMERCIAL') && (status==='RECIBIDAS')">
+      <div class="col-12">
+        <h6 class="text-gris">Documentación</h6>
+      </div>
+  
+      <div class="col-5">
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris heightLong">
+          <form autocomplete="off" class="row">
+            <div class="row">
+              <div class="mb-3 col-12 form-control-sm center">
+                <label for="formFile" class="form-label">Subir archivos</label>
+                <div class="styleFile">
+                  <input type="file" class="upload-box" multiple="" (change)="selectFiles($event)" #name required>
+                </div>
+              </div>
+            </div>
+          </form>
+        </blockquote>
+      </div>
+      <div class="col-7">
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris heightLong">
+          <form autocomplete="off" class="row">
+            <div class="row">
+              <small>
+                <small>
+                  <label for="formFile" class="form-label">Archivos seleccionados</label>
+                </small>
+              </small>
+              <tr *ngFor="let file of selectedFiles" class="form-label">
+                <small>
+                  <small>
+                    <small>
+                      <td class="form-label">
+                        <mat-icon style=" font-size: 50%">fiber_manual_record</mat-icon>
+                        {{file.name}}
+                      </td>
+                    </small>
+                  </small>
+                </small>
+            </div>
+            <button class="btn radiu-tp btn-tp tm"  id="uploadButton"  (click)="uploadFiles()"  [disabled]="!selectedFiles"  >Enviar documentaci&oacute;n</button>
+          </form>
+        </blockquote>
+      </div>
+  
+    </div>
 
   </div>
 
