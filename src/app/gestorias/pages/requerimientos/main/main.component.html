@@ -15,7 +15,8 @@
   </div>
   <div class="col-12 card shadow mt-4">
     <div class="card-body row">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <div class="nav-tabs" style="display: inline-block; width:70%;">
+        <ul class="nav " id="myTab" role="tablist">
             <li class="nav-item" >
               <button class="nav-link"
                 routerLink="encurso"
@@ -52,7 +53,11 @@
                 <button class="nav-link"
                     routerLink="canceladas"
                     routerLinkActive="active">Canceladas</button>
-            </li>
+            </li>            
+          </ul>
+      </div>
+      <div class="nav nav-tabs" style="display: inline-block; width: 29%;">
+        <ul  id="myTab" role="tablist">
             <li class="nav-item position-absolute" style="top: 0.5em !important; right: 1em !important;">
                 <button
                 *ngIf="rol !== 'ROLE_AUTORIZACION' && rol !== 'ROLE_COMERCIAL'"
@@ -62,6 +67,8 @@
                 </button>
             </li>
           </ul>
+      </div>
+        
 
           <div class="tab-content" id="myTabContent">
             <router-outlet></router-outlet>
