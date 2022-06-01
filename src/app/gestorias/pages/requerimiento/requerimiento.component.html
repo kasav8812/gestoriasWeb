@@ -498,12 +498,19 @@
       </div>
       <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION'" >
         <div class="row">
+
           <div class="mb-3 col-3 form-control-sm">
               <label for="text" class="form-label">Folio SAP</label>
               <mat-icon matTooltip="texto">
                 help_outline
                </mat-icon>
+
               <input type="text" class="form-control" formControlName="folioSat">
+
+          </div>
+          <div class="mb-2 col-2 form-control-sm" style="margin-left: -9%;">
+            <label for="text" class="form-label">Autorizar Folio</label>
+            <input type="checkbox" id="cbox2" value="second_checkbox" class="mb-1 col-2">
           </div>
           <div class="mb-3 col-3 form-control-sm">
             <label for="text" class="form-label">Folio de Seguimiento</label>
@@ -512,6 +519,11 @@
              </mat-icon>
             <input type="text" class="form-control" formControlName="folioCap">
         </div>
+        <div class="mb-2 col-2 form-control-sm" style="margin-left: -9%;">
+          <label for="text" class="form-label">Autorizar Folio</label>
+          <input type="checkbox" id="cbox2" value="second_checkbox" class="mb-1 col-2">
+        </div>
+
         </div>
       </blockquote>
       <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'" >
@@ -568,7 +580,7 @@
                   <small>
                     <small>
                       <td class="form-label">
-                        <mat-icon style=" font-size: 50%">fiber_manual_record</mat-icon>
+                        <button class="btnDelt"></button>
                         {{file.name}}
                       </td>
                     </small>

@@ -11,6 +11,8 @@ import { SistemaComponent } from './sistema/sistema.component';
 import { TipoSolicitudComponent } from './tipo-solicitud/tipo-solicitud.component';
 import { CoberturaComponent } from './cobertura/cobertura.component';
 import { TipoActividadComponent } from './tipo-actividad/tipo-actividad.component';
+import { CrearUsuarioComponent } from './crear-usuario/crear-usuario.component';
+
 import { RoleGuard } from 'src/app/guards/role.guard';
 
 
@@ -48,6 +50,9 @@ const routes: Routes = [
       },{
         path: 'tipoDeActividad',
         component: TipoActividadComponent
+      },{
+        path: 'crearUsuario',
+        component: CrearUsuarioComponent
       },{
         path: '**',
         redirectTo: ''

@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseurl: 'https://logingestorias.herokuapp.com',
+  urlUser: 'http://localhost:10445/totalplay/gestorias-usuarios/v1',
   urlAuth: 'http://localhost:10443/totalplay/gestorias-auth/v1/auth',
   urlRequerimiento: 'http://localhost:10446/totalplay/gestoria-requerimiento/v1',
   urlCatalogo: 'http://localhost:10444/totalplay/gestoria-catalogos/v1',

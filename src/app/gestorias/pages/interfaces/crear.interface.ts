@@ -20,3 +20,11 @@ export interface CrearComentario {
   idRequerimiento: number;
   idComentarioReply: number;
 }
+
+export interface UsuariosResponse{
+  id: number;
+  name: string;
+  username: string;
+  created : string;
+  role : string
+}
