@@ -18,26 +18,33 @@ import { UsuariosResponse } from '../../interfaces/crear.interface';
 })
 export class CrearUsuarioComponent implements OnInit {
     usuarios: UsuariosResponse[];
+    area: Catalogo[];
+
     constructor(private configuracion: ConfiguracionService,
         public dialog: MatDialog, private creaService: CrearService,private router: Router,private fb: FormBuilder) { }
     
-
       ngOnInit(): void {
         this.creaService.getAllUsers().subscribe(
           response => {
             this.usuarios = response;
-            console.log(this.usuarios[0].username);
-            
+            console.log(this.usuarios[0].role);
           },
           error => {
             console.log(error);
           }
         )
+
+        this.configuracion.getAreaSolicitante().subscribe(
+          response => {
+            this.area = response;
+          },
+          error => {
+    
+          }
+        );
       }
 
-      consumeInit(){
-        
-      }
+     
 
       create(){
         const dialogRef = this.dialog.open(AlertComponent, {

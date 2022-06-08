@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Catalogo, CatGeneric } from '../pages/interfaces/configuracion.interface';
+import { RolesResponse } from '../pages/interfaces/crear.interface';
 import { ConfiguracionService } from '../pages/services/configuracion.service';
 import { CrearService } from '../pages/services/crear.service';
 
@@ -28,6 +29,10 @@ export class AlertComponent  {
 
   cat: CatGeneric;
   area: Catalogo[];
+  municipio: Catalogo[] = null;
+  res: any;
+  roles : RolesResponse[];
+
   comentariosForm: FormGroup= this.formBuilder.group({
     idUser: ['', Validators.required],
     usuario: ['', Validators.required],
@@ -37,6 +42,28 @@ export class AlertComponent  {
   })
   token:any;
   datosUser: any;
+
+
+  ngOnInit(): void {
+    this.creaService.get_catalogos().subscribe(
+      response => {
+        this.res = response;
+        this.municipio = this.res.ubicacion;
+      },
+      error => {
+      }
+    )
+
+    this.creaService.getAllRoles().subscribe(
+      response => {
+        this.roles = response;
+      },
+      error => {
+      }
+    )
+  }
+
+ 
   editRequrimineto(requerimiento){
     localStorage.setItem('requerimiento', JSON.stringify(requerimiento));
     localStorage.setItem('tipo', 'Reactivar');
@@ -268,6 +295,7 @@ export class AlertComponent  {
     }
   
   }
+
   guardaComentario(){
     this.comentariosForm.value.idUser=this.datosUser.sub;
     this.comentariosForm.value.usuario=this.datosUser.name;
@@ -283,7 +311,44 @@ export class AlertComponent  {
       }
 
       )
-    
+  }
+
+  autoriza(){
+    console.log("Aurtorizar")
+    console.log(this.data.array[0].id);
+    this.creaService.autorizaRequerimiento(this.data.array[0].id).subscribe(
+       responseP=>{
+        console.log(responseP);
+       
+      },error => {
+          console.log(error);
+          console.log(error.error.text);
+          //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
+          if(error.error.text==="Exito"){
+            this.guardaComentario();
+          }
+      }
+    )
+  }
+
+  rechazar(){
+    console.log("Aurtorizar")
+    console.log(this.data.array[0].id);
+    this.creaService.cancelaRequerimiento(this.data.array[0].id).subscribe(
+       responseP=>{
+        console.log("Error");
+        console.log(responseP);
+       
+      },error => {
+        console.log("Exitos")
+          console.log(error);
+          console.log(error.error.text);
+          //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
+          if(error.error.text==="Exito"){
+            this.guardaComentario();
+          }
+      }
+    )
   }
 
 }

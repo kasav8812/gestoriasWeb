@@ -13,11 +13,11 @@ export interface CatGeneric{
 }
 
 export interface RequerimientoGeneric{
-  idRequerimiento: number;//
+	idRequerimiento: number;//
 	folio: string;
 	importe: string;
-	folioSat: string;
-	folioCap:string;
+	foliosap: string;
+	folioseg:string;
 	paydate: string;
 	registroContable: string;
 	nombreContacto: string;

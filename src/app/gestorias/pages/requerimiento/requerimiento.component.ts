@@ -13,6 +13,9 @@ import { FileService } from '../services/file.service';
 import { Observable } from 'rxjs';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import {MailService} from '../services/mail.service'
+import { min } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
+import { HostListener } from "@angular/core";
 
 
 
@@ -23,7 +26,6 @@ import {MailService} from '../services/mail.service'
 })
 export class RequerimientoComponent implements OnInit {
   
-
   private plantilla: string = plantillaCorreo.cambioStatus;
   token: any;
   rol: any;
@@ -36,14 +38,39 @@ export class RequerimientoComponent implements OnInit {
   requerimiento: RequerimientoGeneric;
   requerimientoSalida: RequerimientoGeneric;
   req: CrearResponse;
+  tmpReq: CrearResponse;
+  submitted=false;
+  mCheckSap : Boolean = false;
+  mCheckSeguimiento : Boolean = false;
+
+  
+
   horario: string[] = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
   id:any = JSON.parse(localStorage.getItem('requerimiento'));
+  
   jsonCreate: any;
   permisoEditar:Boolean=false;
+  permisoEditarInfoBasica:Boolean= true;
+
   nomArchivo: any="Ejemplo.pdf";
   jsonCrear: any;
+  pipe = new DatePipe('en-US');
 
+  municipio: Catalogo[] = null;
+  estado: Catalogo[];
+  tipoPermiso: Catalogo[];
+  areaSolicitate: Catalogo[];
+  datosUser: any;
+  comentario:string;
+
+  comentariosForm: FormGroup= this.fb.group({
+    idUser: ['', Validators.required],
+    usuario: ['', Validators.required],
+    comentario: ['', Validators.required],
+    idRequerimiento: ['', Validators.required],
+    idComentarioReply: ['', Validators.required]
+  })
 
   actividadesForm: FormGroup= this.fb.group({
     idRequerimiento: [this.id.id, Validators.required],
@@ -76,21 +103,21 @@ export class RequerimientoComponent implements OnInit {
     cobertura: ['', Validators.required],
     actividad: ['', Validators.required],
     descripcion: ['', Validators.required],
+    foliosap : ['',Validators.required],
+    folioseg : ['',Validators.required]
   })
 
-  tipoAccion:any = localStorage.getItem('tipo');
-  status:any;
-  comentarios: CrearComentario[];
-  cat: CatGeneric;
-  // ARCHIVOS----
+  crearForm: FormGroup = this.fb.group({
+    tipoPermiso: [, [Validators.required]],
+    estado: ['', Validators.required],
+    municipio: ['', Validators.required],
+    vigencia: [''],
+    fechaRequerimiento: [''],
+    fechaVencimeinto: [''],
+    area: ['', Validators.required],
+    unidad: ['', Validators.required]
+  })
 
-  selectedFiles: FileList[]=[];
-  //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
-  progressInfo = [];
-  message = '';
-  imageName = "";
-  fileInfos: Observable<any>;
-  //FIN ARCHIVOS
   constructor(
     private configuracion: ConfiguracionService,
     private router: Router,
@@ -102,18 +129,37 @@ export class RequerimientoComponent implements OnInit {
   )
     {
     this.token = JSON.parse(sessionStorage.getItem('token'));
+    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
+
     console.log("datos token",JSON.parse(atob(this.token.split('.')[1])))
     let namespace = JSON.parse(atob(this.token.split('.')[1]));
     this.rol = namespace.roles[0];
    }
 
+  tipoAccion:any = localStorage.getItem('tipo');
+  status:any;
+  comentarios: CrearComentario[];
+  cat: CatGeneric;
+  // ARCHIVOS----
+
+  selectedFiles: FileList[]=[];
+  tmpFiles: FileList[]=[];
+  file : File;
+
+
+  //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
+  progressInfo = [];
+  message = '';
+  imageName = "";
+  fileInfos: Observable<any>;
+  //FIN ARCHIVOS
+ 
+
   ngOnInit(): void {
     if(this.rol === "ROLE_CONFIGURACION"){
       this.router.navigateByUrl('/gestorias/configuracion');
     }
-    if(this.rol==="ROLE_COMERCIAL"){
-      this.permisoEditar=true;
-    }
+    
     this.configuracion.getAreaSolicitante().subscribe(
       response => {
         this.area = response;
@@ -133,16 +179,7 @@ export class RequerimientoComponent implements OnInit {
         console.log(this.cobertura)
       }
     )
-    this.creaService.get_catalogos().subscribe(
-      response => {
-        this.res = response;
-        this.unidad = this.res.unidaMedida;
-        console.log(this.unidad)
 
-      },
-      error => {
-      }
-    )
     this.configuracion.getTipoActividad().subscribe(
       response => {
         this.actividades = response;
@@ -150,8 +187,42 @@ export class RequerimientoComponent implements OnInit {
       error => {
       }
     )
+
+    this.tmpReq = JSON.parse(localStorage.getItem('requerimiento') );
+    console.log("alskdnalksndlkansdlkandslkanslkdnaskldanklsdnalksndkla")
+    console.log(this.tmpReq.id);
+
+    this.creaService.getRequerimientosId(this.tmpReq.id).subscribe(
+      response => {
+        this.tmpReq=response[0];
+        this.creaService.get_catalogos().subscribe(
+          response => {
+            this.res = response;
+            this.estado = this.res.ubicacion;
+            this.tipoPermiso = this.res.tipoPermiso;
+            this.areaSolicitate = this.res.areaSolitante;
+            this.unidad = this.res.unidaMedida;
+            console.log("response catalgos",response);
+            this.getMunicipioIni();
+          },
+          error => {
+            console.log("Error")
+            console.log(error);
+          }
+        )
+      },error=>{
+        console.log("Response Error")
+        console.log(error);
+      }
+      )
+    
+
     console.log("Este es el id.",this.id.id);
     this.status=this.id.estado;
+    console.log("####################");
+    console.log(this.status);
+    console.log("####################");
+    
     this.creaService.postRequerimientoCompletoLista(this.id.id).subscribe(
       response => {
         this.requerimiento=response[0];
@@ -160,8 +231,8 @@ export class RequerimientoComponent implements OnInit {
         idRequerimiento: [this.id.id, Validators.required],
         folio: [this.requerimiento.folio, Validators.required],
         importe: [this.requerimiento.importe, Validators.required],
-        folioSat: [this.requerimiento.folioSat, Validators.required],
-        folioCap:[this.requerimiento.folioCap, Validators.required],
+        foliosap: [this.requerimiento.foliosap, Validators.required],
+        folioseg:[this.requerimiento.folioseg, Validators.required],
         paydate: [this.requerimiento.paydate, Validators.required],
         registroContable: [this.requerimiento.registroContable, Validators.required],
         nombreContacto: [this.requerimiento.nombreContacto, Validators.required],
@@ -193,30 +264,215 @@ export class RequerimientoComponent implements OnInit {
       },error => {
         console.log(error);
       }
-    )
+    );
     this.getComentarios();
     this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
+  
+
+    switch(this.rol) { 
+      case "ROLE_COMERCIAL": { 
+        if(this.tmpReq.idestado == 2){
+          this.permisoEditar = true;
+          this.permisoEditarInfoBasica = false;
+        }
+         break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+        if(this.tmpReq.idestado == 1){
+          this.permisoEditar = false;
+          this.permisoEditarInfoBasica = true;
+        }
+         break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+          this.permisoEditar = false;
+          this.permisoEditarInfoBasica = false;
+        
+        break; 
+     } 
+      default: { 
+         break; 
+      } 
+   } 
+
+     if(this.id.estado == 5){
+      this.permisoEditar = false;
+      this.permisoEditarInfoBasica = false;
+     }
+
+  }
+
+  getMunicipioIni(){
+    this.creaService.getUbicacionMunicipio(parseInt(this.tmpReq.ubicacion)).subscribe(
+      response => {
+        this.municipio = response;
+        console.log("response municipio::::",this.municipio);
+        this.inicializa();
+      },
+      error => {
+      }
+    )
+  }
+
+
+  getMunicipio() {
+    this.creaService.getUbicacionMunicipio(this.crearForm.value.estado).subscribe(
+      response => {
+        this.municipio = response
+      },
+      error => {
+      }
+    )
+
+  }
+
+  inicializa(){
+    console.log(this.tipoPermiso);
+    
+    console.log(this.tmpReq);
+    let f=this.tmpReq.fechareq.split("/");
+    let fecha1=f[2]+"-"+f[1]+"-"+f[0];
+    let f2=this.tmpReq.fechavencimiento.split("/");
+    let fecha2=f2[2]+"-"+f2[1]+"-"+f2[0];
+    console.log(fecha1);
+    console.log(new Date(fecha1));
+    let vigencia=this.tmpReq.vigencia.split(" ");
+    this.crearForm = this.fb.group({
+      tipoPermiso: [this.tmpReq.permiso, [Validators.required]],
+      estado: [this.tmpReq.ubicacion, Validators.required],
+      municipio: [this.tmpReq.municipio, Validators.required],
+      vigencia: [vigencia[0]],
+      fechaRequerimiento: [fecha1],
+      fechaVencimeinto: [fecha2],
+      area: [this.tmpReq.area, Validators.required],
+      unidad: [vigencia[1], Validators.required]
+    });
+    console.log(this.crearForm.value);
+  }
+
+  get f() { return this.crearForm.controls; }
+  
+  onSubmit() {
+    console.log("Entra a submitted",this.f);
+    console.log("his.crearForm.invalid=",this.crearForm.invalid);
+    this.submitted=true;
+        // stop here if form is invalid
+        if (this.crearForm.invalid) {
+            return;
+        }else{
+          console.log("Campos completos");
+          this.submitted=false;
+          this.guardar();
+        }
+    }
+
+  campoNovalido(campo: string) {
+
   }
 
   guardar(){
-    console.log("FormularioRequerimiento",this.requerimientoForm);
-    console.log("FormularioRequerimiento",this.actividadesForm);
-    this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
-    this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
-    
-    console.log("Datos del form",this.requerimientoForm);
+    switch(this.rol){
+      case "ROLE_COMERCIAL": { 
+       this.updateReqAddon()
+         break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+        this.UpdateInfoBasicReq();
+         break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+        this.updateReqAddon();
+        break; 
+     } 
+      default: { 
+         break; 
+      } 
+    }
+   
+  }
+
+  UpdateInfoBasicReq(){
+    console.log("Anexo");
+
+    let f=this.crearForm.value.fechaRequerimiento.split("-");
+    let fecha1=f[0]+"/"+f[1]+"/"+f[2];
+    let f2=this.crearForm.value.fechaVencimeinto.split("-");
+    let fecha2=f2[0]+"/"+f2[1]+"/"+f2[2];
+
     this.jsonCrear = {
-      tipoRequerimineto: this.requerimientoForm.value.tipoPermiso,
-      ubicacionEstado: this.requerimientoForm.value.estado,
-      municipio: this.requerimientoForm.value.municipio,
-      vigencia: this.requerimientoForm.value.vigencia,
-      umedida: this.requerimientoForm.value.unidad,
+      id : this.tmpReq.id,
+      tipoRequerimineto: this.tmpReq.permiso,
+      ubicacionEstado: this.crearForm.value.estado,
+      municipio: this.crearForm.value.municipio,
+      vigencia: this.crearForm.value.vigencia,
+      umedida: this.crearForm.value.unidad,
+      area: this.crearForm.value.area,
+      fechaRequerimiento: fecha1,
+      fechaVencimiento: fecha2
+    };
+
+    console.log("uiipp");
+    console.log(this.jsonCrear);
+    console.log("uuuipp");
+
+    this.creaService.updateRequerimiento(this.jsonCrear).subscribe(
+      response => {
+        Swal.fire(
+          'Datos Guardados',
+          '',
+          'success'
+        )
+        console.log(response)
+      },error => {
+        Swal.fire(
+          'Ocurrio un error al guardar los datos',
+          '',
+          'error'
+        )
+        console.log(error);
+      }
+    )
+  }
+
+  updateReqAddon(){
+    console.log("update");
+    let f=this.requerimientoForm.value.paydate.split("-");
+    let fecha1=f[0]+"/"+f[1]+"/"+f[2];
+    this.jsonCrear={
+      idRequerimiento: this.tmpReq.id,
+      folio: this.tmpReq.id,
+      importe: this.requerimientoForm.value.importe,
+      paydate: fecha1,
+      registroContable: this.requerimientoForm.value.registroContable,
+      nombreContacto: this.requerimientoForm.value.nombreContacto,
+      proveedor: this.requerimientoForm.value.proveedor,
+      sistema: this.requerimientoForm.value.sistema,
+      tipoSolicitud: "403",
+      folioEgreso: this.requerimientoForm.value.folioEgreso,
       area: this.requerimientoForm.value.area,
-      fechaRequerimiento: this.requerimientoForm.value.fechaRequerimiento,
-      fechaVencimiento: this.requerimientoForm.value.fechaVencimeinto
+      cc: this.requerimientoForm.value.cc,
+      nombreCc: this.requerimientoForm.value.nombreCc,
+      postFin: this.requerimientoForm.value.postFin,
+      incluidoPermiso: this.requerimientoForm.value.incluidoPermiso,
+      horario: this.requerimientoForm.value.horario,
+      perNeg: this.requerimientoForm.value.perNeg,
+      catidad: this.requerimientoForm.value.catidad,
+      vigencia: this.requerimientoForm.value.vigencia,
+      medida: this.requerimientoForm.value.medida,
+      formaPago: this.requerimientoForm.value.formaPago,
+      cobertura: "1",
+      actividad: "41",
+      descripcion: "",
+      foliosap:"10001",
+      folioseg:"20002"
     }
 
-    this.creaService.updateRequerimiento(this.requerimientoForm.value).subscribe(
+    console.log("Carlitos")
+    console.log(this.jsonCrear);
+
+    this.creaService.updateRequerimientoAddon(this.jsonCrear).subscribe(
       response => {
         Swal.fire(
           'Datos Guardados',
@@ -397,6 +653,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
   }
+
   rechaza(){
     this.creaService.cancelaRequerimiento(this.id.id).subscribe(
        responseP=>{
@@ -405,7 +662,7 @@ export class RequerimientoComponent implements OnInit {
           disableClose: true,
           data: {
             tipo: 5,            
-            title: "Cancelar requerimiento",
+            title: "Autorizar Requerimiento",
             array: [this.id]
           }
         })
@@ -416,7 +673,7 @@ export class RequerimientoComponent implements OnInit {
               disableClose: true,
               data: {
                 tipo: 5,            
-                title: "Cancelar requerimiento",
+                title: "Autorizar Requerimiento",
                 array: [this.id]
               }
             })
@@ -424,6 +681,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
   }
+
   sendMail(tipo: any,user: any,accion: any, idRequerimiento: any){
     this.plantilla=this.plantilla.replace("#Tipo",tipo);
     this.plantilla=this.plantilla.replace("#User",user);
@@ -453,13 +711,12 @@ export class RequerimientoComponent implements OnInit {
                 console.log(error);
             }
           )
-        
-        
       },error => {
           console.log(error);
       }
     )
   }
+
   getComentarios(){
     this.creaService.getComentariosId(this.id.id).subscribe(
       response => {
@@ -519,9 +776,21 @@ export class RequerimientoComponent implements OnInit {
   //Archivos
   selectFiles(event) {
     this.progressInfo = [];
-    event.target.files.length == 1 ? this.imageName = event.target.files[0].name : this.imageName = event.target.files.length + " archivos";
-    this.selectedFiles = event.target.files;
+    event.target.files.length == 1 ? this.imageName = event.target.files[0].name : this.imageName = event.target.files.length + " archivos";   
+    for (var i = 0; i < event.target.files.length; i++){
+      this.selectedFiles.push(event.target.files[i])      
+    }
   }
+  
+  deleteFile(event){
+    for (var i = 0; i < this.selectedFiles.length; i++){
+      if(event != i){
+        this.tmpFiles.push(this.selectedFiles[i]);
+      }     
+    }
+    this.selectedFiles = this.tmpFiles;
+    this.tmpFiles = []
+  } 
 
   upload(index, file) {
     this.progressInfo[index] = { value: 0, fileName: file.name };
@@ -616,4 +885,41 @@ export class RequerimientoComponent implements OnInit {
       );*/
   }
   //fin archivos
+
+  guardaComentario(){
+    console.log(this.comentario);
+    this.comentariosForm.value.idUser=this.datosUser.sub;
+    this.comentariosForm.value.usuario=this.datosUser.name;
+    this.comentariosForm.value.idRequerimiento=this.tmpReq.id
+    this.comentariosForm.value.idComentarioReply=0;
+    
+    console.log("formComentarios",this.comentariosForm.value);
+    this.creaService.addComentario(this.comentariosForm.value).subscribe(
+      response=>{
+        console.log(response);
+        this.ngOnInit();
+        this.comentariosForm.reset();
+      },error =>{
+        this.ngOnInit();
+        this.comentariosForm.reset();
+      }
+
+      )
+  }
+
+  CheckSap(){
+    if(this.mCheckSap == false){
+      this.mCheckSap = true
+    }else{
+      this.mCheckSap = false
+    } 
+ }
+
+ CheckSeguimiento(){
+    if(this.mCheckSeguimiento == false){
+      this.mCheckSeguimiento = true
+    }else{
+      this.mCheckSeguimiento = false
+    }
+  }
 }

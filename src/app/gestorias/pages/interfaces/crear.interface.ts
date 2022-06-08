@@ -1,3 +1,4 @@
+
 export interface CrearResponse {
   id: number;
   permiso: string;
@@ -26,5 +27,14 @@ export interface UsuariosResponse{
   name: string;
   username: string;
   created : string;
-  role : string
+  role : [string];
+  areaID : string;
+  email : string;
+}
+
+export interface RolesResponse{
+  id : number;
+  role : string;
+  description : string;
+  enabled : string;
 }

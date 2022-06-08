@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse,CrearComentario, UsuariosResponse } from '../interfaces/crear.interface';
+import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse } from '../interfaces/crear.interface';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
 
@@ -31,7 +31,7 @@ export class CrearService {
   }
 
   updateRequerimiento(formdata: CrearResponse): Observable<CrearResponse>{
-    const url = `${this.baseurlreq}/updateRequerimiento`
+    const url = `${this.baseurlreq}/requerimiento/updateRequerimiento`
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
@@ -266,6 +266,24 @@ export class CrearService {
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     });
     return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+  getAllRoles() :Observable<RolesResponse[]>{
+    const url = `${this.baseurlusr}/rol`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<RolesResponse[]>(url,{headers});
+  }
+
+  updateRequerimientoAddon(formdata: RequerimientoGeneric): Observable<RequerimientoGeneric>{
+    const url = `${this.baseurlreq}/requerimiento/add/updateAddon`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<RequerimientoGeneric>(url,formdata,{headers});
   }
 }
 
