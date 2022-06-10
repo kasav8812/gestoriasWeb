@@ -36,4 +36,5 @@ export class AutorizadasComponent implements OnInit {
     localStorage.setItem('requerimiento', JSON.stringify(req));
   }
 
+  
 }

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Catalogo, RequerimientoGeneric, CatGeneric } from '../interfaces/configuracion.interface';
-import { CrearResponse, CrearComentario } from '../interfaces/crear.interface';
+import { CrearResponse, CrearComentario, ArchivosResponse } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrearService } from '../services/crear.service';
@@ -33,6 +33,7 @@ export class RequerimientoComponent implements OnInit {
   area: Catalogo[];
   tipoSolicitud: Catalogo[];
   unidad: Catalogo[];
+  unidad2:Catalogo[];
   cobertura: Catalogo[];
   actividades: Catalogo[];
   requerimiento: RequerimientoGeneric;
@@ -145,6 +146,7 @@ export class RequerimientoComponent implements OnInit {
   selectedFiles: FileList[]=[];
   tmpFiles: FileList[]=[];
   file : File;
+  mArchivos : ArchivosResponse[];
 
 
   //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
@@ -202,6 +204,7 @@ export class RequerimientoComponent implements OnInit {
             this.tipoPermiso = this.res.tipoPermiso;
             this.areaSolicitate = this.res.areaSolitante;
             this.unidad = this.res.unidaMedida;
+            this.unidad2 = this.unidad;
             console.log("response catalgos",response);
             this.getMunicipioIni();
           },
@@ -266,9 +269,21 @@ export class RequerimientoComponent implements OnInit {
       }
     );
     this.getComentarios();
-    this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
+    //this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
   
 
+    this.uploadFilesService.getFiles(this.id.id).subscribe(
+      response => {
+        this.mArchivos = response;
+        console.log("Archivos FIles");
+        console.log(this.mArchivos);  
+      },error => {
+        console.log(error);
+      }
+    );
+    console.log("Archivos");
+    console.log(this.fileInfos);
+    
     switch(this.rol) { 
       case "ROLE_COMERCIAL": { 
         if(this.tmpReq.idestado == 2){
@@ -587,6 +602,23 @@ export class RequerimientoComponent implements OnInit {
     })
   }
 
+
+  confirmarCancelar(){
+    Swal.fire({
+      title: 'Cancelar Requerimiento?',
+      text: "Estas seguro que deseas cancelar el requerimiento?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#7A4CF6',
+      cancelButtonColor: '#8296BA',
+      confirmButtonText: 'Aceptar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.rechaza();
+      }
+    })
+  }
+
   reactivar(){
     let folioAnterior=this.actividadesForm.value.idRequerimiento;
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
@@ -625,7 +657,14 @@ export class RequerimientoComponent implements OnInit {
   
   autoriza(){
     console.log(this.id);
-    this.creaService.autorizaRequerimiento(this.id.id).subscribe(
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 5,
+        title: "Autorizar requerimiento",
+        array: [this.id]
+      }})
+    /*this.creaService.autorizaRequerimiento(this.id.id).subscribe(
        responseP=>{
         console.log(responseP);
         const dialogRef = this.dialog.open(AlertComponent, {
@@ -651,32 +690,23 @@ export class RequerimientoComponent implements OnInit {
             })
           }
       }
-    )
+    )*/
   }
 
   rechaza(){
     this.creaService.cancelaRequerimiento(this.id.id).subscribe(
        responseP=>{
         console.log(responseP);
-        const dialogRef = this.dialog.open(AlertComponent, {
-          disableClose: true,
-          data: {
-            tipo: 5,            
-            title: "Autorizar Requerimiento",
-            array: [this.id]
-          }
-        })
+       
       },error => {
           console.log(error);
           if(error.error.text==="Exito"){
-            const dialogRef = this.dialog.open(AlertComponent, {
-              disableClose: true,
-              data: {
-                tipo: 5,            
-                title: "Autorizar Requerimiento",
-                array: [this.id]
-              }
-            })
+            Swal.fire(
+              'Requerimiento Cancelado',
+              '',
+              'success'
+            )
+            this.router.navigateByUrl('/gestorias/requerimientos');
           }
       }
     )
@@ -791,6 +821,22 @@ export class RequerimientoComponent implements OnInit {
     this.selectedFiles = this.tmpFiles;
     this.tmpFiles = []
   } 
+
+  confirmDeleteFiles(event){
+    Swal.fire({
+      title: 'Eliminar Documento?',
+      text: "Estas seguro que deseas eliminar el documento?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#7A4CF6',
+      cancelButtonColor: '#8296BA',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteFile(event);
+      }
+    })
+  }
 
   upload(index, file) {
     this.progressInfo[index] = { value: 0, fileName: file.name };

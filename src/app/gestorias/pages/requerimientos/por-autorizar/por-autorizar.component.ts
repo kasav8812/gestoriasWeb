@@ -30,7 +30,7 @@ export class PorAutorizarComponent implements OnInit {
       this.requeServvice.postRequerimientoLista().subscribe(
         response => {
           if(this.rol == "ROLE_AUTORIZACION"){
-            this.requerimientos = response.filter(((el) => el.idestado==3 || el.idestado==7));
+            this.requerimientos = response.filter(((el) => el.idestado==3));
           }
         },
         error => {

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders,HttpRequest,  HttpEvent,HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse,CrearComentario } from '../interfaces/crear.interface';
+import { CrearResponse,CrearComentario, ArchivosResponse } from '../interfaces/crear.interface';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
 
@@ -50,7 +50,7 @@ export class FileService {
       'Content-Type':'application/json',
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
     });
-    return this.http.get(url,{headers});
+    return this.http.get<ArchivosResponse[]>(url,{headers});
   }
 
   getFile(url: any):Observable<File>{

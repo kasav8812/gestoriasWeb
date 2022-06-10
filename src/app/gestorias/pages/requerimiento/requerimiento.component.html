@@ -10,23 +10,33 @@
           Informaci&oacute;n del requerimiento - <strong>{{this.tmpReq.id}}</strong>
         </div>
 
-        <div style="width: 70%; display: flex; justify-content: flex-end;" *ngIf="id.estado !== 'AUTORIZADAS'">
+        <div style="width: 70%; display: flex; justify-content: flex-end;"
+          *ngIf="id.estado !== 'AUTORIZADAS' && id.estado !== 'CANCELADAS'">
 
           <div style="margin-right: 10%;" class="col-1">
             <button style="width: 225%" class="btn radiu-tp btn-outline-tp" (click)="onSubmit()">Guardar</button>
           </div>
+
+          <div class="offset-1 col-2">
+            <button style="width: 120%;" class="btn radiu-tp btn-outline-tp"
+              (click)="confirmarCancelar()">Cancelar</button>
+          </div>
+
           <div class="offset-1 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
             <button style="width: 212%;" class="btn radiu-tp btn-tp " (click)="confirmarEnvio()">Enviar a
               Autorizar</button>
           </div>
 
-          <div class="offset-1 col-2" *ngIf="rol=='ROLE_OPERACIONES'">
+
+          <!-- <div class="offset-1 col-2" *ngIf="rol=='ROLE_OPERACIONES'">
             <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="confirmarEnvio()">Enviar a
               Aprobación</button>
-          </div>
+          </div>-->
+
+
 
           <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION'">
-            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="rechaza()">Autorizar</button>
+            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="autoriza()">Autorizar</button>
           </div>
 
           <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">
@@ -335,7 +345,7 @@
               <input type="text" class="form-control" value="{{requerimientoForm.value.proveedor}}" disabled="true">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Sistema</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Sistema</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -345,7 +355,7 @@
               </select>
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Sistema</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Sistema</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -355,7 +365,7 @@
               </select>
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Tipo de Solicitud</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Tipo de Solicitud</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -365,7 +375,7 @@
               </select>
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Tipo de Solicitud</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Tipo de Solicitud</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -391,7 +401,7 @@
               <input type="text" class="form-control" value="{{requerimientoForm.value.folioEgreso}}" disabled="true">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">&Aacute;rea</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">&Aacute;rea</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -401,7 +411,7 @@
               </select>
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">&Aacute;rea</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">&Aacute;rea</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -517,21 +527,21 @@
           </div>
           <div class="row">
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Cantidad de permisos</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Cantidad de permisos</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
               <input type="text" class="form-control" formControlName="catidad">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Cantidad de permisos</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Cantidad de permisos</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
               <input type="text" class="form-control" value="{{requerimientoForm.value.catidad}}" disabled="true">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Vigencia</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Vigencia</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -539,12 +549,12 @@
                 <input type="number" formControlName="vigencia">
                 <select id="inputState" class="form-select grid-col-6" formControlName="medida">
                   <option selected>Seleccionar</option>
-                  <option *ngFor="let item of unidad" value="{{item.id}}">{{item.descripcion}}</option>
+                  <option *ngFor="let item of unidad2" value="{{item.id}}">{{item.descripcion}}</option>
                 </select>
               </div>
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Vigencia</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Vigencia</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -553,7 +563,7 @@
                 <select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.medida}}"
                   disabled="true">
                   <option selected>Seleccionar</option>
-                  <option *ngFor="let item of unidad" value="{{item.id}}">{{item.descripcion}}</option>
+                  <option *ngFor="let item of unidad2" value="{{item.id}}">{{item.descripcion}}</option>
                 </select>
               </div>
             </div>
@@ -572,7 +582,7 @@
               <input type="text" class="form-control" value="{{requerimientoForm.value.formaPago}}" disabled="true">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Cobertura</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Cobertura</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -667,7 +677,7 @@
           </div>
         </form>
       </blockquote>
-     
+
 
       <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'">
         <h6 class="text-gris">Folios</h6>
@@ -746,8 +756,35 @@
           </ul>
         </div> 
     </blockquote> <!-->
+      <div class="row mb-3" *ngIf="(id.estado === 'AUTORIZADAS' || id.estado === 'CANCELADAS' || id.estado === 'EN CURSO' || rol === 'ROLE_OPERACIONES' )">
+      <div class="col-12">
+        <h6 class="text-gris">Documentación</h6>
+      </div>
+      <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+        <div class="mt-5 row" >
+          <div id="body" class="style-scope ytd-comment-renderer"
+            style="position: relative;display: flex;flex-direction: row; margin-top: -50px;">
+            <table>
+              <thead>
+              </thead>
+              <tbody>
+                <tr *ngFor="let file of mArchivos; let i = index;" >
+                  <td  style="font-size: 12px;" >
+                    <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
+                    <a [routerLink]="file.url"> {{file.name}}</a>
+                  
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </blockquote>
+    
+      </div>
 
-      <div class="row mb-3" *ngIf="(rol==='ROLE_AUTORIZACION' || rol==='ROLE_COMERCIAL')">
+      <div class="row mb-3" *ngIf="(rol==='ROLE_AUTORIZACION' || rol==='ROLE_COMERCIAL') && (id.estado !== 'AUTORIZADAS' || id.estado !== 'CANCELADAS')">
         <div class="col-12">
           <h6 class="text-gris">Documentación</h6>
         </div>
@@ -775,12 +812,23 @@
                     <label for="formFile" class="form-label">Archivos seleccionados</label>
                   </small>
                 </small>
+                <tr *ngFor="let file of mArchivos; let i = index;" class="form-label">
+                  <small>
+                    <small>
+                      <small>
+                        <td class="form-label">
+                          <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
+                          <a [routerLink]="file.url">{{file.name}}</a>
+                          </td>
+                      </small>
+                    </small>
+                  </small>
                 <tr *ngFor="let file of selectedFiles; let i = index;" class="form-label">
                   <small>
                     <small>
                       <small>
                         <td class="form-label">
-                          <button class="btnDelt" (click)="deleteFile(i)"></button>
+                          <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
                           {{file.name}}
                         </td>
                       </small>
@@ -792,14 +840,13 @@
             </form>
           </blockquote>
         </div>
-
       </div>
 
       <div class="col-12">
         <h6 class="text-gris">Observaciones</h6>
       </div>
       <blockquote class=" col-12 p-4 m-2 bg-gris">
-        <div class="mt-5 row" >
+        <div class="mt-5 row">
           <div id="body" class="style-scope ytd-comment-renderer"
             style="position: relative;display: flex;flex-direction: row;">
             <table class="table table-striped" style="margin-top: -60px;">
@@ -812,12 +859,12 @@
                 <tr *ngFor="let item of comentarios; let i = index">
                   <td><strong>{{item.usuario}}</strong> : {{item.comentario}}</td>
                 </tr>
-                
+
               </tbody>
             </table>
-            
-          
-            
+
+
+
             <!--
             <div id="author-thumbnail" class="style-scope ytd-comment-renderer"
               style="position: relative;display: flex;flex-direction: row;">
@@ -846,9 +893,11 @@
         </div>
         <div *ngIf="rol!=='ROLE_OPERACIONES' && id.estado !== 'AUTORIZADAS'">
           <form action="guardaComentario()" [formGroup]="comentariosForm">
-          <input [(ngModel)]="comentario" id="motivo" formControlName="comentario" type="text" style="border: 1px solid #ced4da!important;height: 35px;  margin-right: 10px; width: 300px; margin-top: 15px;">
-          <button type="button" class="btn radiu-tp btn-tp" (click)="guardaComentario()">Comentar</button>
-        </form>
+            <input placeholder="Dejar comentario..." [(ngModel)]="comentario" id="motivo" formControlName="comentario"
+              type="text"
+              style="border: 1px solid #ced4da!important;height: 65px;  margin-right: 10px; width: 400px; margin-top: 15px;">
+            <button type="button" class="btn radiu-tp btn-tp" (click)="guardaComentario()">Comentar</button>
+          </form>
 
         </div>
       </blockquote>
