@@ -40,11 +40,11 @@ export class MailService {
   sendMail(param: any,token: any):Observable<any>{
     let headers= new HttpHeaders({
       'Content-Type':'application/json',
-      'Authorization': 'Bearer '+token
-    })
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+    });
     return this.http.post<any>(this.urlMail,param,{headers});
-
   }
-
   
 }

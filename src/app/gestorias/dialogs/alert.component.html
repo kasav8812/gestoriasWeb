@@ -34,7 +34,6 @@
               <td style="text-align: right;">{{data.req.vigencia}}</td>
             </tr>
 
-
             <tr>
               <td><strong>Fecha Requerimiento:</strong></td>
               <td style="text-align: right;">{{data.req.fechareq}}</td>
@@ -120,7 +119,7 @@
 <div class="modal-2 radiu-tp"  *ngIf="data.tipo ===4">
   <div class="text-center mt-4">
     <div class="modal-header">
-      <h2 class="text-gris mb-3" style="width: 89%;">{{data.title}}</h2>
+      <h2 class="text-gris mb-3" style="width: 100%;">{{data.title}}</h2>
       <button  mat-button="" mat-dialog-close="" style="background-color: lightgrey;" type="button" class="close" aria-label="Close" >
         <span aria-hidden="true">×</span>
       </button>
@@ -156,7 +155,7 @@
   <form [formGroup]="comentariosForm" autocomplete="off">
   <div class="text-center mt-4">
     <div class="modal-header">
-      <h2 class="text-gris mb-3" style="width: 89%;">{{data.title}}</h2>
+      <h2 class="text-gris mb-3" style="width: 100%;">{{data.title}}</h2>
       <button  mat-button="" mat-dialog-close="" style="background-color: lightgrey;" type="button" class="close" aria-label="Close" >
         <span aria-hidden="true">×</span>
       </button>
@@ -248,28 +247,28 @@
 </div>
 
 <div class="modal-1 radiu-tp"  *ngIf="data.tipo ===8" style="height: 630px;">
-  <form [formGroup]="crearForm" autocomplete="off">
+  <form [formGroup]="crearFormUser" autocomplete="off">
     <div class="text-center mt-4">
       <h2 class="text-gris">Crear Usuario</h2>
         <blockquote class="blockquote col-12 p-4 m-2 bg-gris text-start">
           <div class="row">
             <div class=" col-12 form-control-sm">
               <label for="nombre" class="form-label" >Usuario</label>
-              <input class="form-control" [(ngModel)]="data.req.descripcion" maxlength="20" formControlName="nombre" (ngModelChange)="data.req.descripcion = $event.toUpperCase()"/>
+              <input class="form-control" maxlength="20" formControlName="usuario_usr" />
             </div>
             <div class=" col-12 form-control-sm">
               <label for="decripcion" class="form-label" >Contraseña</label>
-              <input class="form-control" maxlength="100" [(ngModel)]="data.req.comentario" formControlName="descripcion" (ngModelChange)="data.req.comentario = $event.toUpperCase()"/>
+              <input class="form-control" maxlength="100" formControlName="password_usr" />
             </div>
 
             <div class=" col-12 form-control-sm">
               <label for="decripcion" class="form-label" >Nombre</label>
-              <input class="form-control" maxlength="100" [(ngModel)]="data.req.comentario" formControlName="descripcion" (ngModelChange)="data.req.comentario = $event.toUpperCase()"/>
+              <input class="form-control" maxlength="100"formControlName="nombre_usr"/>
             </div>
 
             <div class=" col-12 form-control-sm">
               <label for="decripcion" class="form-label" >Rol</label>
-              <select id="inputState" class="form-select" formControlName="sistema">
+              <select id="inputState" class="form-select" formControlName="role_usr">
                 <option selected></option>
                 <option *ngFor="let item of roles;"  value="{{item.id}}">{{item.role}}</option>
               </select>
@@ -277,7 +276,7 @@
 
             <div class=" col-12 form-control-sm">
               <label for="decripcion" class="form-label" >Area</label>
-              <select id="inputState" class="form-select" formControlName="sistema">
+              <select id="inputState" class="form-select" formControlName="area_usr">
                 <option selected></option>
                 <option *ngFor="let item of municipio;"  value="{{item.id}}">{{item.descripcion}}</option>
               </select>
@@ -285,16 +284,79 @@
 
             <div class=" col-12 form-control-sm">
               <label for="decripcion" class="form-label" >Correo</label>
-              <input class="form-control" maxlength="100" [(ngModel)]="data.req.comentario" formControlName="descripcion" (ngModelChange)="data.req.comentario = $event.toUpperCase()"/>
+              <input class="form-control" maxlength="100" formControlName="correo_usr"/>
             </div>
           </div>
         </blockquote>
     </div>
     <div class="text-center" style="padding: 10px;">
       <button mat-button mat-dialog-close class="btn btn-light radiu-tp btn-alert mt-4">Cerrar</button>&nbsp;
-      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="generico(data.tipe, data.req.id, data.catid)">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="onSubmit()">
         <span class="mat-button-wrapper" >Crear Usuario</span>
       </button>
     </div>
   </form>
+</div>
+
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===9">
+  <div class="text-center mt-2">
+    <h2 class="text-gris"> {{data.file.name}}</h2>
+    <!--<img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">-->
+  </div>
+  <div class="text-center mt-1" style="height: 375px;">
+    <!--<img src="{{data.file.url}}" *ngIf="data.file.typeFile!='image/png'" style="width: 100%;height: 100%;">-->
+    <pdf-viewer *ngIf="data.file.typeFile==='application/pdf'"
+      [src]="data.file.url"
+      [rotation]="0"
+      [original-size]="true"
+      [show-all]="true"
+      [fit-to-page]="true"
+      [zoom]="1"
+      [zoom-scale]="'page-width'"
+      [stick-to-page]="true"
+      [render-text]="true"
+      [external-link-target]="'blank'"
+      [autoresize]="true"
+      [show-borders]="true"
+      style="width: 100%; height: 400px;"
+    ></pdf-viewer>
+    
+  </div>
+  <div class="text-center mt-4">
+    
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert" type="button" ><span class="mat-button-wrapper">Regresar</span>      
+    </button>
+  </div>
+</div>
+
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===10" style="height: 350px;">
+  <div class="text-center mt-4" >
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">Cierre de requerimiento</h2>
+      
+    </div>
+    <div class="mt-5 row" >
+      <table class="table table-striped" >
+        <thead>
+          <th>Nombre Perfil</th>
+          <th>Correo</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of mUserDataEmails">
+            <td>{{item.name}}</td>
+            <td>{{item.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" style="margin-right: 15px;" (click)="cerrarReq()">
+        <span class="mat-button-wrapper">Continuar</span>
+      </button>
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button">
+        <span class="mat-button-wrapper">Cerrar</span>
+      </button>
+    </div>
+  </div>
 </div>

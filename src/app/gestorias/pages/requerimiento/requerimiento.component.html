@@ -11,32 +11,37 @@
         </div>
 
         <div style="width: 70%; display: flex; justify-content: flex-end;"
-          *ngIf="id.estado !== 'AUTORIZADAS' && id.estado !== 'CANCELADAS'">
-
+          *ngIf="id.estado === 'AUTORIZADAS' && rol==='ROLE_AUTORIZACION' && isUserRequeriment === true">
           <div style="margin-right: 10%;" class="col-1">
             <button style="width: 225%" class="btn radiu-tp btn-outline-tp" (click)="onSubmit()">Guardar</button>
           </div>
+          <div class="offset-1 col-1">
+            <button style="width: 212%;" class="btn radiu-tp btn-tp " (click)="cierraReq()">Continuar</button>
+          </div>
+        </div>
 
-          <div class="offset-1 col-2">
+        <div style="width: 70%; display: flex; justify-content: flex-end;"
+          *ngIf="id.estado !== 'AUTORIZADAS' && id.estado !== 'CANCELADAS' && id.estado !== 'CERRADAS' && isUserRequeriment === true">
+          
+          <div style="margin-right: 10%;" class="col-1" *ngIf="(rol==='ROLE_COMERCIAL' ||  rol === 'ROLE_OPERACIONES') && isUserRequeriment === true && id.estado === 'RECIBIDAS'">
+            <button style="width: 225%" class="btn radiu-tp btn-outline-tp" (click)="onSubmit()">Guardar</button>
+          </div>
+
+          <div class="offset-1 col-2" >
             <button style="width: 120%;" class="btn radiu-tp btn-outline-tp"
               (click)="confirmarCancelar()">Cancelar</button>
           </div>
 
-          <div class="offset-1 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
+          <div class="offset-1 col-1" *ngIf="rol=='ROLE_COMERCIAL' && isUserRequeriment === true && id.estado === 'RECIBIDAS' ">
             <button style="width: 212%;" class="btn radiu-tp btn-tp " (click)="confirmarEnvio()">Enviar a
               Autorizar</button>
           </div>
-
-
           <!-- <div class="offset-1 col-2" *ngIf="rol=='ROLE_OPERACIONES'">
             <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="confirmarEnvio()">Enviar a
               Aprobación</button>
           </div>-->
-
-
-
-          <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION'">
-            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="autoriza()">Autorizar</button>
+          <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION' && isUserRequeriment === true && id.estado === 'POR AUTORIZAR'">
+            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="autoriza()">Autorizar/Rechazar</button>
           </div>
 
           <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">
@@ -284,14 +289,14 @@
               <input type="text" class="form-control" value="{{requerimientoForm.value.importe}}" disabled="true">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Fecha de pago</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Fecha de pago</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
               <input type="date" class="form-control" formControlName="paydate">
             </div>
             <div class="mb-3 col-3 form-control-sm" *ngIf="!permisoEditar">
-              <label for="exampleInputEmail1" class="form-label">Fecha de pago</label>
+              <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Fecha de pago</label>
               <mat-icon matTooltip="texto">
                 help_outline
               </mat-icon>
@@ -679,14 +684,15 @@
       </blockquote>
 
 
-      <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION'">
+      <div class="col-12" *ngIf="rol==='ROLE_AUTORIZACION' && id.estado === 'AUTORIZADAS'">
         <h6 class="text-gris">Folios</h6>
       </div>
-      <blockquote class="blockquote col-12 p-4 m-2 bg-gris" *ngIf="rol==='ROLE_AUTORIZACION'">
+      <blockquote class="blockquote col-12 p-4 m-2 bg-gris"
+        *ngIf="rol==='ROLE_AUTORIZACION' && id.estado === 'AUTORIZADAS' ">
         <div class="row">
 
           <div class="mb-3 col-3 form-control-sm" *ngIf="mCheckSap">
-            <label for="text" class="form-label">Folio SAP</label>
+            <label for="text" class="form-label">Folio Egreso</label>
             <mat-icon matTooltip="texto">
               help_outline
             </mat-icon>
@@ -697,7 +703,7 @@
           </div>
 
           <div class="mb-3 col-3 form-control-sm" *ngIf="!mCheckSap">
-            <label for="text" class="form-label">Folio SAP</label>
+            <label for="text" class="form-label">Folio Egreso</label>
             <mat-icon matTooltip="texto">
               help_outline
             </mat-icon>
@@ -755,36 +761,35 @@
               </li>
           </ul>
         </div> 
-    </blockquote> <!-->
-      <div class="row mb-3" *ngIf="(id.estado === 'AUTORIZADAS' || id.estado === 'CANCELADAS' || id.estado === 'EN CURSO' || rol === 'ROLE_OPERACIONES' )">
-      <div class="col-12">
-        <h6 class="text-gris">Documentación</h6>
-      </div>
-      <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
-        <div class="mt-5 row" >
-          <div id="body" class="style-scope ytd-comment-renderer"
-            style="position: relative;display: flex;flex-direction: row; margin-top: -50px;">
-            <table>
-              <thead>
-              </thead>
-              <tbody>
-                <tr *ngFor="let file of mArchivos; let i = index;" >
-                  <td  style="font-size: 12px;" >
-                    <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
-                    <a [routerLink]="file.url"> {{file.name}}</a>
-                  
-                  </td>
-                </tr>
-                
-              </tbody>
-            </table>
-          </div>
+    </blockquote> -->
+      <div class="row mb-3" *ngIf="(rol === 'ROLE_COMERCIAL' && id.estado === 'POR AUTORIZAR') || (rol === 'ROLE_COMERCIAL' && id.estado === 'CERRADAS') || (rol === 'ROLE_COMERCIAL' && id.estado === 'CANCELADAS') || (rol === 'ROLE_COMERCIAL' && id.estado === 'AUTORIZADAS') || (rol === 'ROLE_AUTORIZACION' && id.estado === 'AUTORIZADAS') || (rol === 'ROLE_AUTORIZACION' && id.estado === 'CERRADAS') || (rol === 'ROLE_AUTORIZACION' && id.estado === 'CANCELADAS') || (rol === 'ROLE_OPERACIONES' && id.estado === 'RECIBIDAS') || (rol === 'ROLE_OPERACIONES' && id.estado === 'AUTORIZADAS') || (rol === 'ROLE_OPERACIONES' && id.estado === 'POR AUTORIZAR') || (rol === 'ROLE_OPERACIONES' && id.estado === 'CANCELADAS') || (rol === 'ROLE_OPERACIONES' && id.estado === 'CERRADAS')">
+        <div class="col-12">
+          <h6 class="text-gris">Documentación</h6>
         </div>
-      </blockquote>
-    
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+          <div class="mt-5 row">
+            <div id="body" class="style-scope ytd-comment-renderer"
+              style="position: relative;display: flex;flex-direction: row; margin-top: -50px;">
+              <table>
+                <thead>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let file of mArchivos; let i = index;">
+                    <td style="font-size: 12px;">
+                      <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
+                      <button style="background-color: transparent; border: none; text-decoration: underline;"
+                        (click)="previewPDF(file)"> {{file.name}}</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </blockquote>
       </div>
 
-      <div class="row mb-3" *ngIf="(rol==='ROLE_AUTORIZACION' || rol==='ROLE_COMERCIAL') && (id.estado !== 'AUTORIZADAS' || id.estado !== 'CANCELADAS')">
+      <div class="row mb-3"
+        *ngIf="(rol==='ROLE_COMERCIAL' && id.estado == 'RECIBIDAS' ) || (rol==='ROLE_AUTORIZACION' && id.estado === 'POR AUTORIZAR')">
         <div class="col-12">
           <h6 class="text-gris">Documentación</h6>
         </div>
@@ -818,8 +823,9 @@
                       <small>
                         <td class="form-label">
                           <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
-                          <a [routerLink]="file.url">{{file.name}}</a>
-                          </td>
+                          <button style="background-color: transparent; border: none; text-decoration: underline;"
+                            (click)="previewPDF(file)"> {{file.name}}</button>
+                        </td>
                       </small>
                     </small>
                   </small>
@@ -895,7 +901,7 @@
           <form action="guardaComentario()" [formGroup]="comentariosForm">
             <input placeholder="Dejar comentario..." [(ngModel)]="comentario" id="motivo" formControlName="comentario"
               type="text"
-              style="border: 1px solid #ced4da!important;height: 65px;  margin-right: 10px; width: 400px; margin-top: 15px;">
+              style="border: 1px solid #ced4da!important;height: 75px;  margin-right: 10px; width: 450px; margin-top: 15px;">
             <button type="button" class="btn radiu-tp btn-tp" (click)="guardaComentario()">Comentar</button>
           </form>
 

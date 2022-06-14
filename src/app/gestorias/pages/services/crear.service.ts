@@ -285,5 +285,25 @@ export class CrearService {
     });
     return this.http.post<RequerimientoGeneric>(url,formdata,{headers});
   }
+
+  crearUsuario(formdata: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,formdata,{headers});
+  }
+
+  addAreasUser(formdata: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,formdata,{headers});
+  }
+  
+
 }
 

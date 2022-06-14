@@ -10,6 +10,7 @@ export interface CrearResponse {
   fechavencimiento: string;
   area: string;
   idestado: number;
+  idUser: string;
 }
 
 export interface CrearComentario {
@@ -37,4 +38,10 @@ export interface RolesResponse{
   role : string;
   description : string;
   enabled : string;
+}
+
+export interface ArchivosResponse{
+  name: string;
+  url:string;
+  typeFile:string;
 }

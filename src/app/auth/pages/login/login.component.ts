@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit{
         if(role == 'ROLE_CONFIGURACION'){
           this.router.navigateByUrl('gestorias/configuracion');
         }else {
-          this.router.navigateByUrl('gestorias');
+          this.router.navigateByUrl('gestorias/requerimientos/encurso');
         }
       },
       error => {

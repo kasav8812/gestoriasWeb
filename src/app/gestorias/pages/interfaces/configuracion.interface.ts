@@ -39,4 +39,6 @@ export interface RequerimientoGeneric{
 	cobertura: number;
 	actividad: string;
 	descripcion: string;
+	idUserAdmon:string;
+	idUserAut:string;
 }

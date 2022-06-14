@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Catalogo, RequerimientoGeneric, CatGeneric } from '../interfaces/configuracion.interface';
-import { CrearResponse, CrearComentario, ArchivosResponse } from '../interfaces/crear.interface';
+import { CrearResponse, CrearComentario, ArchivosResponse, UsuariosResponse } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrearService } from '../services/crear.service';
@@ -16,6 +16,8 @@ import {MailService} from '../services/mail.service'
 import { min } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { HostListener } from "@angular/core";
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { TouchSequence } from 'selenium-webdriver';
 
 
 
@@ -44,7 +46,9 @@ export class RequerimientoComponent implements OnInit {
   mCheckSap : Boolean = false;
   mCheckSeguimiento : Boolean = false;
 
-  
+  usuarios: UsuariosResponse[];
+  mCheckRolStatus : Boolean = false;
+
 
   horario: string[] = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
@@ -64,6 +68,12 @@ export class RequerimientoComponent implements OnInit {
   areaSolicitate: Catalogo[];
   datosUser: any;
   comentario:string;
+
+  showButtonsRoleComercial: Boolean = false;
+  showButtonsRoleOperaciones: Boolean = false;
+  showButtonsRoleAutorizador: Boolean = false;
+  
+  isUserRequeriment : Boolean = false;
 
   comentariosForm: FormGroup= this.fb.group({
     idUser: ['', Validators.required],
@@ -105,7 +115,9 @@ export class RequerimientoComponent implements OnInit {
     actividad: ['', Validators.required],
     descripcion: ['', Validators.required],
     foliosap : ['',Validators.required],
-    folioseg : ['',Validators.required]
+    folioseg : ['',Validators.required],
+    idUserAdmon :[''],
+    idUserAut:['']
   })
 
   crearForm: FormGroup = this.fb.group({
@@ -116,7 +128,8 @@ export class RequerimientoComponent implements OnInit {
     fechaRequerimiento: [''],
     fechaVencimeinto: [''],
     area: ['', Validators.required],
-    unidad: ['', Validators.required]
+    unidad: ['', Validators.required],
+    idUser:['']
   })
 
   constructor(
@@ -132,7 +145,6 @@ export class RequerimientoComponent implements OnInit {
     this.token = JSON.parse(sessionStorage.getItem('token'));
     this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
 
-    console.log("datos token",JSON.parse(atob(this.token.split('.')[1])))
     let namespace = JSON.parse(atob(this.token.split('.')[1]));
     this.rol = namespace.roles[0];
    }
@@ -190,9 +202,17 @@ export class RequerimientoComponent implements OnInit {
       }
     )
 
+    this.creaService.getAllUsers().subscribe(
+      response => {
+        this.usuarios = response;
+        console.log(this.usuarios[0].role);
+      },
+      error => {
+        console.log(error);
+      }
+    )
+
     this.tmpReq = JSON.parse(localStorage.getItem('requerimiento') );
-    console.log("alskdnalksndlkansdlkandslkanslkdnaskldanklsdnalksndkla")
-    console.log(this.tmpReq.id);
 
     this.creaService.getRequerimientosId(this.tmpReq.id).subscribe(
       response => {
@@ -217,46 +237,51 @@ export class RequerimientoComponent implements OnInit {
         console.log("Response Error")
         console.log(error);
       }
-      )
-    
+    )    
 
-    console.log("Este es el id.",this.id.id);
     this.status=this.id.estado;
-    console.log("####################");
-    console.log(this.status);
-    console.log("####################");
     
     this.creaService.postRequerimientoCompletoLista(this.id.id).subscribe(
       response => {
         this.requerimiento=response[0];
+
+        this.checkRequerimentUser();
         console.log("response",response); 
+        console.log("==========================******************************************");
+        console.log(this.requerimiento.idUserAut);
+        console.log(this.requerimiento.idUserAdmon);
+        console.log("==========================******************************************");
+
         this.requerimientoForm = this.fb.group({
-        idRequerimiento: [this.id.id, Validators.required],
-        folio: [this.requerimiento.folio, Validators.required],
-        importe: [this.requerimiento.importe, Validators.required],
-        foliosap: [this.requerimiento.foliosap, Validators.required],
-        folioseg:[this.requerimiento.folioseg, Validators.required],
-        paydate: [this.requerimiento.paydate, Validators.required],
-        registroContable: [this.requerimiento.registroContable, Validators.required],
-        nombreContacto: [this.requerimiento.nombreContacto, Validators.required],
-        proveedor: [this.requerimiento.proveedor, Validators.required],
-        sistema: [this.requerimiento.sistema, Validators.required],
-        tipoSolicitud: [this.requerimiento.tipoSolicitud, Validators.required],
-        folioEgreso: [this.requerimiento.folioEgreso, Validators.required],
-        area: [this.requerimiento.area, Validators.required],
-        cc: [this.requerimiento.cc, Validators.required],
-        nombreCc: [this.requerimiento.nombreCc, Validators.required],
-        postFin: [this.requerimiento.postFin, Validators.required],
-        incluidoPermiso: [this.requerimiento.incluidoPermiso, Validators.required],
-        horario: [this.requerimiento.horario, Validators.required],
-        perNeg: [this.requerimiento.perNeg, Validators.required],
-        catidad: [this.requerimiento.catidad, Validators.required],
-        vigencia: [this.requerimiento.vigencia, Validators.required],
-        medida: [this.requerimiento.medida, Validators.required],
-        formaPago: [this.requerimiento.formaPago, Validators.required],
-        cobertura: [this.requerimiento.cobertura, Validators.required],
-        actividad: [this.requerimiento.actividad, Validators.required],
-        descripcion: [this.requerimiento.descripcion, Validators.required],
+
+          idRequerimiento: [this.id.id, Validators.required],
+        folio: [this.requerimiento.folio == null ? "" : this.requerimiento.folio , Validators.required],
+        importe: [this.requerimiento.importe == null ? "" : this.requerimiento.importe , Validators.required],
+        foliosap: [this.requerimiento.foliosap == null ? "": this.requerimiento.foliosap, Validators.required],
+        folioseg:[this.requerimiento.folioseg == null ? "": this.requerimiento.folioseg, Validators.required],
+        paydate: [this.requerimiento.paydate == null ? "":this.requerimiento.paydate, Validators.required],
+        registroContable: [this.requerimiento.registroContable == null ? "" : this.requerimiento.registroContable, Validators.required],
+        nombreContacto: [this.requerimiento.nombreContacto == null ? "" : this.requerimiento.nombreContacto, Validators.required],
+        proveedor: [this.requerimiento.proveedor == null ? "" : this.requerimiento.proveedor, Validators.required],
+        sistema: [this.requerimiento.sistema == null ? "" : this.requerimiento.sistema, Validators.required],
+        tipoSolicitud: [this.requerimiento.tipoSolicitud == null ? "" : this.requerimiento.tipoSolicitud, Validators.required],
+        folioEgreso: [this.requerimiento.folioEgreso == null? "" : this.requerimiento.folioEgreso, Validators.required],
+        area: [this.requerimiento.area == null ? "" : this.requerimiento.area, Validators.required],
+        cc: [this.requerimiento.cc == null ? "" : this.requerimiento.cc , Validators.required],
+        nombreCc: [this.requerimiento.nombreCc == null ? "" : this.requerimiento.nombreCc, Validators.required],
+        postFin: [this.requerimiento.postFin == null ? "" : this.requerimiento.postFin, Validators.required],
+        incluidoPermiso: [this.requerimiento.incluidoPermiso == null ? "": this.requerimiento.incluidoPermiso, Validators.required],
+        horario: [this.requerimiento.horario == null ? "" : this.requerimiento.horario, Validators.required],
+        perNeg: [this.requerimiento.perNeg == null ? "" : this.requerimiento.perNeg, Validators.required],
+        catidad: [this.requerimiento.catidad == null ? "" : this.requerimiento.catidad, Validators.required],
+        vigencia: [this.requerimiento.vigencia == null ? "" : this.requerimiento.vigencia, Validators.required],
+        medida: [this.requerimiento.medida == null ? "" : this.requerimiento.medida, Validators.required],
+        formaPago: [this.requerimiento.formaPago == null ? "" : this.requerimiento.formaPago, Validators.required],
+        cobertura: [this.requerimiento.cobertura == null ? "" : this.requerimiento.cobertura, Validators.required],
+        actividad: [this.requerimiento.actividad == null ? "" : this.requerimiento.actividad, Validators.required],
+        descripcion: [this.requerimiento.descripcion == null ? "" : this.requerimiento.descripcion, Validators.required],
+        idUserAdmon: [this.requerimiento.idUserAdmon == null ? "" : this.requerimiento.idUserAdmon,Validators.required] ,
+        idUserAut:[this.requerimiento.idUserAut == null ? "" : this.requerimiento.idUserAut ,Validators.required]
       })
         this.actividadesForm= this.fb.group({
           idRequerimiento: [this.id.id, Validators.required],
@@ -284,6 +309,7 @@ export class RequerimientoComponent implements OnInit {
     console.log("Archivos");
     console.log(this.fileInfos);
     
+    this.validateRoleSesion();
     switch(this.rol) { 
       case "ROLE_COMERCIAL": { 
         if(this.tmpReq.idestado == 2){
@@ -303,7 +329,6 @@ export class RequerimientoComponent implements OnInit {
       case "ROLE_AUTORIZACION": { 
           this.permisoEditar = false;
           this.permisoEditarInfoBasica = false;
-        
         break; 
      } 
       default: { 
@@ -315,6 +340,7 @@ export class RequerimientoComponent implements OnInit {
       this.permisoEditar = false;
       this.permisoEditarInfoBasica = false;
      }
+
 
   }
 
@@ -361,7 +387,8 @@ export class RequerimientoComponent implements OnInit {
       fechaRequerimiento: [fecha1],
       fechaVencimeinto: [fecha2],
       area: [this.tmpReq.area, Validators.required],
-      unidad: [vigencia[1], Validators.required]
+      unidad: [vigencia[1], Validators.required],
+      idUser:this.datosUser.sub
     });
     console.log(this.crearForm.value);
   }
@@ -392,6 +419,7 @@ export class RequerimientoComponent implements OnInit {
        this.updateReqAddon()
          break; 
       } 
+
       case "ROLE_OPERACIONES": { 
         this.UpdateInfoBasicReq();
          break; 
@@ -409,8 +437,6 @@ export class RequerimientoComponent implements OnInit {
   }
 
   UpdateInfoBasicReq(){
-    console.log("Anexo");
-
     let f=this.crearForm.value.fechaRequerimiento.split("-");
     let fecha1=f[0]+"/"+f[1]+"/"+f[2];
     let f2=this.crearForm.value.fechaVencimeinto.split("-");
@@ -425,12 +451,11 @@ export class RequerimientoComponent implements OnInit {
       umedida: this.crearForm.value.unidad,
       area: this.crearForm.value.area,
       fechaRequerimiento: fecha1,
-      fechaVencimiento: fecha2
+      fechaVencimiento: fecha2,
+      idUser:this.datosUser.sub
     };
 
-    console.log("uiipp");
     console.log(this.jsonCrear);
-    console.log("uuuipp");
 
     this.creaService.updateRequerimiento(this.jsonCrear).subscribe(
       response => {
@@ -481,10 +506,11 @@ export class RequerimientoComponent implements OnInit {
       actividad: "41",
       descripcion: "",
       foliosap:"10001",
-      folioseg:"20002"
+      folioseg:"20002",
+      idUserAdmon: this.rol == "ROLE_COMERCIAL" ? this.datosUser.sub : this.requerimientoForm.value.idUserAdmon,
+      idUserAut: this.rol == "ROLE_AUTORIZACION" ? this.datosUser.sub : this.requerimientoForm.value.idUserAut
     }
 
-    console.log("Carlitos")
     console.log(this.jsonCrear);
 
     this.creaService.updateRequerimientoAddon(this.jsonCrear).subscribe(
@@ -506,14 +532,43 @@ export class RequerimientoComponent implements OnInit {
     )
   }
 
+  detectEmail(){
+    switch(this.rol) { 
+      case "ROLE_COMERCIAL": { 
+            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
+            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
+             break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+       
+             break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
+            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
+            break; 
+     } 
+      default: { 
+         break; 
+      } 
+   } 
+  }
+
+
+  getEmail(mEmailTemp):string{
+    var mEmail : string = ""
+    for (var i = 0; i < this.usuarios.length; i++){
+      if(this.usuarios[i].username == mEmailTemp){
+        mEmail = this.usuarios[i].email;
+        return mEmail
+      }
+    }
+  }
+
   cambiarStatus(){
-    console.log("FormularioRequerimiento",this.requerimientoForm);
-    console.log("FormularioRequerimiento",this.actividadesForm);
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
     this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
-    // this.jsonCreate = {
-
-    // }
 
     console.log("FormularioRequerimiento 2",this.requerimientoForm);
     switch(this.rol) { 
@@ -522,6 +577,7 @@ export class RequerimientoComponent implements OnInit {
           response => {
             console.log(response)
           },error => {
+            this.detectEmail();
             this.envioCorrecto();
             console.log(error);
           }
@@ -565,7 +621,7 @@ export class RequerimientoComponent implements OnInit {
       confirmButtonText: 'Listo!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigateByUrl('/gestorias/requerimientos');
+        this.router.navigateByUrl('/gestorias/requerimientos/encurso');
       }
     })
   }
@@ -623,9 +679,7 @@ export class RequerimientoComponent implements OnInit {
     let folioAnterior=this.actividadesForm.value.idRequerimiento;
     this.requerimientoForm.value.actividad=this.actividadesForm.value.actividad;
     this.requerimientoForm.value.descripcion=this.actividadesForm.value.descripcion;
- 
-    console.log("FormularioRequerimiento 2",this.requerimientoForm);
-    
+     
     this.creaService.requerimientoReact(folioAnterior).subscribe(
       responseP=>{
         this.requerimientoForm.value.idRequerimiento=responseP.id;
@@ -656,6 +710,7 @@ export class RequerimientoComponent implements OnInit {
   }
   
   autoriza(){
+    this.updateReqAddon();
     console.log(this.id);
     const dialogRef = this.dialog.open(AlertComponent, {
       disableClose: true,
@@ -664,33 +719,6 @@ export class RequerimientoComponent implements OnInit {
         title: "Autorizar requerimiento",
         array: [this.id]
       }})
-    /*this.creaService.autorizaRequerimiento(this.id.id).subscribe(
-       responseP=>{
-        console.log(responseP);
-        const dialogRef = this.dialog.open(AlertComponent, {
-          disableClose: true,
-          data: {
-            tipo: 5,
-            title: "Autorizar requerimiento",
-            array: [this.id]
-          }
-        })
-      },error => {
-          console.log(error);
-          console.log(error.error.text);
-          this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id)
-          if(error.error.text==="Exito"){
-            const dialogRef = this.dialog.open(AlertComponent, {
-              disableClose: true,
-              data: {
-                tipo: 5,
-                title: "Autorizar requerimiento",
-                array: [this.id]
-              }
-            })
-          }
-      }
-    )*/
   }
 
   rechaza(){
@@ -706,13 +734,27 @@ export class RequerimientoComponent implements OnInit {
               '',
               'success'
             )
-            this.router.navigateByUrl('/gestorias/requerimientos');
+            this.router.navigateByUrl('/gestorias/requerimientos/recibidas');
           }
       }
     )
   }
 
-  sendMail(tipo: any,user: any,accion: any, idRequerimiento: any){
+  cierraReq(){
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 10,
+        title: "Notificar",
+        array: [this.id]
+      }
+    })
+  }
+
+  sendMail(tipo: any,user: any,accion: any, idRequerimiento: any, mFromEmail: string, mToEmail :string){
+    console.log(mFromEmail);
+    console.log(mToEmail);
+    
     this.plantilla=this.plantilla.replace("#Tipo",tipo);
     this.plantilla=this.plantilla.replace("#User",user);
     this.plantilla=this.plantilla.replace("#Accion",accion);
@@ -720,20 +762,21 @@ export class RequerimientoComponent implements OnInit {
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     let param={
-        "to": "jgonzalezg@mcllent.com",
-        "cc": "",
+        "to": mToEmail,
+        "cc": mFromEmail,
         "bcc": "",
         "reply_to": "no-reply@totalplay.com.mx",
-        "subject": "TEST",
+        "subject": "Se Modificado el status",
         "body": this.plantilla,
         "from_Address": "",
         "from_Personal": ""
     }
+
     console.log("Este es la plantilla",this.plantilla);
     this.serviceMail.getToken().subscribe(
        response=>{
         console.log("Response del token___",response);        
-          this.serviceMail.sendMail(param,response.access_token).subscribe(
+          this.serviceMail.sendMail(param,'L8AtJLpf8YRahQLg0reD0BxWrDrV').subscribe(
              responseP=>{
               console.log("Response del mail___",responseP);
               
@@ -748,6 +791,8 @@ export class RequerimientoComponent implements OnInit {
   }
 
   getComentarios(){
+    console.log("PRegious")
+    console.log(this.id.id)
     this.creaService.getComentariosId(this.id.id).subscribe(
       response => {
         console.log("Response comentarios",response);
@@ -765,6 +810,7 @@ export class RequerimientoComponent implements OnInit {
   verDocumento(){
     
   }
+  
   addActividad(){
     let desc=(<HTMLInputElement>document.getElementById("descripcion")).value;
     let com=(<HTMLInputElement>document.getElementById("actividad")).value;
@@ -886,6 +932,7 @@ export class RequerimientoComponent implements OnInit {
       this.upload(i, this.selectedFiles[i]);
     }
   }
+
   selectFile(ruta: any,nombreA: any){
     let tipo=nombreA.split(".")[1];
     console.log("Tipo________",tipo);
@@ -902,7 +949,6 @@ export class RequerimientoComponent implements OnInit {
     this.uploadFilesService.getFile(ruta).subscribe(
       response=>{
         console.log("Response",response);
-        
       },
       error => {
         console.log(error);
@@ -967,5 +1013,78 @@ export class RequerimientoComponent implements OnInit {
     }else{
       this.mCheckSeguimiento = false
     }
+  }
+
+  previewPDF(mArchivos:ArchivosResponse){
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 9,
+        file: mArchivos
+      }
+    })
+  }
+
+  checkRequerimentUser(){
+    console.log("===========================================")
+    console.log(this.datosUser.sub);
+    console.log(this.requerimiento.idUserAdmon);
+    console.log(this.requerimiento.idUserAut);
+    console.log(this.tmpReq.idUser);
+    console.log("===========================================")
+
+    switch(this.rol) { 
+      case "ROLE_COMERCIAL": { 
+        if(this.datosUser.sub == this.requerimiento.idUserAdmon || this.requerimiento.idUserAdmon == null){
+            this.isUserRequeriment = true;
+        }
+         break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+        if(this.datosUser.sub == this.tmpReq.idUser){
+          this.isUserRequeriment = true;
+        }
+         break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+       if(this.datosUser.sub == this.requerimiento.idUserAut || this.requerimiento.idUserAut == null){
+        this.isUserRequeriment = true;
+       }
+        break; 
+     } 
+     
+      default: { 
+         break; 
+      } 
+   } 
+  }
+
+  validateRoleSesion(){
+    switch(this.rol) { 
+      case "ROLE_COMERCIAL": { 
+        if(this.id.estado  == "POR RECIBIR"){
+          this.showButtonsRoleComercial = true;
+        }
+         break; 
+      } 
+      case "ROLE_OPERACIONES": { 
+        if(this.id.estado == "EN CURSO"){
+          this.showButtonsRoleOperaciones = true;
+        }
+         break; 
+      } 
+
+      case "ROLE_AUTORIZACION": { 
+        if(this.id.estado == "POR AUTORIZAR" || this.id.estado == "AUTORIZADAS"){
+          this.showButtonsRoleAutorizador = true;
+        }
+        break; 
+     } 
+     
+      default: { 
+         break; 
+      } 
+   } 
   }
 }

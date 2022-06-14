@@ -123,6 +123,6 @@ export class NabvarComponent implements OnInit {
   }
 
   inicio(){
-    this.router.navigateByUrl('/gestorias/requerimientos');
+    this.router.navigateByUrl('/gestorias/requerimientos/encurso');
   }
 }

@@ -25,6 +25,9 @@ export class CrearComponent implements OnInit {
   jsonCrear: any;
   submitted = false;
   tmpReq: CrearResponse;
+  token: any;
+  datosUser: any;
+
 
   tipoSolicitudAddon: string;
   areaAddon: string;
@@ -35,6 +38,8 @@ export class CrearComponent implements OnInit {
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
 
+ 
+
   crearForm: FormGroup = this.fb.group({
     tipoPermiso: ['', [Validators.required]],
     estado: ['', Validators.required],
@@ -43,16 +48,22 @@ export class CrearComponent implements OnInit {
     fechaRequerimiento: [''],
     fechaVencimeinto: [''],
     area: ['', Validators.required],
-    unidad: ['', Validators.required]
+    unidad: ['', Validators.required],
+    idUser:['']
   })
 
   constructor(
     private fb: FormBuilder,
     private creaService: CrearService,
     public dialog: MatDialog
-  ) { }
+  ) { 
+    this.token = JSON.parse(sessionStorage.getItem('token'));
+    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
+  }
 
   ngOnInit(): void {
+    console.log("Mi USUARIO wiiiiiiiiiiii");
+    console.log(this.datosUser.sub);
     this.creaService.get_catalogos().subscribe(
       response => {
         this.res = response;
@@ -85,6 +96,10 @@ export class CrearComponent implements OnInit {
       this.submitted = false;
       this.guardar();
     }
+  }
+
+  public onDate(event) {
+    console.log(event);
   }
 
   campoNovalido(campo: string) {
@@ -130,7 +145,8 @@ export class CrearComponent implements OnInit {
       umedida: this.crearForm.value.unidad,
       area: this.crearForm.value.area,
       fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
-      fechaVencimiento: this.crearForm.value.fechaVencimeinto
+      fechaVencimiento: this.crearForm.value.fechaVencimeinto,
+      idUser:this.datosUser.sub
     }
 
 
@@ -163,11 +179,14 @@ export class CrearComponent implements OnInit {
   }
 
   guardSetAddon(mResponse: CrearResponse) {
+    let f=mResponse.fechareq.split("/");
+    let fecha1=f[2]+"/"+f[1]+"/"+f[0];
+
     this.jsonCrear = {
       idRequerimiento: mResponse.id,
       folio: mResponse.id,
       importe: 0,
-      paydate: "",
+      paydate: fecha1,
       registroContable: "",
       nombreContacto: "",
       proveedor: "",
@@ -189,7 +208,9 @@ export class CrearComponent implements OnInit {
       actividad: "",
       descripcion: "",
       foliosap: "",
-      folioseg: ""
+      folioseg: "",
+      idUserAdmon:"",
+      idUserAut:""
     }
 
     console.log("uiipp");

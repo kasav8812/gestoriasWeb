@@ -11,7 +11,7 @@ export const environment = {
   urlCatalogo: 'http://localhost:10444/totalplay/gestoria-catalogos/v1',
   urlFiles: 'http://localhost:10447/totalplay/gestoria-archivos/v1/file',
   urlMailToken: 'https://dev.totalplay.amarello.cloud/oauth/client_credential/accesstoken?grant_type=client_credentials',
-  urlMailSend:'https://dev.totalplay.amarello.cloud/mail/sendMail',
+  urlMailSend:'https://dev.totalplay.amarello.cloud/soakio/sendMail',
   userMail:"Exf15FRWxcunNj7by3AWzFF0WOzePRravZCaZ3zKe3ZEwlgN",
   passMail:"OG03A2DyoOWBd4mcI96GUYj07hZHPm29Zxe1Bj8lalXLTIsxjxFG5uAAJKfjWH4Q",
   tokenMail:"Basic RXhmMTVGUld4Y3VuTmo3YnkzQVd6RkYwV096ZVBScmF2WkNhWjN6S2UzWkV3bGdOOk9HMDNBMkR5b09XQmQ0bWNJOTZHVVlqMDdoWkhQbTI5WnhlMUJqOGxhbFhMVElzeGp4Rkc1dUFBSktmaldINFE="

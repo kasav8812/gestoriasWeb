@@ -29,7 +29,7 @@ export class PorAutorizarComponent implements OnInit {
     //if(localStorage.getItem('requerimiento') == null){ 
       this.requeServvice.postRequerimientoLista().subscribe(
         response => {
-          if(this.rol == "ROLE_AUTORIZACION"){
+          if(this.rol == "ROLE_AUTORIZACION" || this.rol == "ROLE_COMERCIAL" || this.rol == "ROLE_OPERACIONES" ){
             this.requerimientos = response.filter(((el) => el.idestado==3));
           }
         },
