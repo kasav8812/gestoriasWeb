@@ -11,6 +11,7 @@ import { MaterialModule } from './material-module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AuthModule } from './auth/auth.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     ReactiveFormsModule,
     MaterialModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true}

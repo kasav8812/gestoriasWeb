@@ -10,23 +10,37 @@ import { CrearService } from '../../services/crear.service';
 })
 export class PorAutorizarComponent implements OnInit {
 
-  constructor(private requeServvice: CrearService) { }
-  requerimientos: CrearResponse[];
+  token: any;
+  rol: any;
+  req:any;
 
+  constructor(private requeServvice: CrearService) { 
+    this.token = JSON.parse(sessionStorage.getItem('token'));
+    let namespace = JSON.parse(atob(this.token.split('.')[1]));
+    this.rol = namespace.roles[0];
+  }
+  requerimientos: CrearResponse[];
+  status:any;
+
+
+
+  
   ngOnInit(): void {
-    if(localStorage.getItem('requerimiento') == null){ 
-      this.requeServvice.getRequerimineto().subscribe(
+    //if(localStorage.getItem('requerimiento') == null){ 
+      this.requeServvice.postRequerimientoLista().subscribe(
         response => {
-          this.requerimientos = response.filter(((el) => el.idestado==3));
+          if(this.rol == "ROLE_AUTORIZACION" || this.rol == "ROLE_COMERCIAL" || this.rol == "ROLE_OPERACIONES" ){
+            this.requerimientos = response.filter(((el) => el.idestado==3));
+          }
         },
         error => {
           console.log(error);
         }
       )
-    }else{
+   /* }else{
       let req: CrearResponse[] = JSON.parse(localStorage.getItem('requerimiento'))
       this.requerimientos = req.filter(((el) => el.idestado==3));
-    }
+    }*/
   }
 
   editRequrimineto(req){

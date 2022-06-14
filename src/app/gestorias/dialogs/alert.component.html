@@ -1,29 +1,67 @@
-<div class="modal-1 radiu-tp" *ngIf="data.tipo ===1">
-  <div class="text-center mt-5">
-    <img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===1" >
+  <div class="text-center mt-5" >
+    <img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="" style="margin-top: -50px;">
   </div>
   <div class="text-center mt-1">
-    <h2 class="text-gris">Requerimiento enviado con &eacute;xito</h2>
+    <h2 class="text-gris"> con &eacute;xito</h2>
     <div class="mt-1 bg-gris">
       <div class="p-4 text-start">
+        <table class="table table-striped" style="height: 230px;">
+          <thead>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Folio</strong></td>
+              <td style="text-align: right;">{{data.req.id}}</td>
+            </tr>
+            <tr>
+              <td><strong>Tipo Permiso:</strong></td>
+              <td style="text-align: right;">{{data.req.permiso}}</td>
+            </tr>
 
-        <p><b>Folio:</b> {{data.req.id}}</p>
-        <p><b>Tipo Permiso:</b> {{data.req.permiso}}</p>
-        <p><b>Estado:</b> {{data.req.ubicacion}}</p>
-        <p><b>Municipio:</b> {{data.req.municipio}}</p>
-        <p><b>Vigencia:</b> {{data.req.vigencia}} </p>
-        <p><b>Fecha requerimiento:</b> {{data.req.fechareq}} </p>
-        <p><b>Fecha Vencimiento:</b> {{data.req.fechavencimiento}} </p>
-        <p><b>&Aacute;rea :</b> {{data.req.area}} </p>
+            <tr>
+              <td><strong>Estado:</strong></td>
+              <td style="text-align: right;">{{data.req.ubicacion}}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Municipio:</strong></td>
+              <td style="text-align: right;">{{data.req.municipio}}</td>
+            </tr>
+            
+            <tr>
+              <td><strong>Vigencia:</strong></td>
+              <td style="text-align: right;">{{data.req.vigencia}}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Fecha Requerimiento:</strong></td>
+              <td style="text-align: right;">{{data.req.fechareq}}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Fecha Vencimiento:</strong></td>
+              <td style="text-align: right;">{{data.req.fechavencimiento}}</td>
+            </tr>
+
+            <tr>
+              <td><strong>&Aacute;reas:</strong></td>
+              <td style="text-align: right;">{{data.req.area}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
   <div class="text-center">
-    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button">
-      <span class="mat-button-wrapper">Aceptar</span>
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" [routerLink]="" style="margin-right: 15px; margin-bottom: 10px;">
+      <span class="mat-button-wrapper">Nuevo Folio</span>
+    </button>
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" [routerLink]="['/gestorias/requerimientos']"><span class="mat-button-wrapper">Bandeja de entrada</span>      
     </button>
   </div>
 </div>
+
 <div class="modal-2 radiu-tp" *ngIf="data.tipo ===2">
   <div class="text-center mt-4">
     <h2 class="text-gris mb-3">{{data.title}}</h2>
@@ -76,4 +114,249 @@
       </button>
     </div>
   </form>
+</div>
+
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===4">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">{{data.title}}</h2>
+      <button  mat-button="" mat-dialog-close="" style="background-color: lightgrey;" type="button" class="close" aria-label="Close" >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="mt-5 row" >
+      <table class="table table-striped table-hover" >
+        <thead>
+          <th>Folio:</th>
+          <th>Fecha requerimiento:</th>
+          <th>Municipio</th>
+          <th>Tipo de permiso:</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data.array">
+            <td><a [routerLink]="['/gestorias/reactivar']" mat-dialog-close="" class="close" (click)="editRequrimineto(item)">{{item.id}}</a></td>
+            <td>{{item.fechareq}}</td>
+            <td>{{item.municipio}}</td>
+            <td>{{item.permiso}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button">
+      <span class="mat-button-wrapper">{{data.boton}}</span>
+    </button>
+    </div>
+  </div>
+</div>
+
+<!-- motivos activacion/rechazo -->
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===5">
+  <form [formGroup]="comentariosForm" autocomplete="off">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">{{data.title}}</h2>
+      <button  mat-button="" mat-dialog-close="" style="background-color: lightgrey;" type="button" class="close" aria-label="Close" >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="mt-5 row" >
+      <table class="table table-striped table-hover" >
+        <thead>
+          <th>Folio:</th>
+          <th>Fecha requerimiento:</th>
+          <th>Municipio</th>
+          <th>Tipo de permiso:</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data.array">
+            <td>{{item.id}}</td>
+            <td>{{item.fechareq}}</td>
+            <td>{{item.municipio}}</td>
+            <td>{{item.permiso}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center mt-5" style="display: inline-block; position: relative;;">
+          <label for="motivo" class="form-label">Motivo</label>
+          <input style="border: 1px solid #ced4da!important;height: 100px;" 
+            type="text"
+            class="form-control"
+            id="motivo"
+            aria-describedby="Motivo"
+            formControlName="comentario"
+            />
+        </div>
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" style="margin-right: 15px;" (click)="autoriza()">
+        <span class="mat-button-wrapper">Autorizar</span>
+      </button>
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" (click)="rechazar()">
+        <span class="mat-button-wrapper">Rechazar</span>
+      </button>
+    </div>
+  </div>
+</form>
+</div>
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===6">
+  <div class="text-center mt-5">
+    <img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">
+  </div>
+  <div class="text-center mt-1">
+    <h2 class="text-gris"> con &eacute;xito</h2>
+    
+  </div>
+  <div class="text-center">
+    
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" [routerLink]="['/gestorias/requerimientos']"><span class="mat-button-wrapper">Bandeja de entrada</span>      
+    </button>
+  </div>
+</div>
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===7">
+  <div class="text-center mt-2">
+    <h2 class="text-gris"> {{data.nombre}}</h2>
+    <!--<img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">-->
+  </div>
+  <div class="text-center mt-1" style="height: 375px;">
+    <img src="{{data.file}}" *ngIf="data.tipoFile!='pdf'" style="width: 100%;height: 100%;">
+    <pdf-viewer *ngIf="data.tipoFile==='pdf'"
+      [src]="data.file"
+      [rotation]="0"
+      [original-size]="true"
+      [show-all]="true"
+      [fit-to-page]="true"
+      [zoom]="1"
+      [zoom-scale]="'page-width'"
+      [stick-to-page]="true"
+      [render-text]="true"
+      [external-link-target]="'blank'"
+      [autoresize]="true"
+      [show-borders]="true"
+      style="width: 100%; height: 400px;"
+    ></pdf-viewer>
+    
+  </div>
+  <div class="text-center mt-4">
+    
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert" type="button" ><span class="mat-button-wrapper">Regresar</span>      
+    </button>
+  </div>
+</div>
+
+<div class="modal-1 radiu-tp"  *ngIf="data.tipo ===8" style="height: 630px;">
+  <form [formGroup]="crearFormUser" autocomplete="off">
+    <div class="text-center mt-4">
+      <h2 class="text-gris">Crear Usuario</h2>
+        <blockquote class="blockquote col-12 p-4 m-2 bg-gris text-start">
+          <div class="row">
+            <div class=" col-12 form-control-sm">
+              <label for="nombre" class="form-label" >Usuario</label>
+              <input class="form-control" maxlength="20" formControlName="usuario_usr" />
+            </div>
+            <div class=" col-12 form-control-sm">
+              <label for="decripcion" class="form-label" >Contraseña</label>
+              <input class="form-control" maxlength="100" formControlName="password_usr" />
+            </div>
+
+            <div class=" col-12 form-control-sm">
+              <label for="decripcion" class="form-label" >Nombre</label>
+              <input class="form-control" maxlength="100"formControlName="nombre_usr"/>
+            </div>
+
+            <div class=" col-12 form-control-sm">
+              <label for="decripcion" class="form-label" >Rol</label>
+              <select id="inputState" class="form-select" formControlName="role_usr">
+                <option selected></option>
+                <option *ngFor="let item of roles;"  value="{{item.id}}">{{item.role}}</option>
+              </select>
+            </div>
+
+            <div class=" col-12 form-control-sm">
+              <label for="decripcion" class="form-label" >Area</label>
+              <select id="inputState" class="form-select" formControlName="area_usr">
+                <option selected></option>
+                <option *ngFor="let item of municipio;"  value="{{item.id}}">{{item.descripcion}}</option>
+              </select>
+            </div>
+
+            <div class=" col-12 form-control-sm">
+              <label for="decripcion" class="form-label" >Correo</label>
+              <input class="form-control" maxlength="100" formControlName="correo_usr"/>
+            </div>
+          </div>
+        </blockquote>
+    </div>
+    <div class="text-center" style="padding: 10px;">
+      <button mat-button mat-dialog-close class="btn btn-light radiu-tp btn-alert mt-4">Cerrar</button>&nbsp;
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" (click)="onSubmit()">
+        <span class="mat-button-wrapper" >Crear Usuario</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===9">
+  <div class="text-center mt-2">
+    <h2 class="text-gris"> {{data.file.name}}</h2>
+    <!--<img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">-->
+  </div>
+  <div class="text-center mt-1" style="height: 375px;">
+    <!--<img src="{{data.file.url}}" *ngIf="data.file.typeFile!='image/png'" style="width: 100%;height: 100%;">-->
+    <pdf-viewer *ngIf="data.file.typeFile==='application/pdf'"
+      [src]="data.file.url"
+      [rotation]="0"
+      [original-size]="true"
+      [show-all]="true"
+      [fit-to-page]="true"
+      [zoom]="1"
+      [zoom-scale]="'page-width'"
+      [stick-to-page]="true"
+      [render-text]="true"
+      [external-link-target]="'blank'"
+      [autoresize]="true"
+      [show-borders]="true"
+      style="width: 100%; height: 400px;"
+    ></pdf-viewer>
+    
+  </div>
+  <div class="text-center mt-4">
+    
+    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert" type="button" ><span class="mat-button-wrapper">Regresar</span>      
+    </button>
+  </div>
+</div>
+
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===10" style="height: 350px;">
+  <div class="text-center mt-4" >
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">Cierre de requerimiento</h2>
+      
+    </div>
+    <div class="mt-5 row" >
+      <table class="table table-striped" >
+        <thead>
+          <th>Nombre Perfil</th>
+          <th>Correo</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of mUserDataEmails">
+            <td>{{item.name}}</td>
+            <td>{{item.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" style="margin-right: 15px;" (click)="cerrarReq()">
+        <span class="mat-button-wrapper">Continuar</span>
+      </button>
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button">
+        <span class="mat-button-wrapper">Cerrar</span>
+      </button>
+    </div>
+  </div>
 </div>

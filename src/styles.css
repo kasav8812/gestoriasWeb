@@ -19,6 +19,42 @@ html, body { height: 100%; }
   bottom: 0;
     height: 100vh;
 }
+
+.upload-box{
+  border-radius: 50px;
+  font-size: 10px;
+  background: #7A4CF6;
+  width: 250px;
+  outline: none;
+
+}
+
+.upload-box1{
+  border-radius: 50px;
+  font-size: 10px;
+  background: #7A4CF6;
+  color: #ffffff;
+  outline: none;
+  FONT-SIZE: 5pt;
+
+}
+
+::-webkit-file-upload-button{
+  color: #ffffff;
+  background: #7A4CF6;
+  border:none;  
+  border-radius: 20px;
+  box-shadow: o 1px 1px #8696B7;
+  outline: none;
+}
+
+::-webkit-file-upload-button:hover{
+  background: #794cf6cc;
+}
+
+.heightLong{
+  height: 470px;
+}
 .o-0{
     overflow: hidden
 }
@@ -61,6 +97,10 @@ thead{
   height: 2rem;
   color: var(--color-tp);
   background-color: var(--color-white);
+}
+
+.heightLong{
+  height: 100%;
 }
 
 .grid{
@@ -116,6 +156,9 @@ input.form-control:focus {
   background: none!important;
   box-shadow:none!important;
   border-bottom: 1px solid #8696B7!important;
+}
+input:disabled{
+  background-color: #e9ecef!important;
 }
 .form-select{
   background: none!important;
@@ -262,6 +305,7 @@ select{
   transform: rotate(330deg);
   animation-delay: 0s;
 }
+
 @keyframes lds-spinner {
   0% {
     opacity: 1;

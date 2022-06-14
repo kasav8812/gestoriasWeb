@@ -1,0 +1,173 @@
+<div class="row m-4">
+    <div class="col-12">
+        <h4></h4>
+    </div>
+    <div class="col-12 card shadow mt-4">
+        <div class="card-header pb-0" style="background-color: #fff;">
+            <div class="row">
+                
+                <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
+                 Informaci&oacute;n del requerimiento
+               </div>
+               <!--<div class="offset-5 col-1" >
+                   <button class="btn radiu-tp btn-outline-tp tm">Guardar</button>
+               </div>-->
+               <div class="offset-2 col-2" ></div>
+               <div class="offset-1 col-2" >
+                   <button class="btn radiu-tp btn-tp tm"  id="uploadButton"  (click)="uploadFiles()" >Enviar documentaci&oacute;n</button>
+               </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row mb-3">
+                        <div class="col-8">
+                            <div class="col-12">
+                                <h6 class="text-gris">Costo</h6>
+                            </div>
+                            <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+                                <form autocomplete="off" class="row">
+                                  <div class="row">
+                                    <div class="mb-3 col form-control-sm">
+                                      <label for="exampleInputEmail1" class="form-label">
+                                        Tipo de permiso
+                                      </label>
+                                      <p><strong>
+                                        {{requerimiento.permiso}}
+                                      </strong></p>
+                                    </div>
+                                    <div class="mb-3 col form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            &Aacute;rea solicitante
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.area}}
+                                        </strong></p>
+                                      </div>
+                                      <div class="mb-3 col form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            Costo
+                                        </label>
+                                        <p><strong>
+                                            <input type="text" class="form-control" value="{{requerimientoForm.value.importe}}" disabled="true">
+                                        </strong></p>
+                                      </div>
+                                  </div>
+                                </form>
+                            </blockquote>  
+                            <div class="col-12">
+                                <h6 class="text-gris">Datos de requerimiento</h6>
+                            </div>
+                            <blockquote class="blockquote col-12 p-4 m-2 bg-gris">
+                                <form autocomplete="off" class="row">
+                                  <div class="row">
+                                    <div class="mb-3 col-4 form-control-sm">
+                                      <label for="exampleInputEmail1" class="form-label">
+                                          
+                                          Tipo de permiso
+                                      </label>
+                                      <p><strong>
+                                        {{requerimiento.permiso}}
+                                      </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            Estado
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.estado}}
+                                        </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            Municipio o Alcand&iacute;a
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.municipio}}
+                                        </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                           Vigencia del permiso
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.vigencia}}
+                                        </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                           Fecha de requerimiento
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.fechareq}}
+                                        </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                           Fecha de vencimiento
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.fechavencimiento}}
+                                        </strong></p>
+                                    </div>
+                                    <div class="mb-3 col-4 form-control-sm">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            &Aacute;rea Solicitante 
+                                        </label>
+                                        <p><strong>
+                                            {{requerimiento.area}}
+                                        </strong></p>
+                                    </div>
+                                  </div>
+                                </form>
+                            </blockquote>
+                        </div>
+                        <div class="col-4">
+                            <div class="col-12">
+                                <h6 class="text-gris">Documentos</h6>
+                            </div>
+                            <blockquote class="blockquote col-12 p-4 m-2 bg-gris heightLong">
+                                <form autocomplete="off" class="row">
+                                  <div class="row">
+                                    <div class="mb-3 col-12 form-control-sm">
+                                            <small>
+                                                <label for="formFile" class="form-label">PDF de Factura</label>
+                                                <div class="styleFile">
+                                                    <input type="file" class="upload-box" (change)="selectFiles($event)">
+                                                </div>
+                                            </small>
+                                       
+                                    </div>
+                                    <div class="mb-3 col-12 form-control-sm">
+                                        <small>
+                                            <label for="formFile" class="form-label">Recibido de pago</label>
+                                            <div class="styleFile">
+                                                <input type="file" class="upload-box" (change)="selectFiles2($event)">
+                                            </div>
+                                        </small>
+                                    </div>
+                                    <div class="mb-3 col-12 form-control-sm">
+                                        <small>
+                                            <label for="formFile" class="form-label">XML de Factura</label>
+                                            <div class="styleFile">
+                                                <input type="file" class="upload-box" (change)="selectFiles3($event)">
+                                            </div>
+                                        </small>
+                                    </div>
+                                    <div class="mb-3 col-12 form-control-sm">
+                                        <small>
+                                            <label for="formFile" class="form-label">Permiso digitalizado</label>
+                                            <div class="styleFile">
+                                                <input type="file" class="upload-box" (change)="selectFiles4($event)">
+                                            </div>
+                                        </small>
+                                    </div>
+                                  </div>
+                                </form>
+                            </blockquote>  
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+    </div>
+</div>

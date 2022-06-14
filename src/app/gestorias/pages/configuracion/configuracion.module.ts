@@ -14,10 +14,11 @@ import { SistemaComponent } from './sistema/sistema.component';
 import { TipoSolicitudComponent } from './tipo-solicitud/tipo-solicitud.component';
 import { CoberturaComponent } from './cobertura/cobertura.component';
 import { TipoActividadComponent } from './tipo-actividad/tipo-actividad.component';
+import { CrearUsuarioComponent } from './crear-usuario/crear-usuario.component';
 
 
 @NgModule({
-  declarations: [MainComponent, EstadoComponent, UnidadmedidaComponent, AreasolicitanteComponent, TipoPermisoComponent, SistemaComponent, TipoSolicitudComponent, CoberturaComponent, TipoActividadComponent],
+  declarations: [MainComponent, EstadoComponent, UnidadmedidaComponent, AreasolicitanteComponent, TipoPermisoComponent, SistemaComponent, TipoSolicitudComponent, CoberturaComponent, TipoActividadComponent, CrearUsuarioComponent],
   imports: [
     CommonModule,
     ConfiguracionRoutingModule,

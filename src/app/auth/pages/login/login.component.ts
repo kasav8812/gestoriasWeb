@@ -50,12 +50,19 @@ export class LoginComponent implements OnInit{
 
   userToken;
   name: any;
+  urlTree: any;
+  requerimiento: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    ) { }
+    ) { 
+    this.urlTree = this.router.parseUrl(this.router.url);
+   this.requerimiento = this.urlTree.queryParams['requerimiento'];
+   sessionStorage.setItem('req', this.requerimiento);
+   console.log("this.requerimiento",this.requerimiento)
+  }
 
   isActive: boolean= true;
 
@@ -81,7 +88,7 @@ export class LoginComponent implements OnInit{
         if(role == 'ROLE_CONFIGURACION'){
           this.router.navigateByUrl('gestorias/configuracion');
         }else {
-          this.router.navigateByUrl('gestorias');
+          this.router.navigateByUrl('gestorias/requerimientos/encurso');
         }
       },
       error => {

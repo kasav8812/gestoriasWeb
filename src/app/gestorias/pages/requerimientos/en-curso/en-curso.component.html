@@ -1,5 +1,5 @@
 <div class="card-body">
-  <table class="table table-striped">
+  <table class="table table-striped" >
     <thead>
       <tr>
         <th class="text-gris">Folio</th>
@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of requerimientos">
+      <tr *ngFor="let item of requerimientos;">
         <th><a [routerLink]="['/gestorias/requerimiento']" (click)="editRequrimineto(item)">{{item.id}}</a></th>
         <th>{{item.permiso}}</th>
         <th>{{item.ubicacion}} </th>

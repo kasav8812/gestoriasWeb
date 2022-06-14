@@ -4,25 +4,26 @@
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Requerimiento por vencer
-      <span class="badge bg-primary abso radiu-tp">3</span>
+      Requerimientos por vencer
+      <span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarLista()">{{tam}}</span>
     </h5>
   </div>
   <div class="col">
     <h5 class="text-gris">
-      Vencidos<span class="badge bg-primary abso radiu-tp">2</span>
+      Vencidos<span class="btn btn-tp badge bg-primary abso radiu-tp" (click)="mostrarListaVencidos()">{{tamVencidos}}</span>
     </h5>
   </div>
   <div class="col-12 card shadow mt-4">
     <div class="card-body row">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <div class="nav-tabs" style="display: inline-block; width:70%;">
+        <ul class="nav " id="myTab" role="tablist">
             <li class="nav-item" >
               <button class="nav-link"
                 routerLink="encurso"
                 [routerLinkActiveOptions]="{ exact: true }"
                 routerLinkActive="active">En curso</button>
             </li>
-            <li class="nav-item" >
+            <li class="nav-item" *ngIf="rol!=='ROLE_OPERACIONES'">
               <button class="nav-link"
               routerLink="recibidas"
               routerLinkActive="active">Recibidas</button>
@@ -30,37 +31,44 @@
             <li class="nav-item" >
               <button class="nav-link"
                  routerLink="porAutorizar"
-                routerLinkActive="active">Por autorizadas</button>
+                routerLinkActive="active">Por autorizar</button>
             </li>
-            <li class="nav-item">
-                <button class="nav-link"
-                    routerLink="cerradas"
-                    routerLinkActive="active">Cerradas</button>
-            </li>
+           
             <li class="nav-item">
                 <button class="nav-link"
                     routerLink="autorizadas"
                     routerLinkActive="active">Autorizadas</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="rol==='Test'">
                 <button class="nav-link"
                     routerLink="documentacion"
                     routerLinkActive="active">Documentaci&oacute;n</button>
             </li>
             <li class="nav-item">
+              <button class="nav-link"
+                  routerLink="cerradas"
+                  routerLinkActive="active">Cerradas</button>
+          </li>
+            <li class="nav-item">
                 <button class="nav-link"
                     routerLink="canceladas"
                     routerLinkActive="active">Canceladas</button>
-            </li>
+            </li>            
+          </ul>
+      </div>
+      <div class="nav nav-tabs" style="display: inline-block; width: 29%;">
+        <ul  id="myTab" role="tablist">
             <li class="nav-item position-absolute" style="top: 0.5em !important; right: 1em !important;">
                 <button
-                *ngIf="rol == 'ROLE_AUTORIZACION' || rol == 'ROLE_COMERCIAL'"
+                *ngIf="rol !== 'ROLE_AUTORIZACION' && rol !== 'ROLE_COMERCIAL'"
                   class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp align-self-end"
                   mat-button
                   [routerLink]="['/gestorias/crear']">+ Nuevo requerimiento
                 </button>
             </li>
           </ul>
+      </div>
+        
 
           <div class="tab-content" id="myTabContent">
             <router-outlet></router-outlet>

@@ -32,7 +32,6 @@ import Swal from 'sweetalert2';
       background: #fff;
     }
 
-
     `
   ]
 })
@@ -40,6 +39,8 @@ export class NabvarComponent implements OnInit {
 
   token: any;
   username: any;
+  rol:any;
+  typeRole:any;
   dtoReque: any;
   buscarForm: FormGroup = this.formBuilder.group({
     buscar: ['', [Validators.required]]
@@ -52,11 +53,37 @@ export class NabvarComponent implements OnInit {
     private buscarService: BuscarService
     ) {
     this.token = sessionStorage.getItem('token');
+   
    }
 
   ngOnInit(): void {
     let tk = JSON.parse(atob(this.token.split('.')[1]));
+    this.rol = tk.roles[0];
     this.username = tk.name;
+    switch(this.rol) { 
+      case "ROLE_OPERACIONES": { 
+        this.typeRole = "Perfil Operaciones";
+         break; 
+      } 
+      case "ROLE_AUTORIZACION": { 
+        this.typeRole = "Perfil Autorizador";
+         break; 
+      } 
+
+      case "ROLE_COMERCIAL": { 
+        this.typeRole = "Perfil Administrador";
+         break; 
+      } 
+
+      case "ROLE_CONFIGURACION": { 
+        this.typeRole = "Perfil Configurador";
+         break; 
+      } 
+      default: { 
+         this.typeRole = "";
+         break; 
+      } 
+   } 
   }
 
   cerrarSesion(){
@@ -96,6 +123,6 @@ export class NabvarComponent implements OnInit {
   }
 
   inicio(){
-    this.router.navigateByUrl('/gestorias/requerimientos');
+    this.router.navigateByUrl('/gestorias/requerimientos/encurso');
   }
 }

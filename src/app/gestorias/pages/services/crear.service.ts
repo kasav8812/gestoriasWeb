@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse } from '../interfaces/crear.interface';
+import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse } from '../interfaces/crear.interface';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class CrearService {
 
   private baseurl: string = environment.urlCatalogo;
   private baseurlreq: string = environment.urlRequerimiento;
+  private baseurlusr: string = environment.urlUser;
+
   userToken: any;
 
   constructor(
@@ -20,6 +23,15 @@ export class CrearService {
 
   cres_Requerimiento(formdata: CrearResponse): Observable<CrearResponse>{
     const url = `${this.baseurlreq}/requerimiento`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<CrearResponse>(url,formdata,{headers});
+  }
+
+  updateRequerimiento(formdata: CrearResponse): Observable<CrearResponse>{
+    const url = `${this.baseurlreq}/requerimiento/updateRequerimiento`
     let headers = new HttpHeaders({
       'Content-Type':'application/json',
       'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
@@ -74,5 +86,224 @@ export class CrearService {
     return this.userToken;
   }
 
+  getRequeriminetoPorVencer(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/porVencer`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  getRequeriminetosVencidos(): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/vencidos`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  postRequerimientoLista():Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/requerimientosEstado`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let tk = JSON.parse(atob(token.split('.')[1]));
+    let id = tk.sub;
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  //Obtener requerimiento completo
+  postRequerimientoCompletoLista(id: any):Observable<RequerimientoGeneric[]>{
+    const url = `${this.baseurlreq}/requerimiento/completo`
+    let token=JSON.parse(sessionStorage.getItem('token'));
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + token
+    });
+    let param={"id":id}  
+    return this.http.post<RequerimientoGeneric[]>(url,param,{headers});
+  }
+  postRequerimientoRelacion(formdata: any){
+    console.log(formdata)
+    const url = `${this.baseurlreq}/requerimiento/addRelacion`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post(url,formdata,{headers});
+  }
+  
+  requerimientoReact(id:any): Observable<CrearResponse>{
+    const url = `${this.baseurlreq}/requerimiento/reactivar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearResponse>(url,param,{headers});
+  }
+  getRequeriminetoId(id: any): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CrearResponse[]>(url,{headers});
+  }
+  //Autorizar requerimiento
+  autorizaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/autoriza`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+
+  cancelaRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cancela`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  cerrarRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cerrar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  recibirRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/recibir`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  cambiarStatusRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/cerrar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  porAutorizarRequerimiento(id:any):Observable<string>{
+    const url = `${this.baseurlreq}/status/porAutorizar`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  addComentario(param: any):Observable<string>{
+    const url = `${this.baseurlreq}/comentarios/add`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<string>(url,param,{headers});
+  }
+
+  getComentariosId(id: any): Observable<CrearComentario[]>{
+    const url = `${this.baseurlreq}/comentarios/get`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearComentario[]>(url,param,{headers});
+  }
+
+  getRequerimientosId(id: any): Observable<CrearResponse[]>{
+    const url = `${this.baseurlreq}/requerimiento/getId`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    let param={"id":id}  
+    return this.http.post<CrearResponse[]>(url,param,{headers});
+  }
+
+  postDocumentcion(body:FormData):Observable<any>{
+    const url= `${this.baseurlreq}/file/upload`;
+    return this.http.post(url,body);
+  }
+
+  getAllUsers() :Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+  getAllRoles() :Observable<RolesResponse[]>{
+    const url = `${this.baseurlusr}/rol`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<RolesResponse[]>(url,{headers});
+  }
+
+  updateRequerimientoAddon(formdata: RequerimientoGeneric): Observable<RequerimientoGeneric>{
+    const url = `${this.baseurlreq}/requerimiento/add/updateAddon`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<RequerimientoGeneric>(url,formdata,{headers});
+  }
+
+  crearUsuario(formdata: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,formdata,{headers});
+  }
+
+  addAreasUser(formdata: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,formdata,{headers});
+  }
+  
 
 }
+

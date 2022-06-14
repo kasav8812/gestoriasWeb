@@ -13,9 +13,11 @@ export interface CatGeneric{
 }
 
 export interface RequerimientoGeneric{
-  idRequerimiento: number;//
+	idRequerimiento: number;//
 	folio: string;
 	importe: string;
+	foliosap: string;
+	folioseg:string;
 	paydate: string;
 	registroContable: string;
 	nombreContacto: string;
@@ -32,10 +34,11 @@ export interface RequerimientoGeneric{
 	perNeg: string;
 	catidad: number;
 	vigencia: number;
-	uMedida: number;
+	medida: number;
 	formaPago: string;
 	cobertura: number;
 	actividad: string;
 	descripcion: string;
-	idEstado: number;//
+	idUserAdmon:string;
+	idUserAut:string;
 }

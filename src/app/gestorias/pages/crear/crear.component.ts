@@ -11,11 +11,7 @@ import { CrearResponse } from '../interfaces/crear.interface';
 @Component({
   selector: 'app-crear',
   templateUrl: './crear.component.html',
-  styles: [
-    `
-
-    `
-  ]
+  styleUrls: ['../../style.scss']
 })
 export class CrearComponent implements OnInit {
 
@@ -27,25 +23,47 @@ export class CrearComponent implements OnInit {
   unidad: Catalogo[];
   res: any;
   jsonCrear: any;
+  submitted = false;
+  tmpReq: CrearResponse;
+  token: any;
+  datosUser: any;
+
+
+  tipoSolicitudAddon: string;
+  areaAddon: string;
+  vigenciaAddon: string;
+  medidaAddon: string;
+
+  mIsComplete: Boolean = false;
+
+  id: any = JSON.parse(localStorage.getItem('requerimiento'));
+
+ 
 
   crearForm: FormGroup = this.fb.group({
-    tipoPermiso: ['', Validators.required],
+    tipoPermiso: ['', [Validators.required]],
     estado: ['', Validators.required],
     municipio: ['', Validators.required],
-    vigencia: ['', Validators.required],
-    fechaRequerimiento: ['', Validators.required],
-    fechaVencimeinto: ['', Validators.required],
+    vigencia: [''],
+    fechaRequerimiento: [''],
+    fechaVencimeinto: [''],
     area: ['', Validators.required],
-    unidad: ['', Validators.required]
+    unidad: ['', Validators.required],
+    idUser:['']
   })
 
   constructor(
     private fb: FormBuilder,
     private creaService: CrearService,
     public dialog: MatDialog
-  ) { }
+  ) { 
+    this.token = JSON.parse(sessionStorage.getItem('token'));
+    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
+  }
 
   ngOnInit(): void {
+    console.log("Mi USUARIO wiiiiiiiiiiii");
+    console.log(this.datosUser.sub);
     this.creaService.get_catalogos().subscribe(
       response => {
         this.res = response;
@@ -53,11 +71,35 @@ export class CrearComponent implements OnInit {
         this.tipoPermiso = this.res.tipoPermiso;
         this.areaSolicitate = this.res.areaSolitante;
         this.unidad = this.res.unidaMedida;
-
       },
       error => {
       }
     )
+  }
+
+  get f() { return this.crearForm.controls; }
+
+  onSubmit() {
+    console.log("Entra a submitted", this.f);
+    console.log("his.crearForm.invalid=", this.crearForm.invalid);
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.crearForm.invalid) {
+      if (this.crearForm.controls.tipoPermiso.value != '' || this.crearForm.controls.estado.value != '' || this.crearForm.controls.municipio.value != '' || this.crearForm.controls.vigencia.value
+        || this.crearForm.controls.fechaRequerimiento.value || this.crearForm.controls.fechaVencimeinto.value || this.crearForm.controls.area.value || this.crearForm.controls.unidad.value) {
+        this.mIsComplete = false;
+        this.guardar();
+      }
+    } else {
+      this.mIsComplete = true;
+      console.log("Campos completos");
+      this.submitted = false;
+      this.guardar();
+    }
+  }
+
+  public onDate(event) {
+    console.log(event);
   }
 
   campoNovalido(campo: string) {
@@ -75,18 +117,26 @@ export class CrearComponent implements OnInit {
 
   }
   fechaInvalida(campo: string) {
-   /* let prueba = this.crearForm.value.fechaRequerimiento;
-    let p = prueba.split("-")
-    const fecha = new Date();
-    const hoy = fecha.getDate();
-    const mesActual = fecha.getMonth() + 1;
-    if (p[2] < hoy) {
-
-      console.log(prueba);
-      return this.crearForm.invalid;
-    }*/
+    /* let prueba = this.crearForm.value.fechaRequerimiento;
+     let p = prueba.split("-")
+     const fecha = new Date();
+     const hoy = fecha.getDate();
+     const mesActual = fecha.getMonth() + 1;
+     if (p[2] < hoy) {
+ 
+       console.log(prueba);
+       return this.crearForm.invalid;
+     }*/
   }
+
   guardar() {
+    console.log("Datos del form", this.crearForm);
+    this.tipoSolicitudAddon = this.crearForm.value.tipoPermiso;
+    this.areaAddon = this.crearForm.value.area;
+    this.vigenciaAddon = this.crearForm.value.vigencia;
+    this.medidaAddon = this.crearForm.value.unidad
+
+
     this.jsonCrear = {
       tipoRequerimineto: this.crearForm.value.tipoPermiso,
       ubicacionEstado: this.crearForm.value.estado,
@@ -95,31 +145,100 @@ export class CrearComponent implements OnInit {
       umedida: this.crearForm.value.unidad,
       area: this.crearForm.value.area,
       fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
-      fechaVencimiento: this.crearForm.value.fechaVencimeinto
-      
+      fechaVencimiento: this.crearForm.value.fechaVencimeinto,
+      idUser:this.datosUser.sub
+    }
+
+
+    console.log("Datos del form");
+
+    console.log(this.jsonCrear);
+
+
+    this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
+      response => {
+        const dialogRef = this.dialog.open(AlertComponent, {
+          disableClose: true,
+          data: {
+            tipo: 1,
+            req: response
+          }
+        })
+        this.crearForm.reset();
+        this.tmpReq = response;
+        this.guardSetAddon(this.tmpReq);
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'Al crear requerimiento',
+          'error'
+        )
+      }
+    );
   }
-  
-  this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
-        response => {
-          const dialogRef = this.dialog.open(AlertComponent, {
-            disableClose: true,
-            data: {
-              tipo: 1,
-              req: response
+
+  guardSetAddon(mResponse: CrearResponse) {
+    let f=mResponse.fechareq.split("/");
+    let fecha1=f[2]+"/"+f[1]+"/"+f[0];
+
+    this.jsonCrear = {
+      idRequerimiento: mResponse.id,
+      folio: mResponse.id,
+      importe: 0,
+      paydate: fecha1,
+      registroContable: "",
+      nombreContacto: "",
+      proveedor: "",
+      sistema: 1,
+      tipoSolicitud: 403,
+      folioEgreso: "",
+      area: this.areaAddon,
+      cc: 0,
+      nombreCc: "",
+      postFin: "",
+      incluidoPermiso: "",
+      horario: "",
+      perNeg: "",
+      catidad: 0,
+      vigencia: this.vigenciaAddon,
+      medida: this.medidaAddon,
+      formaPago: "",
+      cobertura: "1",
+      actividad: "",
+      descripcion: "",
+      foliosap: "",
+      folioseg: "",
+      idUserAdmon:"",
+      idUserAut:""
+    }
+
+    console.log("uiipp");
+    console.log(this.jsonCrear);
+    console.log("uuuipp");
+
+
+    this.creaService.postRequerimiento(this.jsonCrear).subscribe(
+      response => {
+        console.log("Success")
+        if (this.mIsComplete) {
+          this.creaService.recibirRequerimiento(mResponse.id).subscribe(
+            response => {
+              console.log("Change Status")
+              console.log(response)
+            }, error => {
+              console.log(error);
             }
-          })
-          this.crearForm.reset();
-        },
-        error => {
-          Swal.fire(
-            'Error',
-            'Al crear requerimiento',
-            'error'
           )
         }
-      );
-      
-    }
-  
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
 
 }
+
+
+
