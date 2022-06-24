@@ -189,10 +189,10 @@
         </div>
     </div>
     <div class="text-center mt-5">
-      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" style="margin-right: 15px;" (click)="autoriza()">
+      <!--<button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button" style="margin-right: 15px;" (click)="autorizaRequerimiento()">
         <span class="mat-button-wrapper">Autorizar</span>
-      </button>
-      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" (click)="rechazar()">
+      </button>-->
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button" (click)="rechazarRequerimiento()">
         <span class="mat-button-wrapper">Rechazar</span>
       </button>
     </div>
@@ -330,7 +330,7 @@
   </div>
 </div>
 
-<div class="modal-2 radiu-tp"  *ngIf="data.tipo ===10" style="height: 350px;">
+<div class="modal-2 radiu-tp"  *ngIf="data.tipo === 10" style="height: 350px;">
   <div class="text-center mt-4" >
     <div class="modal-header">
       <h2 class="text-gris mb-3" style="width: 100%;">Cierre de requerimiento</h2>

@@ -40,5 +40,5 @@ export interface RequerimientoGeneric{
 	actividad: string;
 	descripcion: string;
 	idUserAdmon:string;
-	idUserAut:string;
+	idUserAut:string ;
 }

@@ -8,12 +8,7 @@
                <div class="bg-tp col-3 text-light p-2" style="border-top-right-radius: 1em;" >
                 Informaci&oacute;n del requerimiento
               </div>
-              <div class="offset-7 col-1" *ngIf="rol=='ROLE_COMERCIAL'">
-                  <button class="btn radiu-tp btn-outline-tp tm" (click)="guardar()">Guardar</button>
-              </div>
-              <div class="offset-1 col-2" *ngIf="tipoAccion!='Reactivar'" style="display: none;">
-                  <button class="btn radiu-tp btn-tp tm" (click)="guardar()">Enviar a aprobaci&oacute;n</button>
-              </div>
+              
               <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'" >
                   <button class="btn radiu-tp btn-tp tm" (click)="reactivar()" style="display: none;" >Reactivar</button>
               </div>

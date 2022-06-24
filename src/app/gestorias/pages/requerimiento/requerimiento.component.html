@@ -40,8 +40,13 @@
             <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="confirmarEnvio()">Enviar a
               Aprobación</button>
           </div>-->
+
+          <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION' && isUserRequeriment === true && id.estado === 'POR AUTORIZAR'" style="margin-right: 40px;">
+            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="autoriza()">Rechazar</button>
+          </div>
+
           <div class="offset-1 col-2" *ngIf="rol=='ROLE_AUTORIZACION' && isUserRequeriment === true && id.estado === 'POR AUTORIZAR'">
-            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="autoriza()">Autorizar/Rechazar</button>
+            <button style="width: 149%;" class="btn radiu-tp btn-tp" (click)="confirmarAutorizacion()">Autorizar</button>
           </div>
 
           <div class="offset-1 col-2" *ngIf="tipoAccion=='Reactivar'">

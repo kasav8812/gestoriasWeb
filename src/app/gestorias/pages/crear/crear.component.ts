@@ -35,10 +35,11 @@ export class CrearComponent implements OnInit {
   medidaAddon: string;
 
   mIsComplete: Boolean = false;
+  mUnidad : string;
+  mCantidad : number;
+  mNewDate : Date;
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
-
- 
 
   crearForm: FormGroup = this.fb.group({
     tipoPermiso: ['', [Validators.required]],
@@ -49,16 +50,16 @@ export class CrearComponent implements OnInit {
     fechaVencimeinto: [''],
     area: ['', Validators.required],
     unidad: ['', Validators.required],
-    idUser:['']
+    idUser: ['']
   })
 
   constructor(
     private fb: FormBuilder,
     private creaService: CrearService,
     public dialog: MatDialog
-  ) { 
+  ) {
     this.token = JSON.parse(sessionStorage.getItem('token'));
-    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
+    this.datosUser = JSON.parse(atob(this.token.split('.')[1]));
   }
 
   ngOnInit(): void {
@@ -71,6 +72,7 @@ export class CrearComponent implements OnInit {
         this.tipoPermiso = this.res.tipoPermiso;
         this.areaSolicitate = this.res.areaSolitante;
         this.unidad = this.res.unidaMedida;
+        console.log(this.unidad);
       },
       error => {
       }
@@ -99,7 +101,8 @@ export class CrearComponent implements OnInit {
   }
 
   public onDate(event) {
-    console.log(event);
+    console.log(event.target.value);
+    this.calculateDate(this.mUnidad,this.mCantidad, event.target.value);
   }
 
   campoNovalido(campo: string) {
@@ -114,8 +117,50 @@ export class CrearComponent implements OnInit {
       error => {
       }
     )
-
   }
+
+  getUnidad(event) {
+    console.log("get unidad value");
+    console.log(event.target.value);
+    this.mUnidad = event.target.value;
+  }
+
+  getCantidad(event) {
+    console.log("get cantidad value");
+    console.log(event.target.value);
+    this.mCantidad = event.target.value;
+  }
+
+
+  calculateDate(mUnidad: string, mCantidad: number, mFirstDateSelected: Date) {
+    this.mNewDate = new Date();
+    this.mNewDate = mFirstDateSelected;
+    switch (mUnidad) {
+      case "1":
+        this.mNewDate.setDate( this.mNewDate.getMilliseconds() + 1 );
+        break
+
+      case "2":
+        this.mNewDate.setDate( this.mNewDate.getDay() + 7 );
+        break
+
+      case "3":
+        this.mNewDate.setDate( this.mNewDate.getMonth() + mCantidad );
+        break
+
+      case "4":
+        this.mNewDate.setDate( this.mNewDate.getFullYear() + mCantidad );
+        break
+    }
+  }
+
+  validateCantidadDay(mCantidad:number, mMonth:string):number{
+   
+
+    return 1;
+  }
+
+
   fechaInvalida(campo: string) {
     /* let prueba = this.crearForm.value.fechaRequerimiento;
      let p = prueba.split("-")
@@ -123,7 +168,6 @@ export class CrearComponent implements OnInit {
      const hoy = fecha.getDate();
      const mesActual = fecha.getMonth() + 1;
      if (p[2] < hoy) {
- 
        console.log(prueba);
        return this.crearForm.invalid;
      }*/
@@ -136,7 +180,6 @@ export class CrearComponent implements OnInit {
     this.vigenciaAddon = this.crearForm.value.vigencia;
     this.medidaAddon = this.crearForm.value.unidad
 
-
     this.jsonCrear = {
       tipoRequerimineto: this.crearForm.value.tipoPermiso,
       ubicacionEstado: this.crearForm.value.estado,
@@ -146,14 +189,11 @@ export class CrearComponent implements OnInit {
       area: this.crearForm.value.area,
       fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
       fechaVencimiento: this.crearForm.value.fechaVencimeinto,
-      idUser:this.datosUser.sub
+      idUser: this.datosUser.sub
     }
-
-
     console.log("Datos del form");
 
     console.log(this.jsonCrear);
-
 
     this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
       response => {
@@ -179,8 +219,8 @@ export class CrearComponent implements OnInit {
   }
 
   guardSetAddon(mResponse: CrearResponse) {
-    let f=mResponse.fechareq.split("/");
-    let fecha1=f[2]+"/"+f[1]+"/"+f[0];
+    let f = mResponse.fechareq.split("/");
+    let fecha1 = f[2] + "/" + f[1] + "/" + f[0];
 
     this.jsonCrear = {
       idRequerimiento: mResponse.id,
@@ -209,8 +249,8 @@ export class CrearComponent implements OnInit {
       descripcion: "",
       foliosap: "",
       folioseg: "",
-      idUserAdmon:"",
-      idUserAut:""
+      idUserAdmon: "",
+      idUserAut: ""
     }
 
     console.log("uiipp");

@@ -532,11 +532,13 @@ export class RequerimientoComponent implements OnInit {
     )
   }
 
-  detectEmail(){
+  detectEmail(mTitle:string, mState : string){
     switch(this.rol) { 
-      case "ROLE_COMERCIAL": { 
-            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
-            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
+      case "ROLE_COMERCIAL": {
+            console.log("IDREQUERIMIENTO USER")
+            console.log(this.tmpReq.idUser); 
+            this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
+            this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
              break; 
       } 
       case "ROLE_OPERACIONES": { 
@@ -545,8 +547,8 @@ export class RequerimientoComponent implements OnInit {
       } 
 
       case "ROLE_AUTORIZACION": { 
-            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
-            this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
+            this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.tmpReq.idUser));
+            this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.getEmail(this.requerimientoForm.value.idUserAdmon));
             break; 
      } 
       default: { 
@@ -577,7 +579,7 @@ export class RequerimientoComponent implements OnInit {
           response => {
             console.log(response)
           },error => {
-            this.detectEmail();
+            this.detectEmail("Requerimiento Pre Autorizado", "Pre Autorización");
             this.envioCorrecto();
             console.log(error);
           }
@@ -644,16 +646,34 @@ export class RequerimientoComponent implements OnInit {
 
   confirmarAutorizacion(){
     Swal.fire({
-      title: 'Deseas autorizar solicitud?',
-      text: "Estas seguro que deseas enviar el requerimiento a Autorizar?",
+      title: 'Deseas autorizar requerimiento?',
+      text: "Estas seguro que deseas Autorizar el requerimiento?",
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#7A4CF6',
       cancelButtonColor: '#8296BA',
-      confirmButtonText: 'Enviar'
+      confirmButtonText: 'Autorizar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cambiarStatus()
+        this.autorizaRequerimiento()
+      }
+    })
+  }
+
+  confirmarRechazo(){
+    Swal.fire({
+      title: 'Esta seguro de rechazar requerimiento?',
+      text: "Estas seguro que desea rechazar el requerimiento?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#7A4CF6',
+      cancelButtonColor: '#8296BA',
+      confirmButtonText: 'Rechazar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.rechazarRequerimiento()
       }
     })
   }
@@ -728,6 +748,7 @@ export class RequerimientoComponent implements OnInit {
        
       },error => {
           console.log(error);
+          this.detectEmail("Requerimiento Cancelado","Cancelado");
           if(error.error.text==="Exito"){
             Swal.fire(
               'Requerimiento Cancelado',
@@ -739,6 +760,54 @@ export class RequerimientoComponent implements OnInit {
       }
     )
   }
+
+  autorizaRequerimiento() {
+    console.log("Aurtorizar")
+    console.log(this.id.id);
+    this.creaService.autorizaRequerimiento(this.id.id).subscribe(
+      responseP => {
+        console.log(responseP);
+
+      }, error => {
+        console.log(error);
+        console.log(error.error.text);
+        this.detectEmail("Requerimiento Autorizado", "Autorizado");
+        if (error.error.text === "Exito") {
+          Swal.fire(
+            "Requerimiento Autorizado",
+            '',
+            'success'
+          )
+          this.router.navigateByUrl('/gestorias/requerimientos/encurso');        }
+      }
+    )
+  }
+
+  rechazarRequerimiento() {
+    console.log("rechazar")
+    console.log(this.id.id);
+    this.creaService.recibirRequerimiento(this.id.id).subscribe(
+      responseP => {
+        console.log("Error");
+        console.log(responseP);
+
+      }, error => {
+        console.log("Exitos")
+        console.log(error);
+        console.log(error.error.text);
+        this.detectEmail("Requerimiento Rechazado", "Rechazado");
+        if (error.error.text === "Exito") {
+          Swal.fire(
+            "Requerimiento Rechazado",
+            '',
+            'success'
+          )
+          this.router.navigateByUrl('/gestorias/requerimientos/encurso');       
+         }
+      }
+    )
+  }
+
 
   cierraReq(){
     const dialogRef = this.dialog.open(AlertComponent, {
@@ -752,7 +821,6 @@ export class RequerimientoComponent implements OnInit {
   }
 
   sendMail(tipo: any,user: any,accion: any, idRequerimiento: any, mFromEmail: string, mToEmail :string){
-    console.log(mFromEmail);
     console.log(mToEmail);
     
     this.plantilla=this.plantilla.replace("#Tipo",tipo);
@@ -766,7 +834,7 @@ export class RequerimientoComponent implements OnInit {
         "cc": mFromEmail,
         "bcc": "",
         "reply_to": "no-reply@totalplay.com.mx",
-        "subject": "Se Modificado el status",
+        "subject": "ADMINISTRACION DE GESTORIAS CAMBIO DE ESTATUS",
         "body": this.plantilla,
         "from_Address": "",
         "from_Personal": ""

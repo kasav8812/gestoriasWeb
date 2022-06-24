@@ -102,7 +102,6 @@ export class AlertComponent {
 
   }
 
-
   getRequerimientoBase(){
     this.creaService.getRequerimientosId(this.id.id).subscribe(
       response => {
@@ -409,7 +408,7 @@ export class AlertComponent {
     }
   }
 
-  autoriza() {
+  autorizaRequerimiento() {
     console.log("Aurtorizar")
     console.log(this.data.array[0].id);
     this.creaService.autorizaRequerimiento(this.data.array[0].id).subscribe(
@@ -421,15 +420,15 @@ export class AlertComponent {
         console.log(error.error.text);
         //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
         if (error.error.text === "Exito") {
-          this.detectEmail();
+          this.detectEmail("Requerimiento Autorizado", "Autorizado");
           this.guardaComentario("Requerimiento Autorizado");
         }
       }
     )
   }
 
-  rechazar() {
-    console.log("Aurtorizar")
+  rechazarRequerimiento() {
+    console.log("rechazar")
     console.log(this.data.array[0].id);
     this.creaService.recibirRequerimiento(this.data.array[0].id).subscribe(
       responseP => {
@@ -440,7 +439,7 @@ export class AlertComponent {
         console.log("Exitos")
         console.log(error);
         console.log(error.error.text);
-        //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
+        this.detectEmail("Requerimiento Rechazado", "Rechazado");
         if (error.error.text === "Exito") {
           this.guardaComentario("Requerimiento Rechazado");
         }
@@ -480,9 +479,9 @@ export class AlertComponent {
     )
   }
 
-  detectEmail(){
-      this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[0].email);
-      this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[1].email);
+  detectEmail(mTitle : string, mState :string){
+      this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[0].email);
+      this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[1].email);
   }
 
   getEmail(mEmailTemp):string{
@@ -505,7 +504,7 @@ export class AlertComponent {
      },error => {
          console.log(error);
          if(error.error.text==="Exito"){
-          this.detectEmail();
+          this.detectEmail("Requerimiento Cerrado", "Cerrado");
            Swal.fire(
              'Requerimiento Cerrado',
              '',
@@ -535,7 +534,7 @@ export class AlertComponent {
         "cc": mFromEmail,
         "bcc": "",
         "reply_to": "no-reply@totalplay.com.mx",
-        "subject": "Se Modificado el status",
+        "subject": "ADMINISTRACION DE GESTORIAS CAMBIO DE ESTATUS " + idRequerimiento ,
         "body": this.plantilla,
         "from_Address": "",
         "from_Personal": ""
