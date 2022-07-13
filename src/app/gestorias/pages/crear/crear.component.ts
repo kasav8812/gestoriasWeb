@@ -6,7 +6,9 @@ import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../dialogs/alert.component';
 import { Catalogo } from '../interfaces/configuracion.interface';
-import { CrearResponse } from '../interfaces/crear.interface';
+import { CrearResponse, FechaVigencia } from '../interfaces/crear.interface';
+import { ConfiguracionService } from '../services/configuracion.service';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-crear',
@@ -27,6 +29,7 @@ export class CrearComponent implements OnInit {
   tmpReq: CrearResponse;
   token: any;
   datosUser: any;
+  actividades: Catalogo[];
 
 
   tipoSolicitudAddon: string;
@@ -38,6 +41,17 @@ export class CrearComponent implements OnInit {
   mUnidad : string;
   mCantidad : number;
   mNewDate : Date;
+  mActividad : string = "";
+
+  mCC:string;
+  mNombreCC: string;
+  mAct : string;
+  mDescrip : string;
+
+  mHasFechas : Boolean = false;
+
+  mResponseFechaVigencia : FechaVigencia;
+  mFechasVigencia : FechaVigencia[];
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
 
@@ -50,10 +64,23 @@ export class CrearComponent implements OnInit {
     fechaVencimeinto: [''],
     area: ['', Validators.required],
     unidad: ['', Validators.required],
-    idUser: ['']
+    idUser: [''],
+    actividad: ['', Validators.required],
+    descrip: ['', Validators.required],
+    nombreCc: ['', Validators.required],
+    cc: ['', Validators.required]
+  })
+
+  fechaVigenciaForm : FormGroup = this.fb.group({
+    idReq:['', [Validators.required]],
+    vigencia: ['', [Validators.required]],
+    unidad:['', [Validators.required]],
+    fechaRequerimiento:['', [Validators.required]],
+    fechaVencimeinto: ['', [Validators.required]]
   })
 
   constructor(
+    private configuracion: ConfiguracionService,
     private fb: FormBuilder,
     private creaService: CrearService,
     public dialog: MatDialog
@@ -77,9 +104,47 @@ export class CrearComponent implements OnInit {
       error => {
       }
     )
+
+    this.configuracion.getTipoActividad().subscribe(
+      response => {
+        this.actividades = response;
+        console.log("Actividades");
+        console.log(this.actividades);
+      },
+      error => {
+      }
+    )   
+    
+    this.getFechas();
+
+    this.configuracion.disparadorActualizar.subscribe(
+      response => {
+        this.getActividades();
+        this.getFechas();
+    })
+    
+
+
   }
 
-  get f() { return this.crearForm.controls; }
+  getActividades(){
+    this.mActividad = "";
+    this.configuracion.getTipoActividad().subscribe(
+      response => {
+        this.actividades = response;
+        console.log("Actividades");
+        console.log(this.actividades);
+      },
+      error => {
+      }
+    )
+  }
+
+  crearforms(){
+   
+  }
+
+  get f() { return this.crearForm.controls,this.fechaVigenciaForm.controls}
 
   onSubmit() {
     console.log("Entra a submitted", this.f);
@@ -131,6 +196,18 @@ export class CrearComponent implements OnInit {
     this.mCantidad = event.target.value;
   }
 
+ getActividad(event){
+  console.log("get actividad Value");
+  for (var i = 0; i < this.actividades.length; i++){
+    if(this.actividades[i].id == event.target.value){
+      this.mActividad = this.actividades[i].comentario;
+    }else{
+    
+    }
+  }
+  console.log(this.mActividad);
+ }
+
 
   calculateDate(mUnidad: string, mCantidad: number, mFirstDateSelected: Date) {
     this.mNewDate = new Date();
@@ -178,7 +255,13 @@ export class CrearComponent implements OnInit {
     this.tipoSolicitudAddon = this.crearForm.value.tipoPermiso;
     this.areaAddon = this.crearForm.value.area;
     this.vigenciaAddon = this.crearForm.value.vigencia;
-    this.medidaAddon = this.crearForm.value.unidad
+    this.medidaAddon = this.crearForm.value.unidad;
+
+    this.mCC = this.crearForm.value.cc;
+    this.mNombreCC = this.crearForm.value.nombreCc;
+    this.mAct = this.crearForm.value.actividad;
+    this.mDescrip = this.mActividad;
+  
 
     this.jsonCrear = {
       tipoRequerimineto: this.crearForm.value.tipoPermiso,
@@ -204,7 +287,6 @@ export class CrearComponent implements OnInit {
             req: response
           }
         })
-        this.crearForm.reset();
         this.tmpReq = response;
         this.guardSetAddon(this.tmpReq);
       },
@@ -219,7 +301,7 @@ export class CrearComponent implements OnInit {
   }
 
   guardSetAddon(mResponse: CrearResponse) {
-    let f = mResponse.fechareq.split("/");
+    let f = mResponse.fechavencimiento.split("/");
     let fecha1 = f[2] + "/" + f[1] + "/" + f[0];
 
     this.jsonCrear = {
@@ -234,8 +316,8 @@ export class CrearComponent implements OnInit {
       tipoSolicitud: 403,
       folioEgreso: "",
       area: this.areaAddon,
-      cc: 0,
-      nombreCc: "",
+      cc: this.mCC,
+      nombreCc: this.mNombreCC,
       postFin: "",
       incluidoPermiso: "",
       horario: "",
@@ -245,8 +327,8 @@ export class CrearComponent implements OnInit {
       medida: this.medidaAddon,
       formaPago: "",
       cobertura: "1",
-      actividad: "",
-      descripcion: "",
+      actividad: this.mAct,
+      descripcion: this.mDescrip,
       foliosap: "",
       folioseg: "",
       idUserAdmon: "",
@@ -260,16 +342,56 @@ export class CrearComponent implements OnInit {
 
     this.creaService.postRequerimiento(this.jsonCrear).subscribe(
       response => {
-        console.log("Success")
-        if (this.mIsComplete) {
+        console.log("Success All Reqe")
           this.creaService.recibirRequerimiento(mResponse.id).subscribe(
             response => {
               console.log("Change Status")
               console.log(response)
+              this.updateFecha(mResponse.id);
             }, error => {
+              console.log("Change Status Error")
               console.log(error);
+              this.updateFecha(mResponse.id);
             }
           )
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  create(){
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 3,
+        title: 'Crea Actividad',
+        button: 'Crear',
+        tipe: 1,
+        catid: 8,
+        req: {id:null}
+      }
+    })
+  }
+
+  loadFechaVigencia(){
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 11,
+        title: "",
+        req: {id:"tmpReq"}
+      }
+    })
+  }
+
+
+  updateFecha(idReq : number){
+    this.creaService.updateFechaVigencia(idReq).subscribe(
+      response => {
+        this.mResponseFechaVigencia = response;
+        if(this.mResponseFechaVigencia.idReq == ""){
+          console.log("Success Update fechas")
         }
       }, error => {
         console.log("Response Error")
@@ -278,6 +400,46 @@ export class CrearComponent implements OnInit {
   }
 
 
+  getFechas(){
+    this.creaService.getFechasVigencia("tmpReq").subscribe(
+      response => {
+        this.mFechasVigencia = response;
+        console.log(this.mFechasVigencia);
+        if(this.mFechasVigencia != null){
+          this.mHasFechas = true;
+          console.log("Success Update Requerimiento")
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+
+  getDescription(mUnidad):string{
+    var mDescrip : string = "";
+    for(var i=0;i<this.unidad.length;i++){
+      if(this.unidad[i].id==mUnidad){
+        mDescrip = this.unidad[i].descripcion;
+      }
+    }
+
+    return mDescrip;
+  }
+
+  deleteFechaVigencia(idReq:string){
+
+    this.creaService.deleteFechaVigencia(idReq).subscribe(
+      response => {
+        console.log("success delete");
+        this.ngOnInit();
+      }, error => {
+        console.log("fail delete");
+      }
+    )
+    console.log(idReq);
+  }
+  
 }
 
 

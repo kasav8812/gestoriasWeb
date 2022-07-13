@@ -45,3 +45,24 @@ export interface ArchivosResponse{
   url:string;
   typeFile:string;
 }
+
+export interface FechaVigencia{
+  id:number;
+  idReq:string;
+  vigencia:string;
+  unidad:string;
+  fechaReq:string;
+  fechaVigencia:string;
+}
+
+export interface UserAreaModel{
+  id:string;
+  tpguid:string;
+  tpgcuid:string;
+}
+
+export interface UserRelationShipModel{
+  id:string;
+  tpguid_ad:string;
+  tpgctpguid_opuid:string;
+}

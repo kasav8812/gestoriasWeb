@@ -58,3 +58,64 @@
      display: none;
      overflow: hidden;
    }
+
+
+   /* floating button*/
+
+   .kc_fab_main_btn {
+    background-color: #7A4CF6;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    background: #7A4CF6;
+    border: none;
+    outline: none;
+    color: #FFF;
+    font-size: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: .3s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+  .kc_fab_main_btn:focus {
+    transform: scale(1.1);
+  }
+
+  .kc_del_main_btn {
+    background-color: #97231f;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: #97231f;
+    border: none;
+    outline: none;
+    color: #FFF;
+    font-size: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: .3s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  .kc_del_main_btn_float {
+    background-color: #97231f;
+    width: 19px;
+    height: 19px;
+    border-radius: 100%;
+    background: #97231f;
+    border: none;
+    margin-top: -8;
+    outline: none;
+    color: #FFF;
+    font-size: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: .3s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+  .kc_del_main_btn:focus {
+    transform: scale(1.1);
+  }
+  ul > li {
+    display: inline-block;
+    /* You can also add some margins here to make it look prettier */
+}

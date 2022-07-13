@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse } from '../interfaces/crear.interface';
+import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse, FechaVigencia, UserAreaModel, UserRelationShipModel } from '../interfaces/crear.interface';
 import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
 
@@ -304,6 +304,110 @@ export class CrearService {
     return this.http.post<UsuariosResponse>(url,formdata,{headers});
   }
   
+  setFechaVigencia(formdata: FechaVigencia): Observable<FechaVigencia>{
+    const url = `${this.baseurlreq}/requerimiento/setFechaVigencia`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<FechaVigencia>(url,formdata,{headers});
+  }
+
+  getFechasVigencia(id: any): Observable<FechaVigencia[]>{
+    const url = `${this.baseurlreq}/requerimiento/getFechas/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<FechaVigencia[]>(url,{headers});
+  }
+
+  updateFechaVigencia(id:any): Observable<FechaVigencia>{
+    const url = `${this.baseurlreq}/requerimiento/updateFechaVigencia/` + id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<FechaVigencia>(url,{headers});
+  }
+
+  deleteFechaVigencia(id:any): Observable<String>{
+    const url = `${this.baseurlreq}/requerimiento/deleteFechaVigencia/` + id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<string>(url,{headers});
+  }
+
+
+  getRegiones(): Observable<Catalogo[]>{
+    const url = `${this.baseurl}/catalogo/regiones`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<Catalogo[]>(url,{headers});
+  }
+
+  getEstadosByRegion(id: any): Observable<Catalogo[]>{
+    const url = `${this.baseurl}/catalogo/getEstadosByRegion/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<Catalogo[]>(url,{headers});
+  }
+
+
+  setAreasUsuarios(formdata: UserAreaModel[]): Observable<UserAreaModel>{
+    const url = `${this.baseurlusr}/user/usuariosAreas`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UserAreaModel>(url,formdata,{headers});
+  }
+
+  setRelationShip(formdata: UserRelationShipModel): Observable<UserRelationShipModel>{
+    const url = `${this.baseurlusr}/user/addUserRelationShip`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UserRelationShipModel>(url,formdata,{headers});
+  }
+  
+
+  getUserbByEstado(id: any): Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user/getUserByEstado/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+
+  getUserByAdmin(id: any): Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user/getUserByAdmin/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+  
+
+  updateUsr(user: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user/updateUsr`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,user,{headers});
+  }
 
 }
 

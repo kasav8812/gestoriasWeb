@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Catalogo, CatGeneric, RequerimientoGeneric } from '../pages/interfaces/configuracion.interface';
-import { CrearResponse, RolesResponse, UsuariosResponse } from '../pages/interfaces/crear.interface';
+import { CrearResponse, FechaVigencia, RolesResponse, UserAreaModel, UserRelationShipModel, UsuariosResponse } from '../pages/interfaces/crear.interface';
 import { ConfiguracionService } from '../pages/services/configuracion.service';
 import { CrearService } from '../pages/services/crear.service';
 import { Router } from '@angular/router';
@@ -13,8 +13,8 @@ import {MailService} from '../pages/services/mail.service'
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styles: [
-  ]
+  styleUrls: ['../style.scss']
+
 })
 export class AlertComponent {
   // @Output() public textoEmitido = new EventEmitter<string>();
@@ -23,6 +23,10 @@ export class AlertComponent {
   cat: CatGeneric;
   area: Catalogo[];
   municipio: Catalogo[] = null;
+  regiones : Catalogo[] = null;
+  userByEstado : UsuariosResponse[] = null;
+  userRelation : UserRelationShipModel;
+  userArea : UserAreaModel;
   res: any;
   roles: RolesResponse[];
   jsonCrear:any;
@@ -34,6 +38,19 @@ export class AlertComponent {
   requerimientoBase : CrearResponse;
   rol: any;
   id:any = JSON.parse(localStorage.getItem('requerimiento'));
+  unidad: Catalogo[];
+  unidad2: Catalogo[];
+
+  mResponseFechaVigencia : FechaVigencia;
+  mFechasVigencia : FechaVigencia[];
+  mSelectionRoleOP: Boolean = false;
+  mAddEstados: Boolean = false;
+  mUserId : string;
+  mAdmon : string;
+  mRole : string;
+
+  mListEstadosToAdd : Catalogo[] = [];
+  mListUsersOwn : UsuariosResponse [] = [];
 
   constructor(
     private router: Router,
@@ -41,7 +58,7 @@ export class AlertComponent {
     private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<AlertComponent>, private creaService: CrearService,
-    private serviceMail: MailService
+    private serviceMail: MailService,
   ) {
     this.token = JSON.parse(sessionStorage.getItem('token'));
     this.datosUser = JSON.parse(atob(this.token.split('.')[1]));
@@ -63,7 +80,9 @@ export class AlertComponent {
     password_usr:['',Validators.required],  
     role_usr:['',Validators.required],
     area_usr:['',Validators.required],
-    correo_usr:['',Validators.required]
+    region_usr:['',Validators.required],
+    correo_usr:['',Validators.required],
+    admon:['',Validators.required]
   })
 
   crearForm: FormGroup = this.formBuilder.group({
@@ -71,11 +90,50 @@ export class AlertComponent {
     descripcion: ['', Validators.required]
   })
 
+  editarUsr: FormGroup = this.formBuilder.group({
+    usr_nombre: ['', [Validators.required, Validators.maxLength(2)]],
+    usr_region: ['', Validators.required],
+    usr_email: ['', Validators.required]
+  })
+
+  fechaVigenciaForm : FormGroup = this.formBuilder.group({
+    idReq:['', [Validators.required]],
+    vigencia: ['', [Validators.required]],
+    unidad:['', [Validators.required]],
+    fechaRequerimiento:['', [Validators.required]],
+    fechaVencimeinto: ['', [Validators.required]]
+  })
+
+
+
   ngOnInit(): void {
+
+    console.log("************************** init ****************************");
+    try{
+      console.log(this.data.array[0]);
+      this.editarUsr = this.formBuilder.group({
+        usr_nombre:[this.data.array[0].name],
+        usr_region:[this.data.array[0].areaID],
+        usr_email:[this.data.array[0].email]
+      })
+    }catch (e) {
+      console.log(e);
+    }
+    
     this.creaService.get_catalogos().subscribe(
       response => {
         this.res = response;
         this.municipio = this.res.ubicacion;
+        this.unidad = this.res.unidaMedida;
+        this.unidad2 = this.unidad;
+      },
+      error => {
+      }
+    )
+
+    this.creaService.getRegiones().subscribe(
+      response => {
+        this.regiones = response;
       },
       error => {
       }
@@ -93,13 +151,24 @@ export class AlertComponent {
       response => {
         console.log("SUCCESS ALL USERS");
         this.mUsuearios = response;
-        this.getReqListCompleto();
+        try {
+          this.getReqListCompleto();
+        } catch (e) {
+          console.log(e);
+        }
       },
       error => {
         console.log(error);
       }
     )
 
+    try {
+      this.getUserByAdmin();
+    } catch (e) {
+      console.log(e);
+    }
+
+   
   }
 
   getRequerimientoBase(){
@@ -447,37 +516,7 @@ export class AlertComponent {
     )
   }
 
-  onSubmit(){
-    console.log("Datos del form", this.crearFormUser);
-    this.jsonCrear = {
-      name: this.crearFormUser.value.nombre_usr,
-      username: this.crearFormUser.value.usuario_usr,
-      password: this.crearFormUser.value.password_usr,
-      rol: [this.crearFormUser.value.role_usr],
-      areaID: this.crearFormUser.value.area_usr,
-      email: this.crearFormUser.value.correo_usr
-    }
 
-    console.log("Estructura JSON #••############")
-    console.log(this.jsonCrear);
-    this.creaService.crearUsuario(this.jsonCrear).subscribe(
-      responseP => {
-        Swal.fire(
-          "Usuario creado",
-          '',
-          'success'
-        )
-        this.router.navigateByUrl('gestorias/configuracion/crearUsuario');
-
-      }, error => {
-        Swal.fire(
-          "Error al crear el usuario",
-          '',
-          'error'
-        )
-      }
-    )
-  }
 
   detectEmail(mTitle : string, mState :string){
       this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[0].email);
@@ -558,4 +597,250 @@ export class AlertComponent {
     )
   }
 
+  guardarFecha(){
+    this.jsonCrear = {
+      idReq: this.data.req.id,
+      vigencia: this.fechaVigenciaForm.value.vigencia,
+      unidad: this.fechaVigenciaForm.value.unidad,
+      fechaReq: this.fechaVigenciaForm.value.fechaRequerimiento,
+      fechaVigencia: this.fechaVigenciaForm.value.fechaVencimeinto
+    }
+    console.log(this.jsonCrear);
+
+    this.creaService.setFechaVigencia(this.jsonCrear).subscribe(
+      response => {
+        this.mResponseFechaVigencia = response
+        this.configuracion.disparadorActualizar.emit();
+        if(this.mResponseFechaVigencia.idReq != ""){
+          Swal.fire(
+            'Fecha Agregada',
+            'Nueva fecha agregada correctamente',
+            'success'
+          )
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  updateFecha(idReq : number){
+    this.creaService.updateFechaVigencia(idReq).subscribe(
+      response => {
+        this.mResponseFechaVigencia = response;
+        if(this.mResponseFechaVigencia.idReq == ""){
+          console.log("Success Update Requerimiento")
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  getFechas(idReq:any){
+    this.creaService.getFechasVigencia(idReq).subscribe(
+      response => {
+        this.mFechasVigencia = response;
+        if(this.mFechasVigencia != null){
+          console.log("Success Update Requerimiento")
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  getEstadosByRegion(){
+    this.creaService.getEstadosByRegion(this.crearFormUser.value.region_usr).subscribe(
+      response => {
+        this.municipio = response
+      },
+      error => {
+      }
+    )
+  }
+
+  getAdmonByRegion(event){
+    console.log(event.target.value);
+      this.creaService.getUserbByEstado(event.target.value).subscribe(
+        response => {
+          console.log("Success Admon");
+          this.userByEstado = response;
+
+        },
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  showSelect(){
+    console.log("********************************************** user role")
+    console.log(this.crearFormUser.value.role_usr)
+    if(this.crearFormUser.value.role_usr == "4"){
+      this.mSelectionRoleOP = true;
+    }
+  }
+
+  getAdmonSelect(event){
+    console.log("Admon", event.target);
+    console.log("Admon", this.crearFormUser.value.admon);
+  
+    this.mAdmon = this.userByEstado[0].username;
+    console.log(this.mAdmon);
+  }
+
+  onSelected(item){
+    console.log("My fucking index",  item);
+  }
+
+  
+  addEstado(){
+    this.mAddEstados = true
+    console.log("Estados");
+    console.log(this.crearFormUser.value.area_usr);
+
+    for(var i=0;i<this.municipio.length;i++){
+        if(this.crearFormUser.value.area_usr == this.municipio[i].id){
+          this.mListEstadosToAdd.push(this.municipio[i]);
+        }
+    }
+  }
+
+  onSubmit(){
+    console.log("Datos del form >>>>>>>>>>", this.crearFormUser);
+    this.mUserId = this.crearFormUser.value.usuario_usr;
+    this.mAdmon = this.crearFormUser.value.admon;
+    this.mRole = this.crearFormUser.value.role_usr;
+
+    console.log(this.mRole);
+    this.jsonCrear = {
+      name: this.crearFormUser.value.nombre_usr,
+      username: this.crearFormUser.value.usuario_usr,
+      password: this.crearFormUser.value.password_usr,
+      rol: [this.crearFormUser.value.role_usr],
+      areaID: this.crearFormUser.value.area_usr,
+      email: this.crearFormUser.value.correo_usr
+    }
+
+    console.log("Estructura JSON #••############")
+    console.log(this.jsonCrear);
+    this.creaService.crearUsuario(this.jsonCrear).subscribe(
+      responseP => {
+        Swal.fire(
+          "Usuario creado",
+          '',
+          'success'
+        )
+        if(this.mRole == "4"){
+          this.saveRelationShip();
+        }else{
+          this.saveEstadosByUser();
+        }
+      }, error => {
+        Swal.fire(
+          "Error al crear el usuario",
+          '',
+          'error'
+        )
+      }
+    )
+  }
+
+  saveRelationShip(){
+    this.jsonCrear = {
+      tpguid_ad: this.userByEstado[0].username,
+      tpguid_op: this.mUserId
+    }
+
+    console.log("RelationShip");
+    console.log(this.jsonCrear);
+    this.creaService.setRelationShip(this.jsonCrear).subscribe(
+      response=>{
+        console.log("Save RelationShip Success")
+        this.saveEstadosByUser();
+      },error =>{
+        console.log("Save RelationShip Fail")
+      }
+    )
+  }
+  
+  saveEstadosByUser(){
+    var mMunicipios : any[] = [];
+
+    for(var i=0;i<this.mListEstadosToAdd.length;i++){
+      this.jsonCrear = {
+        id:i,
+        tpguid:  this.mUserId,
+        tpgcuid: this.mListEstadosToAdd[i].id
+      }
+
+      mMunicipios.push(this.jsonCrear);
+    }
+
+    console.log("Areas Add ");
+    console.log(mMunicipios);
+
+    this.creaService.setAreasUsuarios(mMunicipios).subscribe(
+      response=>{
+        this.configuracion.disparadorActualizar.emit();
+        console.log("Success Areas");
+        this.router.navigateByUrl('gestorias/configuracion/crearUsuario');
+      },error =>{
+        console.log("Error Areas");
+      }
+    )
+  }
+
+  getUserByAdmin(){
+    console.log(this.data.req.id);
+    this.creaService.getUserByAdmin(this.data.req.id).subscribe(
+      response => {
+        this.mListUsersOwn = response;
+        console.log(this.mListUsersOwn);
+        console.log("Success Load Employed Owned")
+      },
+      error => {
+        console.log("Error Load Employed Owned")
+      }
+    )
+  }
+
+  deleteArea(mPos:number){
+    var mTemporal : Catalogo[] = [] 
+    console.log("Position", i);
+
+
+    for(var i=0;i<this.mListEstadosToAdd.length;i++){
+      if( i != mPos){
+        mTemporal.push(this.mListEstadosToAdd[i]);
+      }
+    }
+
+    this.mListEstadosToAdd = mTemporal;
+  }
+
+
+  editarDatos(){
+    this.jsonCrear = {
+      id:this.data.array[0].id,
+      username:this.data.array[0].username,
+      name: this.editarUsr.value.usr_nombre,
+      region: this.editarUsr.value.usr_region,
+      email: this.editarUsr.value.usr_email
+    }
+
+    console.log("UPDATE ************");
+    console.log(this.jsonCrear);
+
+    this.creaService.updateUsr(this.jsonCrear).subscribe(
+      response => {
+        this.configuracion.disparadorActualizar.emit();
+        console.log("Success update usr")
+      },
+      error => {
+        console.log("Error Update usr")
+      }
+    )
+  }
 }
