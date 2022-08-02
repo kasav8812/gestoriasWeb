@@ -5,7 +5,7 @@ import { CrearService } from '../services/crear.service';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../dialogs/alert.component';
-import { Catalogo } from '../interfaces/configuracion.interface';
+import { ActividadesModel, Catalogo, CentroCModel } from '../interfaces/configuracion.interface';
 import { CrearResponse, FechaVigencia } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
@@ -30,7 +30,8 @@ export class CrearComponent implements OnInit {
   token: any;
   datosUser: any;
   actividades: Catalogo[];
-
+  rangoHorario : string[] = ["9:00-14:00", "14:00-16:00", "16:00-19:00"]; 
+  mComboPermiso : string[] = ["PERMISO", "NEGOCIACIóN"];
 
   tipoSolicitudAddon: string;
   areaAddon: string;
@@ -47,11 +48,20 @@ export class CrearComponent implements OnInit {
   mNombreCC: string;
   mAct : string;
   mDescrip : string;
+  mPerNeg : string;
+  mHorario : string;
 
   mHasFechas : Boolean = false;
 
   mResponseFechaVigencia : FechaVigencia;
   mFechasVigencia : FechaVigencia[];
+
+  mArrayActividades: Catalogo[] = [];
+  isChecked : Boolean = false;
+
+  mCatCC : CentroCModel[] = [];
+
+
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
 
@@ -68,7 +78,9 @@ export class CrearComponent implements OnInit {
     actividad: ['', Validators.required],
     descrip: ['', Validators.required],
     nombreCc: ['', Validators.required],
-    cc: ['', Validators.required]
+    cc: ['', Validators.required],
+    perNeg:['',Validators.required],
+    horario:['', Validators.required]
   })
 
   fechaVigenciaForm : FormGroup = this.fb.group({
@@ -108,8 +120,7 @@ export class CrearComponent implements OnInit {
     this.configuracion.getTipoActividad().subscribe(
       response => {
         this.actividades = response;
-        console.log("Actividades");
-        console.log(this.actividades);
+
       },
       error => {
       }
@@ -124,6 +135,13 @@ export class CrearComponent implements OnInit {
     })
     
 
+    this.creaService.getAllCCEnabled().subscribe(
+      response => {
+        this.mCatCC = response;
+      },
+      error => {
+      }
+    ) 
 
   }
 
@@ -132,8 +150,6 @@ export class CrearComponent implements OnInit {
     this.configuracion.getTipoActividad().subscribe(
       response => {
         this.actividades = response;
-        console.log("Actividades");
-        console.log(this.actividades);
       },
       error => {
       }
@@ -185,27 +201,24 @@ export class CrearComponent implements OnInit {
   }
 
   getUnidad(event) {
-    console.log("get unidad value");
     console.log(event.target.value);
     this.mUnidad = event.target.value;
   }
 
   getCantidad(event) {
-    console.log("get cantidad value");
     console.log(event.target.value);
     this.mCantidad = event.target.value;
   }
 
- getActividad(event){
-  console.log("get actividad Value");
+ getActividad(event) : string{
   for (var i = 0; i < this.actividades.length; i++){
-    if(this.actividades[i].id == event.target.value){
+    if(this.actividades[i].id == event){
       this.mActividad = this.actividades[i].comentario;
     }else{
     
     }
   }
-  console.log(this.mActividad);
+  return this.mActividad;
  }
 
 
@@ -261,6 +274,8 @@ export class CrearComponent implements OnInit {
     this.mNombreCC = this.crearForm.value.nombreCc;
     this.mAct = this.crearForm.value.actividad;
     this.mDescrip = this.mActividad;
+    this.mPerNeg = this.crearForm.value.perNeg;
+    this.mHorario = this.crearForm.value.horario;
   
 
     this.jsonCrear = {
@@ -320,14 +335,14 @@ export class CrearComponent implements OnInit {
       nombreCc: this.mNombreCC,
       postFin: "",
       incluidoPermiso: "",
-      horario: "",
-      perNeg: "",
+      horario: this.mHorario,
+      perNeg: this.mPerNeg,
       catidad: 0,
       vigencia: this.vigenciaAddon,
       medida: this.medidaAddon,
       formaPago: "",
       cobertura: "1",
-      actividad: this.mAct,
+      actividad:"41",
       descripcion: this.mDescrip,
       foliosap: "",
       folioseg: "",
@@ -347,11 +362,13 @@ export class CrearComponent implements OnInit {
             response => {
               console.log("Change Status")
               console.log(response)
-              this.updateFecha(mResponse.id);
+              this.saveListActividades(mResponse.id);
+
+              
             }, error => {
+              this.saveListActividades(mResponse.id);
               console.log("Change Status Error")
               console.log(error);
-              this.updateFecha(mResponse.id);
             }
           )
       }, error => {
@@ -439,8 +456,60 @@ export class CrearComponent implements OnInit {
     )
     console.log(idReq);
   }
+
+  addActividadesCheck(item:Catalogo){
+    var mTempActividades : Catalogo [] = [];
+    var isNewItem : Boolean = true;
+    console.log(item);
+
+    if(this.mArrayActividades.length <= 0){
+      this.mArrayActividades.push(item);
+    }else{
+      for(var i=0;i<this.mArrayActividades.length;i++){
+        if(this.mArrayActividades[i].id == item.id){
+          isNewItem = false;
+        }else{
+          mTempActividades.push(this.mArrayActividades[i])
+        }
+      }
+      if(isNewItem){
+        mTempActividades.push(item);
+      }
+      this.mArrayActividades = mTempActividades;
+    }
+
+    console.log(this.mArrayActividades);
+  }
   
+  saveListActividades(idReq){
+    var mListActividades : any[] = []
+
+    for(var i=0; i<this.mArrayActividades.length; i++){
+        this.jsonCrear ={
+          tpgcreqid:idReq,
+          tpgcacid:this.mArrayActividades[i].id
+        }
+
+        mListActividades.push(this.jsonCrear);
+    }
+
+    console.log("Save Actividades");
+    console.log(mListActividades);
+    this.creaService.setActividades(mListActividades).subscribe(
+      response=>{
+       console.log("Succces Save Actviidades")
+       this.updateFecha(idReq);
+      },error =>{
+        console.log("Error Save Actviidades");
+        this.updateFecha(idReq);
+      }
+    )
+  }
+
+
 }
+
+
 
 
 

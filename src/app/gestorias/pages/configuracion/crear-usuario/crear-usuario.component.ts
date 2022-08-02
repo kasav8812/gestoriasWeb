@@ -21,6 +21,7 @@ export class CrearUsuarioComponent implements OnInit {
     area: Catalogo[];
     mListEnablePersonal : Boolean = false;
     mBackup : UsuariosResponse[] = [];
+    jsonCrear:any;
 
     buscarForm: FormGroup = this.fb.group({
       buscar: ['', [Validators.required]]
@@ -157,5 +158,69 @@ export class CrearUsuarioComponent implements OnInit {
     }
   })
  }
+
+ enableUser(item:UsuariosResponse){
+ 
+  if(item.enabled == true){
+    Swal.fire({
+      title: '¿Esta seguro que desea desactivar?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.changeValue(item,false);
+        Swal.fire(
+          'Desactivada',
+          'Se desactivo correctamente',
+          'success'
+        )
+      }
+    })
+  }else {
+    Swal.fire({
+      title: '¿Esta seguro que desea activar?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.changeValue(item,true);
+        Swal.fire(
+          'Activada',
+          'Se activo correctamente',
+          'success'
+        )
+      }
+    })
+  }
+  this.ngOnInit();
+ }
+
+ changeValue(mData: UsuariosResponse, mEnabled : boolean){
+  this.jsonCrear = {
+    id: mData.id,
+    username: mData.username,
+    name: mData.name,
+    region: mData.areaID,
+    email: mData.email,
+    enabled : mEnabled
+  }
+
+  this.creaService.updateUsr(this.jsonCrear).subscribe(
+    response => {
+      this.ngOnInit();
+      console.log("Success update usr")
+    },
+    error => {
+      console.log("Error Update usr")
+    }
+  )
+}
+
 
 }

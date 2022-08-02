@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit{
   isActive: boolean= true;
 
   milogin: FormGroup = this.formBuilder.group({
-    user: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+    user: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 

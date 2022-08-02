@@ -20,6 +20,8 @@ export class AlertComponent {
   // @Output() public textoEmitido = new EventEmitter<string>();
   // @Output() reloadComponent: EventEmitter<any> = new EventEmitter();
   private plantilla: string = plantillaCorreo.cambioStatus;
+  private plantillaRecover: string = plantillaCorreo.recoverMail;
+
   cat: CatGeneric;
   area: Catalogo[];
   municipio: Catalogo[] = null;
@@ -52,6 +54,8 @@ export class AlertComponent {
   mListEstadosToAdd : Catalogo[] = [];
   mListUsersOwn : UsuariosResponse [] = [];
 
+  mListIdEstados :Catalogo[] = [];
+
   constructor(
     private router: Router,
     private configuracion: ConfiguracionService,
@@ -81,7 +85,7 @@ export class AlertComponent {
     role_usr:['',Validators.required],
     area_usr:['',Validators.required],
     region_usr:['',Validators.required],
-    correo_usr:['',Validators.required],
+    correo_usr:['',Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
     admon:['',Validators.required]
   })
 
@@ -566,8 +570,6 @@ export class AlertComponent {
     this.plantilla=this.plantilla.replace("#User",user);
     this.plantilla=this.plantilla.replace("#Accion",accion);
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
-    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
-    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     let param={
         "to": mToEmail,
         "cc": mFromEmail,
@@ -709,6 +711,7 @@ export class AlertComponent {
 
   onSubmit(){
     console.log("Datos del form >>>>>>>>>>", this.crearFormUser);
+   // if (!this.crearFormUser.invalid){
     this.mUserId = this.crearFormUser.value.usuario_usr;
     this.mAdmon = this.crearFormUser.value.admon;
     this.mRole = this.crearFormUser.value.role_usr;
@@ -732,6 +735,7 @@ export class AlertComponent {
           '',
           'success'
         )
+        this.sendMailChange(responseP.name,responseP.username,responseP.email);
         if(this.mRole == "4"){
           this.saveRelationShip();
         }else{
@@ -745,6 +749,13 @@ export class AlertComponent {
         )
       }
     )
+  /*  }else{
+      Swal.fire(
+        "Error",
+        'Es necesario llenar todos los campos',
+        'error'
+      )
+    }*/
   }
 
   saveRelationShip(){
@@ -785,6 +796,7 @@ export class AlertComponent {
       response=>{
         this.configuracion.disparadorActualizar.emit();
         console.log("Success Areas");
+        
         this.router.navigateByUrl('gestorias/configuracion/crearUsuario');
       },error =>{
         console.log("Error Areas");
@@ -843,4 +855,94 @@ export class AlertComponent {
       }
     )
   }
+
+  sendMailChange(pass: any,user: any,mToEmail :string){
+    console.log("MAILS");
+  
+    console.log(mToEmail);
+  
+  
+    this.plantillaRecover=this.plantillaRecover.replace("#User",user);
+    this.plantillaRecover=this.plantillaRecover.replace("#Pass",pass);
+  
+    let param={
+        "to": mToEmail,
+        "cc": mToEmail,
+        "bcc": "",
+        "reply_to": "no-reply@totalplay.com.mx",
+        "subject": "ADMINISTRACION DE GESTORIAS ACTUALIZAR CONTRASEÑA ",
+        "body": this.plantillaRecover,
+        "from_Address": "",
+        "from_Personal": ""
+    }
+  
+    console.log("Este es la plantilla",this.plantillaRecover);
+    this.serviceMail.getToken().subscribe(
+       response=>{
+        console.log("Response del token___",response);        
+          this.serviceMail.sendMail(param,response.access_token).subscribe(
+             responseP=>{
+              console.log("Response del mail___",responseP);
+            },error => {
+                console.log(error);
+            }
+          )
+      },error => {
+          console.log(error);
+      }
+    )
+  }
+
+
+  addIdEstados(item:Catalogo){
+    console.log(this.data.req.id);
+
+    var mTempEstados : Catalogo [] = [];
+    var isNewItem : Boolean = true;
+    console.log(item);
+    item.tpgregion = this.data.req.id;
+
+    if(this.mListIdEstados.length <= 0){
+      this.mListIdEstados.push(item);
+    }else{
+      for(var i=0;i<this.mListIdEstados.length;i++){
+        if(this.mListIdEstados[i].id == item.id){
+          isNewItem = false;
+        }else{
+          mTempEstados.push(this.mListIdEstados[i])
+        }
+      }
+      if(isNewItem){
+        mTempEstados.push(item);
+      }
+      this.mListIdEstados = mTempEstados;
+    }
+
+    console.log(this.mListIdEstados);
+  }
+
+  
+
+  saveNewEstados(){
+    this.creaService.setEstadosRegion(this.mListIdEstados).subscribe(
+      response => {
+        console.log("Success update List")
+        Swal.fire(
+          "Se han agreadado nuevos estados",
+          '',
+          'success'
+        )
+      },
+      error => {
+        Swal.fire(
+          "Error al agregar estados",
+          '',
+          'error'
+        )
+        console.log("Error Update List")
+      }
+    )
+  }
+
+
 }

@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Catalogo, RequerimientoGeneric, CatGeneric } from '../interfaces/configuracion.interface';
+import { Catalogo, RequerimientoGeneric, CatGeneric, CentroCModel } from '../interfaces/configuracion.interface';
 import { CrearResponse, CrearComentario, ArchivosResponse, UsuariosResponse, FechaVigencia } from '../interfaces/crear.interface';
 import { ConfiguracionService } from '../services/configuracion.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { HostListener } from "@angular/core";
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { TouchSequence } from 'selenium-webdriver';
+import { kill } from 'process';
 
 
 
@@ -26,6 +27,8 @@ import { TouchSequence } from 'selenium-webdriver';
   templateUrl: './requerimiento.component.html',
   styleUrls: ['../../style.scss']
 })
+
+
 export class RequerimientoComponent implements OnInit {
 
   private plantilla: string = plantillaCorreo.cambioStatus;
@@ -48,9 +51,14 @@ export class RequerimientoComponent implements OnInit {
 
   usuarios: UsuariosResponse[];
   mCheckRolStatus: Boolean = false;
+  mCatCC : CentroCModel[] = [];
 
 
   horario: string[] = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
+
+
+  rangoHorario : string[] = ["9:00-14:00", "14:00-16:00", "16:00-19:00"]; 
+  mComboPermiso : string[] = ["PERMISO", "NEGOCIACIóN"];
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
 
@@ -76,6 +84,7 @@ export class RequerimientoComponent implements OnInit {
   mReqCC:string = "";
   mReqNombreCC:string = "";
   mReqDescripcion:string = "";
+  mPerNeg: string = "";
 
   mResponseFechaVigencia : FechaVigencia;
   showButtonsRoleComercial: Boolean = false;
@@ -159,7 +168,9 @@ export class RequerimientoComponent implements OnInit {
     actividad: ['', Validators.required],
     descrip: ['', Validators.required],
     nombreCc: ['', Validators.required],
-    cc: ['', Validators.required]
+    cc: ['', Validators.required],
+    perNeg: ['',Validators.required],
+    appt:['',Validators.required]
   })
 
   constructor(
@@ -187,7 +198,11 @@ export class RequerimientoComponent implements OnInit {
   selectedFiles: FileList[] = [];
   tmpFiles: FileList[] = [];
   file: File;
-  mArchivos: ArchivosResponse[];
+  mArchivos: ArchivosResponse[] = [];
+
+  mArrayActividades: Catalogo[] = [];
+
+  mArrayActividadesWS: Catalogo[] = [];
 
 
   //Es el array que contiene los items para mostrar el progreso de subida de cada archivo
@@ -225,13 +240,7 @@ export class RequerimientoComponent implements OnInit {
       }
     )
 
-    this.configuracion.getTipoActividad().subscribe(
-      response => {
-        this.actividades = response;
-      },
-      error => {
-      }
-    )
+
 
     this.creaService.getAllUsers().subscribe(
       response => {
@@ -332,7 +341,6 @@ export class RequerimientoComponent implements OnInit {
     this.getComentarios();
     //this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
 
-
     this.uploadFilesService.getFiles(this.id.id).subscribe(
       response => {
         this.mArchivos = response;
@@ -377,13 +385,22 @@ export class RequerimientoComponent implements OnInit {
       this.permisoEditarInfoBasica = false;
     }
   
-   
+   this.getActividades();
 
     this.configuracion.disparadorActualizar.subscribe(
       response => {
         this.getActividades();
         this.getFechas(this.tmpReq.id);
       })
+
+      this.creaService.getAllCCEnabled().subscribe(
+        response => {
+          this.mCatCC = response;
+        },
+        error => {
+        }
+      ) 
+  
 
   }
 
@@ -392,25 +409,38 @@ export class RequerimientoComponent implements OnInit {
     this.configuracion.getTipoActividad().subscribe(
       response => {
         this.actividades = response;
-        console.log("Actividades");
+        console.log("Actividades uiiipp");
+        console.log(this.id.id);
         console.log(this.actividades);
+        this.creaService.getActividadesByReq(this.id.id).subscribe(
+          response => {
+            console.log("Success load Actividades por Req");
+            this.mArrayActividadesWS = response;
+            this.detectSelectedCheck();
+          },
+          error => {
+            console.log("Fail load Actividades por Req");
+          }
+        );
+    
       },
       error => {
       }
     )
   }
 
-  getActividad(event) {
-    console.log("get actividad Value");
-    for (var i = 0; i < this.actividades.length; i++) {
-      if (this.actividades[i].id == event.target.value) {
+ 
+  getActividad(event) : string{
+    for (var i = 0; i < this.actividades.length; i++){
+      if(this.actividades[i].id == event){
         this.mActividad = this.actividades[i].comentario;
-      } else {
-
+      }else{
+      
       }
     }
-    console.log(this.mActividad);
-  }
+    return this.mActividad;
+   }
+  
 
   getMunicipioIni() {
     this.creaService.getUbicacionMunicipio(parseInt(this.tmpReq.ubicacion)).subscribe(
@@ -460,7 +490,9 @@ export class RequerimientoComponent implements OnInit {
       actividad: [this.requerimiento.actividad, Validators.required],
       descrip: [this.requerimiento.descripcion, Validators.required],
       nombreCc: [this.requerimiento.nombreCc, Validators.required],
-      cc: [this.requerimiento.cc, Validators.required]
+      cc: [this.requerimiento.cc, Validators.required],
+      perNeg: [this.requerimiento.perNeg, Validators.required],
+      appt: [this.requerimiento.horario, Validators.required]
     });
     console.log(this.crearForm.value);
   }
@@ -915,8 +947,6 @@ export class RequerimientoComponent implements OnInit {
     this.plantilla = this.plantilla.replace("#User", user);
     this.plantilla = this.plantilla.replace("#Accion", accion);
     this.plantilla = this.plantilla.replace("#IdRequerimiento", idRequerimiento);
-    this.plantilla = this.plantilla.replace("#IdRequerimiento", idRequerimiento);
-    this.plantilla = this.plantilla.replace("#IdRequerimiento", idRequerimiento);
     let param = {
       "to": mToEmail,
       "cc": mFromEmail,
@@ -1012,6 +1042,8 @@ export class RequerimientoComponent implements OnInit {
     for (var i = 0; i < event.target.files.length; i++) {
       this.selectedFiles.push(event.target.files[i])
     }
+
+    this.uploadFiles();
   }
 
   deleteFile(event) {
@@ -1050,6 +1082,7 @@ export class RequerimientoComponent implements OnInit {
         } else if (event instanceof HttpResponse) {
           console.log("si entra.....")
           this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
+          this.refreshFiles();
         }
       },
       error => {
@@ -1057,6 +1090,8 @@ export class RequerimientoComponent implements OnInit {
 
         if (error.status == 200) {
           this.fileInfos = this.uploadFilesService.getFiles(this.id.id);
+          this.refreshFiles();
+
           this.progressInfo[index].value = 100;
           Swal.fire(
             {
@@ -1086,9 +1121,21 @@ export class RequerimientoComponent implements OnInit {
     this.message = '';
     for (let i = 0; i < this.selectedFiles.length; i++) {
       this.upload(i, this.selectedFiles[i]);
+    
     }
   }
 
+  refreshFiles(){
+    this.uploadFilesService.getFiles(this.id.id).subscribe(
+      response => {
+        this.mArchivos = response;
+        console.log("Archivos Refresh Files");
+        console.log(this.mArchivos);
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
 
   selectFile(ruta: any, nombreA: any) {
     let tipo = nombreA.split(".")[1];
@@ -1177,6 +1224,17 @@ export class RequerimientoComponent implements OnInit {
       disableClose: true,
       data: {
         tipo: 9,
+        file: mArchivos
+      }
+    })
+  }
+
+
+  previewIMG(mArchivos: ArchivosResponse) {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 15,
         file: mArchivos
       }
     })
@@ -1337,6 +1395,65 @@ export class RequerimientoComponent implements OnInit {
     console.log(idReq);
   }
   
+  addActividadesCheck(item:Catalogo){
+    var mTempActividades : Catalogo [] = [];
+    var isNewItem : Boolean = true;
+    console.log(item);
+
+    if(this.mArrayActividades.length <= 0){
+      this.mArrayActividades.push(item);
+    }else{
+      for(var i=0;i<this.mArrayActividades.length;i++){
+        if(this.mArrayActividades[i].id == item.id){
+          isNewItem = false;
+        }else{
+          mTempActividades.push(this.mArrayActividades[i])
+        }
+      }
+      if(isNewItem){
+        mTempActividades.push(item);
+      }
+      this.mArrayActividades = mTempActividades;
+    }
+
+    console.log(this.mArrayActividades);
+  }
   
+  saveListActividades(idReq){
+    var mListActividades : any[] = []
+
+    for(var i=0; i<this.mArrayActividades.length; i++){
+        this.jsonCrear ={
+          tpgcreqid:idReq,
+          tpgcacid:this.mArrayActividades[i].id
+        }
+
+        mListActividades.push(this.jsonCrear);
+    }
+
+    console.log("Save Actividades");
+    console.log(mListActividades);
+    this.creaService.setActividades(mListActividades).subscribe(
+      response=>{
+       console.log("Succces Save Actviidades")
+      },error =>{
+        console.log("Error Save Actviidades");
+      }
+    )
+  }
+
+  detectSelectedCheck(){
+    console.log("Actividades DETECT");
+    console.log(this.mArrayActividadesWS);
+    for(var i=0; i<this.mArrayActividadesWS.length;i++){
+      for(var j=0;j<this.actividades.length;j++){
+        if(this.actividades[j].id == this.mArrayActividadesWS[i].id){
+          this.actividades[j].selected = true;
+        }
+      }
+    }
+    console.log("Actividades DETECT");
+    console.log(this.actividades);
+  }
 
 }

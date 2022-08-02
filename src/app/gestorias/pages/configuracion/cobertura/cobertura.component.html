@@ -1,19 +1,103 @@
 <div class="row m-4">
   <div class="col-3 offset-9">
-      <button
-          class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp mt-3"
-          mat-button
-          (click)="create()"
-      >
+    <button hidden class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp mt-3" mat-button (click)="create()">
       + Nueva Cobertura
-      </button>
+    </button>
   </div>
-  <div class="table-responsive m-4">
-      <table class="table caption-top table-striped table-hover">
+  <div class="m-4">
+
+    <div class="row">
+      <div class="mb-1 col-5 form-control-sm">
+
+        <table class="table">
+          <thead>
+            <tr>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <button class="btn btn-outline-tp">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path
+                      d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd"
+                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                  </svg>
+                </button>
+              </td>
+
+              <td>
+                <select id="inputState" class="form-control-sm"
+                  style="width: 310px; border-width: 1px; border-color: gray;" formControlName="region_usr"
+                  (change)="getEstadosByRegion($event.target.value)">
+                  <option *ngFor="let item of regiones; let i = index" [selected]="i === 0" value="{{item.id}}">
+                    {{item.descripcion}}</option>
+                </select>
+              </td>
+
+              <td>
+                <table class="table ">
+                  <thead>
+                    <tr>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of municipio;let i = index">
+                      <td>{{item.descripcion}}</td>
+                      <td>
+                        <button style="background-color: #97231f;
+                      width: 19px;
+                      height: 19px;
+                      border-radius: 100%;
+                      background: #97231f;
+                      border: none;
+                      margin-top: -8;
+                      outline: none;
+                      color: #FFF;
+                      font-size: 20px;
+                      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+                      transition: .3s;
+                      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" (click)="deleteEstado(item)">-</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <button
+                        style="background-color: transparent; border: none; text-decoration: underline; color: blue;"
+                        (click)="callListStates()">+ Agregar Estadado</button>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+        <div>
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <!--<table class="table caption-top table-striped table-hover">
           <thead>
             <tr>
               <th class="text-gris">Cobertura</th>
-              <th class="text-gris">Desacripci&oacute;n</th>
+              <th class="text-gris">Descripci&oacute;n</th>
               <th class="text-gris">Estado</th>
               <th class="text-gris">Editar</th>
             </tr>
@@ -35,6 +119,5 @@
               </td>
             </tr>
           </tbody>
-        </table>
-  </div>
+        </table>-->
 </div>

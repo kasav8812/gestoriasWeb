@@ -31,6 +31,7 @@
           <th class="text-gris">Rol</th>
           <th class="text-gris">Email</th>
           <th class="text-gris">Editar</th>
+          <th class="text-gris">Habilitar</th>
         </tr>
       </thead>
       <tbody>
@@ -53,6 +54,10 @@
               </svg>
             </button>
           </td>
+
+          <td>
+            <mat-slide-toggle [checked]="item.enabled" color="primary" (change)="enableUser(item)"></mat-slide-toggle>
+           </td>
         </tr>
       </tbody>
     </table>

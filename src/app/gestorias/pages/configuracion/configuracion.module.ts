@@ -15,10 +15,11 @@ import { TipoSolicitudComponent } from './tipo-solicitud/tipo-solicitud.componen
 import { CoberturaComponent } from './cobertura/cobertura.component';
 import { TipoActividadComponent } from './tipo-actividad/tipo-actividad.component';
 import { CrearUsuarioComponent } from './crear-usuario/crear-usuario.component';
+import { ccComponent } from './cc/cc.component';
 
 
 @NgModule({
-  declarations: [MainComponent, EstadoComponent, UnidadmedidaComponent, AreasolicitanteComponent, TipoPermisoComponent, SistemaComponent, TipoSolicitudComponent, CoberturaComponent, TipoActividadComponent, CrearUsuarioComponent],
+  declarations: [MainComponent, EstadoComponent, UnidadmedidaComponent, AreasolicitanteComponent, TipoPermisoComponent, SistemaComponent, TipoSolicitudComponent, CoberturaComponent, TipoActividadComponent, CrearUsuarioComponent,ccComponent],
   imports: [
     CommonModule,
     ConfiguracionRoutingModule,

@@ -249,32 +249,32 @@
       <blockquote class="blockquote col-12 p-4 m-2 bg-gris text-start">
         <div class="row">
           <div class=" col-12 form-control-sm">
-            <label for="nombre" class="form-label">No. Empleado</label>
+            <label for="nombre" class="form-label">*No. Empleado</label>
             <input class="form-control" maxlength="20" formControlName="usuario_usr" />
           </div>
           <div class=" col-12 form-control-sm">
-            <label for="decripcion" class="form-label">Contraseña</label>
+            <label for="decripcion" class="form-label">*Contraseña</label>
             <input class="form-control" maxlength="100" formControlName="password_usr" />
           </div>
 
           <div class=" col-12 form-control-sm">
-            <label for="decripcion" class="form-label">Nombre Completo</label>
+            <label for="decripcion" class="form-label">*Nombre Completo</label>
             <input class="form-control" maxlength="100" formControlName="nombre_usr" />
           </div>
 
           <div class=" col-12 form-control-sm">
             <div class="row">
               <div class="mb-3 col-4 form-control-sm">
-                <label for="decripcion" class="form-label">Region</label>
+                <label for="decripcion" class="form-label">*Region</label>
                 <select id="inputState" class="form-select" formControlName="region_usr"
                   (change)="getEstadosByRegion()">
                   <option selected></option>
-                  <option *ngFor="let item of regiones;" value="{{item.id}}">Region - {{item.id}}</option>
+                  <option *ngFor="let item of regiones;" value="{{item.id}}">{{item.descripcion}}</option>
                 </select>
               </div>
 
               <div class="mb-3 col-4 form-control-sm">
-                <label for="decripcion" class="form-label">Estados</label>
+                <label for="decripcion" class="form-label">*Estados</label>
                 <select id="inputState" class="form-select" formControlName="area_usr"
                   (change)="getAdmonByRegion($event)">
                   <option selected></option>
@@ -299,7 +299,7 @@
           </div>
 
           <div class=" col-12 form-control-sm">
-            <label for="decripcion" class="form-label">Rol</label>
+            <label for="decripcion" class="form-label">*Rol</label>
             <select id="inputState" class="form-select" formControlName="role_usr" (change)="showSelect()">
               <option selected></option>
               <option *ngFor="let item of roles;" value="{{item.id}}">{{item.role}}</option>
@@ -308,7 +308,7 @@
 
 
           <div class=" col-12 form-control-sm" *ngIf="mSelectionRoleOP">
-            <label for="decripcion" class="form-label">Administrador a cargo</label>
+            <label for="decripcion" class="form-label">*Administrador a cargo</label>
             <select id="inputState" class="form-select" formControlName="admon" (change)="getAdmonSelect($event)">
               <option selected></option>
               <option *ngFor="let item of userByEstado;  let i = index" value="{{item.id}}">{{item.name}}</option>
@@ -316,7 +316,7 @@
           </div>
 
           <div class=" col-12 form-control-sm">
-            <label for="decripcion" class="form-label">Correo</label>
+            <label for="decripcion" class="form-label">*Correo</label>
             <input class="form-control" maxlength="100" formControlName="correo_usr" />
           </div>
         </div>
@@ -324,7 +324,7 @@
     </div>
     <div class="text-center" style="padding: 10px;">
       <button mat-dialog-close class="btn radiu-tp btn-outline-tp" style="width: 230px; height: 43px;">Cerrar</button>&nbsp;
-      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button"
+      <button mat-button=""  mat-dialog-close class="btn-tp radiu-tp btn-alert mt-4" type="button"
         (click)="onSubmit()">
         <span class="mat-button-wrapper">Crear Usuario</span>
       </button>
@@ -333,12 +333,16 @@
 </div>
 
 
-<div class="modal-1 radiu-tp" *ngIf="data.tipo ===9">
-  <div class="text-center mt-2">
-    <h2 class="text-gris"> {{data.file.name}}</h2>
-    <!--<img src="../../../assets/img/totalplay/Icon awesome-check-circle.svg" alt="">-->
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===9" style="height: 675px;">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3">{{data.file.name}}</h2>
+      <button mat-button="" mat-dialog-close="" style="background-color: transparent;" type="button" class="close"
+        aria-label="Close">Cerrar
+      </button>
+    </div>
   </div>
-  <div class="text-center mt-1" style="height: 375px;">
+  <div class="text-center mt-1" >
     <!--<img src="{{data.file.url}}" *ngIf="data.file.typeFile!='image/png'" style="width: 100%;height: 100%;">-->
     <pdf-viewer *ngIf="data.file.typeFile==='application/pdf'" [src]="data.file.url" [rotation]="0"
       [original-size]="true" [show-all]="true" [fit-to-page]="true" [zoom]="1" [zoom-scale]="'page-width'"
@@ -346,12 +350,7 @@
       [show-borders]="true" style="width: 100%; height: 400px;"></pdf-viewer>
 
   </div>
-  <div class="text-center mt-4">
 
-    <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert" type="button"><span
-        class="mat-button-wrapper">Regresar</span>
-    </button>
-  </div>
 </div>
 
 <div class="modal-2 radiu-tp" *ngIf="data.tipo === 10" style="height: 350px;">
@@ -520,4 +519,52 @@
       </button>
     </div>
   </form>
+</div>
+
+<div class="modal-2 radiu-tp" *ngIf="data.tipo ===14" style="height: 750px;width: 550px;">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+
+      <h2 class="text-gris mb-3">Estados</h2>
+      <button mat-button="" mat-dialog-close="" style="background-color: transparent;" type="button" class="close"
+        aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="mt-5 row">
+      <table class="table table-striped table-hover">
+        <thead>
+          <th>Seleccionar</th>
+          <th>Estados</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of municipio">
+            <td><input type="checkbox" (change)="addIdEstados(item)"></td>
+            <td>{{item.descripcion}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button style="margin-bottom: 15px;" mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button"
+    (click)="saveNewEstados()">
+        <span class="mat-button-wrapper" >Agregar</span>
+      </button>
+  </div>
+</div>
+
+
+<div class="modal-1 radiu-tp" *ngIf="data.tipo ===15" style="height: 675px;">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3">{{data.file.name}}</h2>
+      <button mat-button="" mat-dialog-close="" style="background-color: transparent;" type="button" class="close"
+        aria-label="Close">Cerrar
+      </button>
+    </div>
+  </div>
+  <div class="text-center mt-1">
+    <img src="{{data.file.url}}" style="width: 100%;height: 100%; object-fit:contain">  
+  </div>
+  
 </div>

@@ -14,16 +14,16 @@
 
           <div class="offset-1 col-1" style="margin-right: 30px;" hidden="true">
 
-          <button style="width: 212%"  class="btn radiu-tp btn-outline-tp"
-            [routerLink]="['/gestorias/requerimientos']">
-            Cancelar
-          </button>
+            <button style="width: 212%" class="btn radiu-tp btn-outline-tp"
+              [routerLink]="['/gestorias/requerimientos']">
+              Cancelar
+            </button>
           </div>
-  
+
           <div class="offset-1 col-1">
-          <button class="btn radiu-tp btn-tp fw-bold" style="width: 212%;" (click)="onSubmit()">
-            Enviar y generar folio
-          </button>
+            <button class="btn radiu-tp btn-tp fw-bold" style="width: 212%;" (click)="onSubmit()">
+              Enviar y generar folio
+            </button>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
           <div class="row">
             <div class="mb-3 col-3 form-control-sm">
               <label for="tipoPermiso" class="form-label">Tipo de permiso</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Tipo de Permiso">
                 help_outline
               </mat-icon>
               <br>
@@ -47,14 +47,14 @@
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of tipoPermiso">{{item.descripcion}}</option>
               </select>
-             <!---- <div *ngIf="submitted && f.tipoPermiso.errors" class="alert alert-danger">
+              <!---- <div *ngIf="submitted && f.tipoPermiso.errors" class="alert alert-danger">
                 Tipo de permiso es requerido.
               </div>-->
             </div>
 
             <div class="col-3 form-control-sm">
               <label for="estado" class="form-label">Estado</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Estado perteneciente">
                 help_outline
               </mat-icon>
               <br>
@@ -69,14 +69,14 @@
 
             <div class="col-3 form-control-sm">
               <label for="municipio" class="form-label">Municipio o Alcald&iacute;a</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Municipio perteneciente">
                 help_outline
               </mat-icon>
               <select name="" class="mt-3" formControlName="municipio" style="width: 90%;">
                 <option disabled selected>Seleccionar</option>
                 <option value="{{item.id}}" *ngFor="let item of municipio">{{item.descripcion}}</option>
               </select>
-             <!---- <div *ngIf="submitted && f.municipio.errors" class="alert alert-danger">
+              <!---- <div *ngIf="submitted && f.municipio.errors" class="alert alert-danger">
                 Municipio o Alcald&iacute;a es requerido.
               </div>-->
 
@@ -84,7 +84,7 @@
 
             <div class="mb-3 col-3 form-control-sm">
               <label for="area" class="form-label">&Aacute;rea solicitante</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Área que solicita">
                 help_outline
               </mat-icon>
               <br>
@@ -105,15 +105,15 @@
               <div class="row">
                 <div class="mb-3 col-7 form-control-sm" style="padding-right: 0;">
                   <label for="vigencia" class="form-label">Vigencia del permiso</label>
-                  <mat-icon matTooltip="texto">
+                  <mat-icon matTooltip="Vigencia que tendrá el permiso">
                     help_outline
                   </mat-icon>
-                  <input type="number" class="form-control" id="vigencia"  placeholder="0" aria-describedby="emailHelp"
-                    formControlName="vigencia" (change)="getCantidad($event)" style="width: 95%;"/>
+                  <input type="number" class="form-control" id="vigencia" placeholder="0" aria-describedby="emailHelp"
+                    formControlName="vigencia" (change)="getCantidad($event)" style="width: 95%;" />
                 </div>
                 <div class="mb-3 col-2 form-control-sm" style="padding-left: 0;">
-                  <select name="" class="mt-5" formControlName="unidad" style="margin-top: 3.2em!important; width: 110px;"
-                    (change)="getUnidad($event)">
+                  <select name="" class="mt-5" formControlName="unidad"
+                    style="margin-top: 3.2em!important; width: 110px;" (change)="getUnidad($event)">
                     <option disabled selected value="" style="text-decoration: darkgray;">Unidad</option>
                     <option value="{{item.id}}" *ngFor="let item of unidad">{{item.descripcion}}</option>
                   </select>
@@ -129,7 +129,7 @@
 
             <div class="mb-3 col-3 form-control-sm">
               <label for="fechaRequerimiento" class="form-label">Fecha requerimiento</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Fecha levantamiento de requerimiento">
                 help_outline
               </mat-icon>
               <input type="date" class="form-control" id="fechaRequerimiento" aria-describedby="fechaRequerimiento"
@@ -141,11 +141,11 @@
 
             <div class="mb-3 col-3 form-control-sm">
               <label for="fechaVencimeinto" class="form-label">Fecha Vencimiento</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Fecha en la que vencerá el requerimiento">
                 help_outline
               </mat-icon>
               <input type="date" class="form-control" id="fechaVencimeinto" aria-describedby="fechaVencimeinto"
-                formControlName="fechaVencimeinto" value="{{mNewDate}}" style="width: 90%;"  />
+                formControlName="fechaVencimeinto" value="{{mNewDate}}" style="width: 90%;" />
             </div>
 
             <div class="mb-3 col-3 form-control-sm">
@@ -157,79 +157,147 @@
 
           <!--Vigencia Add-->
           <div class="row" *ngIf="mHasFechas" style="margin-left: -20;">
-                <table class="table" style="margin-top: -30px;" >
-                  <thead>
-                    <tr>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let mVigencia of mFechasVigencia; let i = index">
-                      <td>
+            <table class="table" style="margin-top: -30px;">
+              <thead>
+                <tr>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let mVigencia of mFechasVigencia; let i = index">
+                  <td>
+                    <div class="row">
+                      <div class="col-3">
                         <div class="row">
-                          <div class="col-3">
-                            <div class="row">
 
-                             
-                              <div class="mb-3 col-7 form-control-sm" style="padding-right: 0;">
-                                <label for="vigencia" class="form-label">Vigencia del permiso</label>
-                                <mat-icon matTooltip="texto">
-                                  help_outline
-                                </mat-icon>
-                                <input  class="form-control" placeholder="00" aria-describedby="emailHelp"
-                                style="width: 95%;" value="{{mVigencia.vigencia}}"/>
-                              </div>
-                              <div class="mb-3 col-2 form-control-sm" style="padding-left: 0;">
-                                
-                                  <input style="margin-top: 42px;" value="{{getDescription(mVigencia.unidad)}}"/>
-              
-                              </div>
-                             <!---- <div *ngIf="submitted && f.unidad.errors" class="alert alert-danger form-control-sm">
+
+                          <div class="mb-3 col-7 form-control-sm" style="padding-right: 0;">
+                            <label for="vigencia" class="form-label">Vigencia del permiso</label>
+                            <mat-icon matTooltip="texto">
+                              help_outline
+                            </mat-icon>
+                            <input class="form-control" placeholder="00" aria-describedby="emailHelp"
+                              style="width: 95%;" value="{{mVigencia.vigencia}}" />
+                          </div>
+                          <div class="mb-3 col-2 form-control-sm" style="padding-left: 0;">
+
+                            <input style="margin-top: 42px;" value="{{getDescription(mVigencia.unidad)}}" />
+
+                          </div>
+                          <!---- <div *ngIf="submitted && f.unidad.errors" class="alert alert-danger form-control-sm">
                                 Vigencia del permiso es requerido.
                               </div>-->
-              
-                            </div>
-              
-                          </div>
-              
-                          <div class="mb-3 col-3 form-control-sm">
-                            <label class="form-label">Fecha requerimiento</label>
-                            <mat-icon matTooltip="texto">
-                              help_outline
-                            </mat-icon>
-                            <input class="form-control"
-                               (change)="onDate($event)" style="width: 90%;" value="{{mVigencia.fechaReq}}"/>
-                           
-                          </div>
-                          <div class="mb-3 col-3 form-control-sm">
-                            <label class="form-label">Fecha Vencimiento</label>
-                            <mat-icon matTooltip="texto">
-                              help_outline
-                            </mat-icon>
-                            <input  class="form-control"
-                               style="width: 90%;" value="{{mVigencia.fechaVigencia}}">
-                          </div>
 
-                          <div class="mb-3 col-3 form-control-sm">
-                            <button (click)="deleteFechaVigencia(mVigencia.id)" class="kc_del_main_btn" style="margin-top: 27px;">-</button>
-                          </div>
                         </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-             
+
+                      </div>
+
+                      <div class="mb-3 col-3 form-control-sm">
+                        <label class="form-label">Fecha requerimiento</label>
+                        <mat-icon matTooltip="texto">
+                          help_outline
+                        </mat-icon>
+                        <input class="form-control" (change)="onDate($event)" style="width: 90%;"
+                          value="{{mVigencia.fechaReq}}" />
+
+                      </div>
+                      <div class="mb-3 col-3 form-control-sm">
+                        <label class="form-label">Fecha Vencimiento</label>
+                        <mat-icon matTooltip="texto">
+                          help_outline
+                        </mat-icon>
+                        <input class="form-control" style="width: 90%;" value="{{mVigencia.fechaVigencia}}">
+                      </div>
+
+                      <div class="mb-3 col-3 form-control-sm">
+                        <button (click)="deleteFechaVigencia(mVigencia.id)" class="kc_del_main_btn"
+                          style="margin-top: 27px;">-</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
 
 
+
+          <!---- Fin vigencia Add-->
+
+
+
+          <!--Centro de costos-->
+          <div class="row">
+
+            <div class="mb-3 col-3 form-control-sm">
+              <label for="exampleInputEmail1" class="form-label">CC</label>
+              <mat-icon matTooltip="Centro de Costos">
+                help_outline
+              </mat-icon>
+              <select name="" formControlName="cc" style="margin-top: 17px; width: 90%;" >
+                <option selected value=""></option>
+                <option value="{{item.cc}}" *ngFor="let item of mCatCC">{{item.cc}}</option>
+              </select>
+             <!----<input type="text" class="form-control" formControlName="cc" style="width: 90%;">-->
+            </div>
+
+            <div class="mb-3 col-3 form-control-sm">
+              <label for="exampleInputEmail1" class="form-label">Nombre CC</label>
+              <mat-icon matTooltip="Nombre del Centro de Costos">
+                help_outline
+              </mat-icon>
+              <select name="" formControlName="nombreCc" style="margin-top: 17px; width: 90%;" >
+                <option selected value=""></option>
+                <option value="{{item.nombreCC}}" *ngFor="let item of mCatCC">{{item.nombreCC}}</option>
+              </select>
+              <!--<input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;">-->
+            </div>
+
+            <div class="mb-3 col-3 form-control-sm">
+              <label for="exampleInputEmail1" class="form-label">Permiso/Negociaci&oacute;n</label>
+              <mat-icon matTooltip="Ingresar si es Permiso o Negociación">
+                help_outline
+              </mat-icon>
+              <select name="" formControlName="perNeg" style="margin-top: 17px; width: 90%;" >
+                <option selected value=""></option>
+                <option value="{{item}}" *ngFor="let item of mComboPermiso">{{item}}</option>
+              </select>
+             <!-- <input type="text" class="form-control" formControlName="perNeg" style="width: 90%;">-->
+            </div>
+
+            <div class="mb-3 col-3 form-control-sm">
+              <label for="exampleInputEmail1" class="form-label">Horario de permiso</label>
+              <mat-icon matTooltip="Horario en el cual se levanto el permiso">
+                help_outline
+              </mat-icon>
+              <div class="grid3" style="margin-top: 0px;">
+                  <select name="" formControlName="horario" style="margin-top: 17px; width: 90%;" >
+                  <option selected value=""></option>
+                  <option value="{{item}}" *ngFor="let item of rangoHorario">{{item}}</option>
+                </select>
+                <!--<input type="time"  id="appt" name="appt" formControlName="horario" required>
+
+                <select id="inputState" class="form-select grid-col-6" formControlName="horario">
+                      <option selected>Seleccionar</option>
+                      <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>:
+                    </select>
+                    <select id="inputState" class="form-select grid-col-6" >
+                      <option selected>Seleccionar</option>
+                      <option *ngFor="let item of horario" value="{{item}}">{{item}}</option>
+                    </select>-->
+              </div>
+            </div>
+          </div>
+
           
-         <!---- Fin vigencia Add-->
+
 
           <!--Actividades-->
           <div class="row">
             <div class="mb-3 col-3 form-control-sm">
               <label for="tipoActividad" class="form-label">Tipo de actividad</label>
-              <mat-icon matTooltip="texto">
+              <mat-icon matTooltip="Seleccionar actividades que se realizarán">
                 help_outline
               </mat-icon>
               <br>
@@ -238,65 +306,43 @@
                 <thead>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of actividades">
-                    <td><input type="checkbox" id="cbox2" value="second_checkbox">
+                  <tr *ngFor="let item of actividades;let i = index">
+                    <td><input type="checkbox" (change)="addActividadesCheck(item)">
                     </td>
-                    <td>{{item.descripcion}}</td>
-                    <td>{{mActividad}}</td>
+                    <td><strong>{{item.descripcion}}</strong></td>
+                    <td>{{getActividad(item.id)}}</td>
                   </tr>
                 </tbody>
-              </table>          
-    
-             <!-- <select id="inputState" class="mt-3" style="width: 90%;" formControlName="actividad" (change)="getActividad($event)">
-                <option selected>Selecciona</option>
-                <option *ngFor="let item of actividades;" value="{{item.id}}">{{item.descripcion}}</option>
-              </select>-->
+              </table>
+
+              <!-- <select id="inputState" class="mt-3" style="width: 90%;" formControlName="actividad" (change)="getActividad($event)">
+                          <option selected>Selecciona</option>
+                          <option *ngFor="let item of actividades;" value="{{item.id}}">{{item.descripcion}}</option>
+                        </select>-->
             </div>
-<!--
+            <!--
+                      <div class="mb-3 col-3 form-control-sm">
+                        <label for="descripcionActividad" class="form-label">Descripci&oacute;n de actividades</label>
+                        <mat-icon matTooltip="texto">
+                          help_outline
+                        </mat-icon>
+                        <input type="text" class="form-control" formControlName="descrip" value="{{mActividad}}" style="width: 90%;" >
+                      </div>
+                      -->
+
             <div class="mb-3 col-3 form-control-sm">
-              <label for="descripcionActividad" class="form-label">Descripci&oacute;n de actividades</label>
-              <mat-icon matTooltip="texto">
-                help_outline
-              </mat-icon>
-              <input type="text" class="form-control" formControlName="descrip" value="{{mActividad}}" style="width: 90%;" >
-            </div>
-            -->
-
-            <div class="mb-3 col-3 form-control-sm" >
-              <button class="btn btn-tp radiu-tp ps-4 pe-4" style="margin-top: 15px;"  (click)="create()"> + Otra actividad</button>
+              <button class="btn btn-tp radiu-tp ps-4 pe-4" style="margin-top: 15px; align-self: flex-end;"
+                (click)="create()"> + Otra actividad</button>
             </div>
 
-          
-
-        
           </div>
           <!--Fin Area Solicitante-->
-
-          <!--Centro de costos-->
-          <div class="row">
-
-            <div class="mb-3 col-3 form-control-sm">
-              <label for="exampleInputEmail1" class="form-label">CC</label>
-              <mat-icon matTooltip="texto">
-                help_outline
-              </mat-icon>
-              <input type="text" class="form-control" formControlName="cc" style="width: 90%;" >
-            </div>
-
-            <div class="mb-3 col-3 form-control-sm">
-              <label for="exampleInputEmail1" class="form-label">Nombre CC</label>
-              <mat-icon matTooltip="texto">
-                help_outline
-              </mat-icon>
-              <input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;" >
-            </div>
-          </div>
           <!--fin centro de costos-->
 
         </form>
       </blockquote>
 
-     
+
     </div>
 
   </div>
