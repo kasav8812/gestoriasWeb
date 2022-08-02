@@ -1,0 +1,35 @@
+<div class="row m-4">
+    <div class="col-3 offset-9">
+        <button class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp mt-3">
+            <label>
+              + Cargar Centro de costos
+              <input type="file" style="display: none" file-handler (change)="onFileChange($event)"   accept=".xlsx">
+            </label>
+          </button>
+          
+    </div>
+  
+    <div class="table-responsive m-4">
+        <table class="table caption-top table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="text-gris">ID</th>
+              <th class="text-gris">Centro de Costos</th>
+              <th class="text-gris">Nombre de Centro de Costos</th>
+              <th class="text-gris">Habilitar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of mCatCC; let i = index">
+              <td>{{item.id}}</td>
+              <td>{{item.cc}}</td>
+              <td>{{item.nombreCC}}</td>
+              <td><mat-slide-toggle [checked]="item.enabled" color="primary" (change)="enableCC(item)"></mat-slide-toggle>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+    
+  </div>
