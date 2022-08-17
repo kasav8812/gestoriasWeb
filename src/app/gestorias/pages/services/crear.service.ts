@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse } from '../interfaces/crear.interface';
-import { Catalogo, RequerimientoGeneric } from '../interfaces/configuracion.interface';
+import { CrearResponse,CrearComentario, UsuariosResponse, RolesResponse, FechaVigencia, UserAreaModel, UserRelationShipModel, RegionEdoModel } from '../interfaces/crear.interface';
+import { ActividadesModel, Catalogo, CentroCModel, RequerimientoGeneric } from '../interfaces/configuracion.interface';
 import { Observable } from 'rxjs';
 
 
@@ -304,6 +304,239 @@ export class CrearService {
     return this.http.post<UsuariosResponse>(url,formdata,{headers});
   }
   
+  setFechaVigencia(formdata: FechaVigencia): Observable<FechaVigencia>{
+    const url = `${this.baseurlreq}/requerimiento/setFechaVigencia`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<FechaVigencia>(url,formdata,{headers});
+  }
+
+  getFechasVigencia(id: any): Observable<FechaVigencia[]>{
+    const url = `${this.baseurlreq}/requerimiento/getFechas/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<FechaVigencia[]>(url,{headers});
+  }
+
+  updateFechaVigencia(id:any): Observable<FechaVigencia>{
+    const url = `${this.baseurlreq}/requerimiento/updateFechaVigencia/` + id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<FechaVigencia>(url,{headers});
+  }
+
+  deleteFechaVigencia(id:any): Observable<String>{
+    const url = `${this.baseurlreq}/requerimiento/deleteFechaVigencia/` + id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<string>(url,{headers});
+  }
+
+
+  getRegiones(): Observable<Catalogo[]>{
+    const url = `${this.baseurl}/catalogo/regiones`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<Catalogo[]>(url,{headers});
+  }
+
+  getEstadosByRegion(id: any): Observable<Catalogo[]>{
+    const url = `${this.baseurl}/catalogo/getEstadosByRegion/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<Catalogo[]>(url,{headers});
+  }
+
+
+  setAreasUsuarios(formdata: UserAreaModel[]): Observable<UserAreaModel>{
+    const url = `${this.baseurlusr}/user/usuariosAreas`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UserAreaModel>(url,formdata,{headers});
+  }
+
+  setRelationShip(formdata: UserRelationShipModel): Observable<UserRelationShipModel>{
+    const url = `${this.baseurlusr}/user/addUserRelationShip`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UserRelationShipModel>(url,formdata,{headers});
+  }
+  
+
+  getUserbByEstado(id: any): Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user/getUserByEstado/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+
+  getUserByAdmin(id: any): Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user/getUserByAdmin/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+  
+
+  updateUsr(user: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user/updateUsr`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,user,{headers});
+  }
+
+
+  getActividadesByReq(id: any): Observable<Catalogo[]>{
+    const url = `${this.baseurl}/catalogo/getActividadesByReq/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<Catalogo[]>(url,{headers});
+  }
+
+  setActividades(act: ActividadesModel[]): Observable<ActividadesModel>{
+    const url = `${this.baseurlreq}/requerimiento/setActividades`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<ActividadesModel>(url,act,{headers});
+  }
+
+  deleteUser(id:any):Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.delete<UsuariosResponse>(url,{headers});
+  }
+
+  getRecoverEmail(id: any): Observable<UsuariosResponse[]>{
+    const url = `${this.baseurlusr}/user/recoverEmailUser/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<UsuariosResponse[]>(url,{headers});
+  }
+
+  recoverPass(act: UsuariosResponse): Observable<UsuariosResponse>{
+    const url = `${this.baseurlusr}/user/changePass`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<UsuariosResponse>(url,act,{headers});
+  }
+
+  saveListEstados(formdata: Catalogo[]):Observable<Catalogo[]>{
+    console.log(formdata)
+    const url = `${this.baseurl}/catalogo/updateEstados`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<Catalogo[]>(url,formdata,{headers});
+  }
+
+
+  deleteEstado(formdata: Catalogo):Observable<Catalogo>{
+    console.log(formdata)
+    const url = `${this.baseurl}/catalogo/deleteEstado`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<Catalogo>(url,formdata,{headers});
+  }
+
+
+
+  setEstadosRegion(formdata: Catalogo[]):Observable<Catalogo>{
+    console.log(formdata)
+    const url = `${this.baseurl}/catalogo/setRegionEdo`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<Catalogo>(url,formdata,{headers});
+  }
+
+
+  setCC(formdata: CentroCModel[]):Observable<CentroCModel[]>{
+    console.log(formdata)
+    const url = `${this.baseurl}/catalogo/setCC`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<CentroCModel[]>(url,formdata,{headers});
+  }
+
+  getAllCC(): Observable<CentroCModel[]>{
+    const url = `${this.baseurl}/catalogo/getAllCC`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CentroCModel[]>(url,{headers});
+  }
+
+  getAllCCEnabled(): Observable<CentroCModel[]>{
+    const url = `${this.baseurl}/catalogo/getAllCCEnabled`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<CentroCModel[]>(url,{headers});
+  }
+
+  updateCC(formdata: CentroCModel[]):Observable<CentroCModel>{
+    console.log(formdata)
+    const url = `${this.baseurl}/catalogo/updateCC`
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.post<CentroCModel>(url,formdata,{headers});
+  }
+
+
+  getListRequerimientoByUser(id: any): Observable<RequerimientoGeneric[]>{
+    const url = `${this.baseurlreq}/requerimiento/add/getListRequerimientoByUser/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<RequerimientoGeneric[]>(url,{headers});
+  }
+
 
 }
 

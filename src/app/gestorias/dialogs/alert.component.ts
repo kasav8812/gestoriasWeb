@@ -3,26 +3,38 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Catalogo, CatGeneric, RequerimientoGeneric } from '../pages/interfaces/configuracion.interface';
-import { CrearResponse, RolesResponse, UsuariosResponse } from '../pages/interfaces/crear.interface';
+import { CrearResponse, FechaVigencia, RolesResponse, UserAreaModel, UserRelationShipModel, UsuariosResponse } from '../pages/interfaces/crear.interface';
 import { ConfiguracionService } from '../pages/services/configuracion.service';
 import { CrearService } from '../pages/services/crear.service';
 import { Router } from '@angular/router';
 import { plantillaCorreo } from '../pages/services/constantes.service';
 import {MailService} from '../pages/services/mail.service'
+import { parseString } from 'xml2js';
+import * as XLSX from 'xlsx'; 
+import * as FileSaver from 'file-saver';
+
+import xml2js from 'xml2js';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styles: [
-  ]
+  styleUrls: ['../style.scss']
+
 })
 export class AlertComponent {
   // @Output() public textoEmitido = new EventEmitter<string>();
   // @Output() reloadComponent: EventEmitter<any> = new EventEmitter();
   private plantilla: string = plantillaCorreo.cambioStatus;
+  private plantillaRecover: string = plantillaCorreo.recoverMail;
+
   cat: CatGeneric;
   area: Catalogo[];
   municipio: Catalogo[] = null;
+  regiones : Catalogo[] = null;
+  userByEstado : UsuariosResponse[] = null;
+  userRelation : UserRelationShipModel;
+  userArea : UserAreaModel;
   res: any;
   roles: RolesResponse[];
   jsonCrear:any;
@@ -34,6 +46,28 @@ export class AlertComponent {
   requerimientoBase : CrearResponse;
   rol: any;
   id:any = JSON.parse(localStorage.getItem('requerimiento'));
+  unidad: Catalogo[];
+  unidad2: Catalogo[];
+
+  mResponseFechaVigencia : FechaVigencia;
+  mFechasVigencia : FechaVigencia[];
+  mSelectionRoleOP: Boolean = false;
+  mAddEstados: Boolean = false;
+  mUserId : string;
+  mAdmon : string;
+  mRole : string;
+
+  mListEstadosToAdd : Catalogo[] = [];
+  mListUsersOwn : UsuariosResponse [] = [];
+
+  mListIdEstados :Catalogo[] = [];
+
+  mListRequerimientosByUser : RequerimientoGeneric[];
+
+  fileName= 'Gestorias.xlsx';  
+
+  public xmlItems: any;
+
 
   constructor(
     private router: Router,
@@ -41,7 +75,8 @@ export class AlertComponent {
     private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<AlertComponent>, private creaService: CrearService,
-    private serviceMail: MailService
+    private serviceMail: MailService,
+    private http: HttpClient
   ) {
     this.token = JSON.parse(sessionStorage.getItem('token'));
     this.datosUser = JSON.parse(atob(this.token.split('.')[1]));
@@ -63,7 +98,9 @@ export class AlertComponent {
     password_usr:['',Validators.required],  
     role_usr:['',Validators.required],
     area_usr:['',Validators.required],
-    correo_usr:['',Validators.required]
+    region_usr:['',Validators.required],
+    correo_usr:['',Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+    admon:['',Validators.required]
   })
 
   crearForm: FormGroup = this.formBuilder.group({
@@ -71,11 +108,50 @@ export class AlertComponent {
     descripcion: ['', Validators.required]
   })
 
+  editarUsr: FormGroup = this.formBuilder.group({
+    usr_nombre: ['', [Validators.required, Validators.maxLength(2)]],
+    usr_region: ['', Validators.required],
+    usr_email: ['', Validators.required]
+  })
+
+  fechaVigenciaForm : FormGroup = this.formBuilder.group({
+    idReq:['', [Validators.required]],
+    vigencia: ['', [Validators.required]],
+    unidad:['', [Validators.required]],
+    fechaRequerimiento:['', [Validators.required]],
+    fechaVencimeinto: ['', [Validators.required]]
+  })
+
+
+
   ngOnInit(): void {
+
+    console.log("************************** init ****************************");
+    try{
+      console.log(this.data.array[0]);
+      this.editarUsr = this.formBuilder.group({
+        usr_nombre:[this.data.array[0].name],
+        usr_region:[this.data.array[0].areaID],
+        usr_email:[this.data.array[0].email]
+      })
+    }catch (e) {
+      console.log(e);
+    }
+    
     this.creaService.get_catalogos().subscribe(
       response => {
         this.res = response;
         this.municipio = this.res.ubicacion;
+        this.unidad = this.res.unidaMedida;
+        this.unidad2 = this.unidad;
+      },
+      error => {
+      }
+    )
+
+    this.creaService.getRegiones().subscribe(
+      response => {
+        this.regiones = response;
       },
       error => {
       }
@@ -93,15 +169,56 @@ export class AlertComponent {
       response => {
         console.log("SUCCESS ALL USERS");
         this.mUsuearios = response;
-        this.getReqListCompleto();
+        try {
+          this.getReqListCompleto();
+        } catch (e) {
+          console.log(e);
+        }
       },
       error => {
         console.log(error);
       }
     )
 
-  }
+    try {
+      this.getReqByUser();
+    } catch (e) {
+      console.log(e);
+    }
 
+    try {
+      this.getUserByAdmin();
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.creaService.getListRequerimientoByUser("").subscribe(
+      response => {
+        if(this.rol == "ROLE_OPERACIONES"){
+          this.mListRequerimientosByUser = response;
+        }
+      },
+      error => {
+
+      }
+    )
+   
+    this.loadXML();
+  }
+  
+  getReqByUser(){
+    console.log(this.data.req.id);
+    this.creaService.getListRequerimientoByUser(this.data.req.id).subscribe(
+      response => {
+        this.mListRequerimientosByUser = response;
+        console.log(this.mListRequerimientosByUser);
+        console.log("Success Load Employed Owned")
+      },
+      error => {
+        console.log("Error Load Employed Owned")
+      }
+    )
+  }
 
   getRequerimientoBase(){
     this.creaService.getRequerimientosId(this.id.id).subscribe(
@@ -409,7 +526,7 @@ export class AlertComponent {
     }
   }
 
-  autoriza() {
+  autorizaRequerimiento() {
     console.log("Aurtorizar")
     console.log(this.data.array[0].id);
     this.creaService.autorizaRequerimiento(this.data.array[0].id).subscribe(
@@ -421,15 +538,15 @@ export class AlertComponent {
         console.log(error.error.text);
         //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
         if (error.error.text === "Exito") {
-          this.detectEmail();
+          this.detectEmail("Requerimiento Autorizado", "Autorizado");
           this.guardaComentario("Requerimiento Autorizado");
         }
       }
     )
   }
 
-  rechazar() {
-    console.log("Aurtorizar")
+  rechazarRequerimiento() {
+    console.log("rechazar")
     console.log(this.data.array[0].id);
     this.creaService.recibirRequerimiento(this.data.array[0].id).subscribe(
       responseP => {
@@ -440,7 +557,7 @@ export class AlertComponent {
         console.log("Exitos")
         console.log(error);
         console.log(error.error.text);
-        //this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.data.array[0].id)
+        this.detectEmail("Requerimiento Rechazado", "Rechazado");
         if (error.error.text === "Exito") {
           this.guardaComentario("Requerimiento Rechazado");
         }
@@ -448,41 +565,11 @@ export class AlertComponent {
     )
   }
 
-  onSubmit(){
-    console.log("Datos del form", this.crearFormUser);
-    this.jsonCrear = {
-      name: this.crearFormUser.value.nombre_usr,
-      username: this.crearFormUser.value.usuario_usr,
-      password: this.crearFormUser.value.password_usr,
-      rol: [this.crearFormUser.value.role_usr],
-      areaID: this.crearFormUser.value.area_usr,
-      email: this.crearFormUser.value.correo_usr
-    }
 
-    console.log("Estructura JSON #••############")
-    console.log(this.jsonCrear);
-    this.creaService.crearUsuario(this.jsonCrear).subscribe(
-      responseP => {
-        Swal.fire(
-          "Usuario creado",
-          '',
-          'success'
-        )
-        this.router.navigateByUrl('gestorias/configuracion/crearUsuario');
 
-      }, error => {
-        Swal.fire(
-          "Error al crear el usuario",
-          '',
-          'error'
-        )
-      }
-    )
-  }
-
-  detectEmail(){
-      this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[0].email);
-      this.sendMail("Autorización de requerimiento",JSON.parse(atob(this.token.split('.')[1])).name,"Autorizado",this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[1].email);
+  detectEmail(mTitle : string, mState :string){
+      this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[0].email);
+      this.sendMail(mTitle,JSON.parse(atob(this.token.split('.')[1])).name,mState,this.id.id,this.getEmail(this.datosUser.sub),this.mUserDataEmails[1].email);
   }
 
   getEmail(mEmailTemp):string{
@@ -505,7 +592,7 @@ export class AlertComponent {
      },error => {
          console.log(error);
          if(error.error.text==="Exito"){
-          this.detectEmail();
+          this.detectEmail("Requerimiento Cerrado", "Cerrado");
            Swal.fire(
              'Requerimiento Cerrado',
              '',
@@ -528,14 +615,12 @@ export class AlertComponent {
     this.plantilla=this.plantilla.replace("#User",user);
     this.plantilla=this.plantilla.replace("#Accion",accion);
     this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
-    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
-    this.plantilla=this.plantilla.replace("#IdRequerimiento",idRequerimiento);
     let param={
         "to": mToEmail,
         "cc": mFromEmail,
         "bcc": "",
         "reply_to": "no-reply@totalplay.com.mx",
-        "subject": "Se Modificado el status",
+        "subject": "ADMINISTRACION DE GESTORIAS CAMBIO DE ESTATUS " + idRequerimiento ,
         "body": this.plantilla,
         "from_Address": "",
         "from_Personal": ""
@@ -557,6 +642,418 @@ export class AlertComponent {
           console.log(error);
       }
     )
+  }
+
+  guardarFecha(){
+    this.jsonCrear = {
+      idReq: this.data.req.id,
+      vigencia: this.fechaVigenciaForm.value.vigencia,
+      unidad: this.fechaVigenciaForm.value.unidad,
+      fechaReq: this.fechaVigenciaForm.value.fechaRequerimiento,
+      fechaVigencia: this.fechaVigenciaForm.value.fechaVencimeinto
+    }
+    console.log(this.jsonCrear);
+
+    this.creaService.setFechaVigencia(this.jsonCrear).subscribe(
+      response => {
+        this.mResponseFechaVigencia = response
+        this.configuracion.disparadorActualizar.emit();
+        if(this.mResponseFechaVigencia.idReq != ""){
+          Swal.fire(
+            'Fecha Agregada',
+            'Nueva fecha agregada correctamente',
+            'success'
+          )
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  updateFecha(idReq : number){
+    this.creaService.updateFechaVigencia(idReq).subscribe(
+      response => {
+        this.mResponseFechaVigencia = response;
+        if(this.mResponseFechaVigencia.idReq == ""){
+          console.log("Success Update Requerimiento")
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  getFechas(idReq:any){
+    this.creaService.getFechasVigencia(idReq).subscribe(
+      response => {
+        this.mFechasVigencia = response;
+        if(this.mFechasVigencia != null){
+          console.log("Success Update Requerimiento")
+        }
+      }, error => {
+        console.log("Response Error")
+      }
+    )
+  }
+
+  getEstadosByRegion(){
+    this.creaService.getEstadosByRegion(this.crearFormUser.value.region_usr).subscribe(
+      response => {
+        this.municipio = response
+      },
+      error => {
+      }
+    )
+  }
+
+  getAdmonByRegion(event){
+    console.log(event.target.value);
+      this.creaService.getUserbByEstado(event.target.value).subscribe(
+        response => {
+          console.log("Success Admon");
+          this.userByEstado = response;
+
+        },
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  showSelect(){
+    console.log("********************************************** user role")
+    console.log(this.crearFormUser.value.role_usr)
+    if(this.crearFormUser.value.role_usr == "4"){
+      this.mSelectionRoleOP = true;
+    }
+  }
+
+  getAdmonSelect(event){
+    console.log("Admon", event.target);
+    console.log("Admon", this.crearFormUser.value.admon);
+  
+    this.mAdmon = this.userByEstado[0].username;
+    console.log(this.mAdmon);
+  }
+
+  onSelected(item){
+    console.log("My fucking index",  item);
+  }
+
+  
+  addEstado(){
+    this.mAddEstados = true
+    console.log("Estados");
+    console.log(this.crearFormUser.value.area_usr);
+
+    for(var i=0;i<this.municipio.length;i++){
+        if(this.crearFormUser.value.area_usr == this.municipio[i].id){
+          this.mListEstadosToAdd.push(this.municipio[i]);
+        }
+    }
+  }
+
+  onSubmit(){
+    console.log("Datos del form >>>>>>>>>>", this.crearFormUser);
+   // if (!this.crearFormUser.invalid){
+    this.mUserId = this.crearFormUser.value.usuario_usr;
+    this.mAdmon = this.crearFormUser.value.admon;
+    this.mRole = this.crearFormUser.value.role_usr;
+
+    console.log(this.mRole);
+    this.jsonCrear = {
+      name: this.crearFormUser.value.nombre_usr,
+      username: this.crearFormUser.value.usuario_usr,
+      password: this.crearFormUser.value.password_usr,
+      rol: [this.crearFormUser.value.role_usr],
+      areaID: this.crearFormUser.value.area_usr,
+      email: this.crearFormUser.value.correo_usr
+    }
+
+    console.log("Estructura JSON #••############")
+    console.log(this.jsonCrear);
+    this.creaService.crearUsuario(this.jsonCrear).subscribe(
+      responseP => {
+        Swal.fire(
+          "Usuario creado",
+          '',
+          'success'
+        )
+        this.sendMailChange(responseP.name,responseP.username,responseP.email);
+        if(this.mRole == "4"){
+          this.saveRelationShip();
+        }else{
+          this.saveEstadosByUser();
+        }
+      }, error => {
+        Swal.fire(
+          "Error al crear el usuario",
+          '',
+          'error'
+        )
+      }
+    )
+  /*  }else{
+      Swal.fire(
+        "Error",
+        'Es necesario llenar todos los campos',
+        'error'
+      )
+    }*/
+  }
+
+  saveRelationShip(){
+    this.jsonCrear = {
+      tpguid_ad: this.userByEstado[0].username,
+      tpguid_op: this.mUserId
+    }
+
+    console.log("RelationShip");
+    console.log(this.jsonCrear);
+    this.creaService.setRelationShip(this.jsonCrear).subscribe(
+      response=>{
+        console.log("Save RelationShip Success")
+        this.saveEstadosByUser();
+      },error =>{
+        console.log("Save RelationShip Fail")
+      }
+    )
+  }
+  
+  saveEstadosByUser(){
+    var mMunicipios : any[] = [];
+
+    for(var i=0;i<this.mListEstadosToAdd.length;i++){
+      this.jsonCrear = {
+        id:i,
+        tpguid:  this.mUserId,
+        tpgcuid: this.mListEstadosToAdd[i].id
+      }
+
+      mMunicipios.push(this.jsonCrear);
+    }
+
+    console.log("Areas Add ");
+    console.log(mMunicipios);
+
+    this.creaService.setAreasUsuarios(mMunicipios).subscribe(
+      response=>{
+        this.configuracion.disparadorActualizar.emit();
+        console.log("Success Areas");
+        
+        this.router.navigateByUrl('gestorias/configuracion/crearUsuario');
+      },error =>{
+        console.log("Error Areas");
+      }
+    )
+  }
+
+  getUserByAdmin(){
+    console.log(this.data.req.id);
+    this.creaService.getUserByAdmin(this.data.req.id).subscribe(
+      response => {
+        this.mListUsersOwn = response;
+        console.log(this.mListUsersOwn);
+        console.log("Success Load Employed Owned")
+      },
+      error => {
+        console.log("Error Load Employed Owned")
+      }
+    )
+  }
+
+  deleteArea(mPos:number){
+    var mTemporal : Catalogo[] = [] 
+    console.log("Position", i);
+
+
+    for(var i=0;i<this.mListEstadosToAdd.length;i++){
+      if( i != mPos){
+        mTemporal.push(this.mListEstadosToAdd[i]);
+      }
+    }
+
+    this.mListEstadosToAdd = mTemporal;
+  }
+
+
+  editarDatos(){
+    this.jsonCrear = {
+      id:this.data.array[0].id,
+      username:this.data.array[0].username,
+      name: this.editarUsr.value.usr_nombre,
+      region: this.editarUsr.value.usr_region,
+      email: this.editarUsr.value.usr_email
+    }
+
+    console.log("UPDATE ************");
+    console.log(this.jsonCrear);
+
+    this.creaService.updateUsr(this.jsonCrear).subscribe(
+      response => {
+        this.configuracion.disparadorActualizar.emit();
+        console.log("Success update usr")
+      },
+      error => {
+        console.log("Error Update usr")
+      }
+    )
+  }
+
+  sendMailChange(pass: any,user: any,mToEmail :string){
+    console.log("MAILS");
+  
+    console.log(mToEmail);
+  
+  
+    this.plantillaRecover=this.plantillaRecover.replace("#User",user);
+    this.plantillaRecover=this.plantillaRecover.replace("#Pass",pass);
+  
+    let param={
+        "to": mToEmail,
+        "cc": mToEmail,
+        "bcc": "",
+        "reply_to": "no-reply@totalplay.com.mx",
+        "subject": "ADMINISTRACION DE GESTORIAS ACTUALIZAR CONTRASEÑA ",
+        "body": this.plantillaRecover,
+        "from_Address": "",
+        "from_Personal": ""
+    }
+  
+    console.log("Este es la plantilla",this.plantillaRecover);
+    this.serviceMail.getToken().subscribe(
+       response=>{
+        console.log("Response del token___",response);        
+          this.serviceMail.sendMail(param,response.access_token).subscribe(
+             responseP=>{
+              console.log("Response del mail___",responseP);
+            },error => {
+                console.log(error);
+            }
+          )
+      },error => {
+          console.log(error);
+      }
+    )
+  }
+
+
+  addIdEstados(item:Catalogo){
+    console.log(this.data.req.id);
+
+    var mTempEstados : Catalogo [] = [];
+    var isNewItem : Boolean = true;
+    console.log(item);
+    item.tpgregion = this.data.req.id;
+
+    if(this.mListIdEstados.length <= 0){
+      this.mListIdEstados.push(item);
+    }else{
+      for(var i=0;i<this.mListIdEstados.length;i++){
+        if(this.mListIdEstados[i].id == item.id){
+          isNewItem = false;
+        }else{
+          mTempEstados.push(this.mListIdEstados[i])
+        }
+      }
+      if(isNewItem){
+        mTempEstados.push(item);
+      }
+      this.mListIdEstados = mTempEstados;
+    }
+
+    console.log(this.mListIdEstados);
+  }
+
+
+  saveNewEstados(){
+    this.creaService.setEstadosRegion(this.mListIdEstados).subscribe(
+      response => {
+        console.log("Success update List")
+        Swal.fire(
+          "Se han agreadado nuevos estados",
+          '',
+          'success'
+        )
+      },
+      error => {
+        Swal.fire(
+          "Error al agregar estados",
+          '',
+          'error'
+        )
+        console.log("Error Update List")
+      }
+    )
+  }
+
+  exportExcel() {
+    if (this.mListRequerimientosByUser.length > 0) {
+      import("xlsx").then(xlsx => {
+        const worksheet = xlsx.utils.json_to_sheet(this.mListRequerimientosByUser);
+        const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+        const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, "Gestorias");
+      });
+    }
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+
+  loadXML() {
+    /*Read Data*/
+    this.http.get(this.data.file.url,
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'text/xml')
+          .append('Access-Control-Allow-Methods', 'GET')
+          .append('Access-Control-Allow-Origin', '*')
+          .append('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method"),
+        responseType: 'text'
+      })
+      .subscribe((data) => {
+        this.parseXML(data)
+          .then((data) => {
+            this.xmlItems = data;
+            console.log("MY ITEMS ON XML")
+            console.log(this.xmlItems);
+          });
+      });
+    /*Read Data*/
+  }
+  //store xml data into array variable
+  parseXML(data) {
+    return new Promise(resolve => {
+      var k: string | number,
+        arr = [],
+        parser = new xml2js.Parser(
+          {
+            trim: true,
+            explicitArray: true
+          });
+      parser.parseString(data, function (err, result) {
+        var obj = result.Gestorias;
+        for (k in obj.cuenta) {
+          var item = obj.cuenta[k];
+          arr.push({
+            folio: item.folio[0],
+            monto: item.monto[0],
+            nombre: item.nombre[0],
+
+          });
+        }
+        resolve(arr);
+      });
+    });
   }
 
 }

@@ -22,7 +22,7 @@ export class ReactivarComponent implements OnInit {
   areaSolicitate: Catalogo[];
   jsonCrear: any;
   submitted=false;
-
+  datosUser: any;
   token: any;
   rol: any;
   res: any;
@@ -82,6 +82,7 @@ export class ReactivarComponent implements OnInit {
   )
     {
     this.token = JSON.parse(sessionStorage.getItem('token'));
+    this.datosUser=JSON.parse(atob(this.token.split('.')[1]));
     let namespace = JSON.parse(atob(this.token.split('.')[1]));
     this.rol = namespace.roles[0];
    }
@@ -194,7 +195,8 @@ export class ReactivarComponent implements OnInit {
       umedida: this.crearForm.value.unidad,
       area: this.crearForm.value.area,
       fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
-      fechaVencimiento: this.crearForm.value.fechaVencimeinto
+      fechaVencimiento: this.crearForm.value.fechaVencimeinto,
+      idUser: this.datosUser.sub
     }
   
     this.creaService.requerimientoReact(folioAnterior).subscribe(
@@ -215,7 +217,8 @@ export class ReactivarComponent implements OnInit {
               console.log("Realiza el alta de la relacion",param);
                this.creaService.postRequerimientoRelacion(param).subscribe(
                 resp => {
-                  this.successMsg()
+                  this.successMsg();
+                  this.guardSetAddon(response);
                   console.log("Este es el res...",resp);
                 }
               );
@@ -276,6 +279,7 @@ export class ReactivarComponent implements OnInit {
     )
 
   }
+
   fechaInvalida(campo: string) {
    /* let prueba = this.crearForm.value.fechaRequerimiento;
     let p = prueba.split("-")
@@ -299,41 +303,62 @@ export class ReactivarComponent implements OnInit {
     )
   }
 
-  guardar() {
+  guardSetAddon(mResponse: CrearResponse) {
+    let f=mResponse.fechareq.split("/");
+    let fecha1=f[2]+"/"+f[1]+"/"+f[0];
+
     this.jsonCrear = {
-      tipoRequerimineto: this.crearForm.value.tipoPermiso,
-      ubicacionEstado: this.crearForm.value.estado,
-      municipio: this.crearForm.value.municipio,
-      vigencia: this.crearForm.value.vigencia,
-      umedida: this.crearForm.value.unidad,
-      area: this.crearForm.value.area,
-      fechaRequerimiento: this.crearForm.value.fechaRequerimiento,
-      fechaVencimiento: this.crearForm.value.fechaVencimeinto
-      
+      idRequerimiento: mResponse.id,
+      folio: mResponse.id,
+      importe: 0,
+      paydate: fecha1,
+      registroContable: "",
+      nombreContacto: "",
+      proveedor: "",
+      sistema: 1,
+      tipoSolicitud: 403,
+      folioEgreso: "",
+      area: "1",
+      cc: 0,
+      nombreCc: "",
+      postFin: "",
+      incluidoPermiso: "",
+      horario: "",
+      perNeg: "",
+      catidad: 0,
+      vigencia: "1",
+      medida: "2",
+      formaPago: "",
+      cobertura: "1",
+      actividad: "",
+      descripcion: "",
+      foliosap: "",
+      folioseg: "",
+      idUserAdmon:"",
+      idUserAut:""
     }
-  
-    this.creaService.cres_Requerimiento(this.jsonCrear).subscribe(
-        response => {
-          const dialogRef = this.dialog.open(AlertComponent, {
-            disableClose: true,
-            data: {
-              tipo: 1,
-              req: response
+
+    console.log("uiipp");
+    console.log(this.jsonCrear);
+    console.log("uuuipp");
+
+
+    this.creaService.postRequerimiento(this.jsonCrear).subscribe(
+      response => {
+        console.log("Success")
+          this.creaService.recibirRequerimiento(mResponse.id).subscribe(
+            response => {
+              console.log("Change Status")
+              console.log(response)
+            }, error => {
+              console.log(error);
             }
-          })
-          this.crearForm.reset();
-        },
-        error => {
-          Swal.fire(
-            'Error',
-            'Al crear requerimiento',
-            'error'
           )
         }
-      );
-      
-    }
- 
+    )
+  }
+   
+  
     inicializa(){
       console.log(this.tipoPermiso);
       

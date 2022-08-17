@@ -28,6 +28,7 @@ export interface UsuariosResponse{
   name: string;
   username: string;
   created : string;
+  enabled:boolean;
   role : [string];
   areaID : string;
   email : string;
@@ -44,4 +45,33 @@ export interface ArchivosResponse{
   name: string;
   url:string;
   typeFile:string;
+}
+
+export interface FechaVigencia{
+  id:number;
+  idReq:string;
+  vigencia:string;
+  unidad:string;
+  fechaReq:string;
+  fechaVigencia:string;
+}
+
+export interface UserAreaModel{
+  id:string;
+  tpguid:string;
+  tpgcuid:string;
+}
+
+export interface UserRelationShipModel{
+  id:string;
+  tpguid_ad:string;
+  tpgctpguid_opuid:string;
+}
+
+export interface RegionEdoModel {
+	id:string;
+	TPGREGIONEDOID:string;
+	TPGREGIONID:string;
+	TPGCUID:string;
+  ENABLED:boolean;
 }

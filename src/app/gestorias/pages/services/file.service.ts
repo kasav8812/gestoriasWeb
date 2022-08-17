@@ -44,7 +44,7 @@ export class FileService {
     return this.http.request(req);
   }
 
-  getFiles(idRequerimiento: any){
+  getFiles(idRequerimiento: any) : Observable<ArchivosResponse[]>{
     const url = `${this.baseurl}/filesRequerimiento/${idRequerimiento}`
     let headers = new HttpHeaders({
       'Content-Type':'application/json',

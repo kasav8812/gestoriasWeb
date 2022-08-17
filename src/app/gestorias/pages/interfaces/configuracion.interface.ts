@@ -4,6 +4,8 @@ export interface Catalogo {
     comentario: string;
     enabled: boolean;
     activo: number;
+	selected:boolean;
+	tpgregion:string;
 }
 export interface CatGeneric{
     id: number;
@@ -41,4 +43,19 @@ export interface RequerimientoGeneric{
 	descripcion: string;
 	idUserAdmon:string;
 	idUserAut:string;
+	mIdUser:string;
+}
+
+export interface ActividadesModel{
+	id:string;
+	tpgcreqid:string;
+	tpgcacid:string;
+}
+
+export interface CentroCModel{
+	id: string;
+	cc:string;
+	nombreCC: string;
+	responsableCC:string;
+	enabled : number;
 }

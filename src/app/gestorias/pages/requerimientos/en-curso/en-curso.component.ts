@@ -6,8 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-en-curso',
   templateUrl: './en-curso.component.html',
-  styles: [
-  ]
+  styleUrls: ['../../../style.scss']
 })
 export class EnCursoComponent implements OnInit {
 

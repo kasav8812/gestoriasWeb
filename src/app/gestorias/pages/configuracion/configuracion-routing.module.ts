@@ -14,6 +14,8 @@ import { TipoActividadComponent } from './tipo-actividad/tipo-actividad.componen
 import { CrearUsuarioComponent } from './crear-usuario/crear-usuario.component';
 
 import { RoleGuard } from 'src/app/guards/role.guard';
+import { ccComponent } from './cc/cc.component';
+import { exportaData } from './export-data/export-data.component';
 
 
 
@@ -53,6 +55,13 @@ const routes: Routes = [
       },{
         path: 'crearUsuario',
         component: CrearUsuarioComponent
+      },{
+        path: 'cc',
+        component: ccComponent
+      },
+      {
+        path: 'exportData',
+        component: exportaData
       },{
         path: '**',
         redirectTo: ''

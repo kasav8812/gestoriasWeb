@@ -1,32 +1,65 @@
 <div class="row m-4">
-    <div class="col-3 offset-9">
-        <button
-            class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp mt-3"
-            mat-button
-            (click)="create()"
-        >
-        + Nuevo Usuario
-        </button>
-    </div>
-    <div class="table-responsive m-4">
-        <table class="table caption-top table-striped table-hover">
-            <thead>
-              <tr>
-                <th class="text-gris">Nombre</th>
-                <th class="text-gris">Area</th>
-                <th class="text-gris">Rol</th>
-                <th class="text-gris">Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of usuarios; let i = index">
-                <td>{{item.name}}</td>
-                <td>{{item.areaID}}</td>
-                <td>{{item.role}}</td>
-                <td>{{item.email}}</td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
+  <div class="col-3 offset-9">
+    <button class="btn btn-tp radiu-tp ps-4 pe-4 radiu-tp mt-3" mat-button (click)="create()">
+      + Nuevo Usuario
+    </button>
   </div>
-  
+
+  <div class="container-fluid" style="margin-left: 30px;">
+    <form class="d-flex col-3" [formGroup]="buscarForm">
+      <div class="input-group col-md-4">
+        <input type="text" class="form-control " placeholder="Buscar" aria-label="Buscar" aria-describedby="buscar"
+          formControlName="buscar"  (input)="onInput($event)" />
+        <button class="btn btn-outline-secondary btn-tp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17.49" height="17.49" viewBox="0 0 17.49 17.49">
+            <path id="Path_6701" data-name="Path 6701"
+              d="M15.5,14h-.79l-.28-.27a6.51,6.51,0,1,0-.7.7l.27.28v.79l5,4.99L20.49,19Zm-6,0A4.5,4.5,0,1,1,14,9.5,4.494,4.494,0,0,1,9.5,14Z"
+              transform="translate(-3 -3)" fill="#ffffff" />
+          </svg>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="table-responsive m-4">
+    <table class="table caption-top table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-gris">Usuario</th>
+          <th class="text-gris">Nombre</th>
+          <th class="text-gris">Rol</th>
+          <th class="text-gris">Email</th>
+          <th class="text-gris">Editar</th>
+          <th class="text-gris">Habilitar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of usuarios; let i = index">
+          <td  *ngIf="item.role[0] !== 'ROLE_OPERACIONES' && item.role[0] !== 'ROLE_AUTORIZACION'">
+            <button  style="background-color: transparent; border: none; text-decoration: underline; color: blue;" (click)="loadEmployes(item)">{{item.username}}</button>
+          </td>
+          <td  *ngIf="item.role[0] === 'ROLE_OPERACIONES' || item.role[0] === 'ROLE_AUTORIZACION' " style="padding-left: 15px;">
+            {{item.username}}
+          </td>
+
+          <td>{{item.name}}</td>
+          <td>{{item.role}}</td>
+          <td>{{item.email}}</td>
+          <td>              
+            <button class="btn btn-outline-tp" (click)="editItem(item)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+              </svg>
+            </button>
+          </td>
+
+          <td>
+            <mat-slide-toggle [checked]="item.enabled" color="primary" (change)="enableUser(item)"></mat-slide-toggle>
+           </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
