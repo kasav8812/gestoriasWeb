@@ -22,6 +22,8 @@ import { kill } from 'process';
 
 
 
+
+
 @Component({
   selector: 'app-requerimiento',
   templateUrl: './requerimiento.component.html',
@@ -51,14 +53,14 @@ export class RequerimientoComponent implements OnInit {
 
   usuarios: UsuariosResponse[];
   mCheckRolStatus: Boolean = false;
-  mCatCC : CentroCModel[] = [];
+  mCatCC: CentroCModel[] = [];
 
 
   horario: string[] = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
 
 
-  rangoHorario : string[] = ["9:00-14:00", "14:00-16:00", "16:00-19:00"]; 
-  mComboPermiso : string[] = ["PERMISO", "NEGOCIACIóN"];
+  rangoHorario: string[] = ["9:00-14:00", "14:00-16:00", "16:00-19:00"];
+  mComboPermiso: string[] = ["PERMISO", "NEGOCIACIóN"];
 
   id: any = JSON.parse(localStorage.getItem('requerimiento'));
 
@@ -81,25 +83,28 @@ export class RequerimientoComponent implements OnInit {
 
 
   mReqActividad: string = "";
-  mReqCC:string = "";
-  mReqNombreCC:string = "";
-  mReqDescripcion:string = "";
+  mReqCC: string = "";
+  mReqNombreCC: string = "";
+  mReqDescripcion: string = "";
   mPerNeg: string = "";
 
-  mResponseFechaVigencia : FechaVigencia;
+  mResponseFechaVigencia: FechaVigencia;
   showButtonsRoleComercial: Boolean = false;
   showButtonsRoleOperaciones: Boolean = false;
   showButtonsRoleAutorizador: Boolean = false;
-  mHasFechas : Boolean = false;
+  mHasFechas: Boolean = false;
 
-  mFechaVigencia : FechaVigencia;
-  mFechasVigencia : FechaVigencia[];
+  mFechaVigencia: FechaVigencia;
+  mFechasVigencia: FechaVigencia[];
 
   isUserRequeriment: Boolean = false;
 
-  mUnidad : string;
-  mCantidad : number;
-  mNewDate : Date;
+  mUnidad: string;
+  mCantidad: number;
+  mNewDate: Date;
+
+  public xmlItems: any;
+
 
   comentariosForm: FormGroup = this.fb.group({
     idUser: ['', Validators.required],
@@ -115,11 +120,11 @@ export class RequerimientoComponent implements OnInit {
     descripcion: ['', Validators.required]
   })
 
-  fechaVigenciaForm : FormGroup = this.fb.group({
-    idReq:['', [Validators.required]],
+  fechaVigenciaForm: FormGroup = this.fb.group({
+    idReq: ['', [Validators.required]],
     vigencia: ['', [Validators.required]],
-    unidad:['', [Validators.required]],
-    fechaRequerimiento:['', [Validators.required]],
+    unidad: ['', [Validators.required]],
+    fechaRequerimiento: ['', [Validators.required]],
     fechaVencimeinto: ['', [Validators.required]]
   })
 
@@ -169,8 +174,8 @@ export class RequerimientoComponent implements OnInit {
     descrip: ['', Validators.required],
     nombreCc: ['', Validators.required],
     cc: ['', Validators.required],
-    perNeg: ['',Validators.required],
-    appt:['',Validators.required]
+    perNeg: ['', Validators.required],
+    appt: ['', Validators.required]
   })
 
   constructor(
@@ -215,7 +220,7 @@ export class RequerimientoComponent implements OnInit {
 
   ngOnInit(): void {
 
-   
+
     if (this.rol === "ROLE_CONFIGURACION") {
       this.router.navigateByUrl('/gestorias/configuracion');
     }
@@ -269,7 +274,7 @@ export class RequerimientoComponent implements OnInit {
             this.getMunicipioIni();
             console.log("Listdo fechas");
             this.getFechas(this.tmpReq.id);
-            
+
           },
           error => {
             console.log("Error")
@@ -384,8 +389,8 @@ export class RequerimientoComponent implements OnInit {
       this.permisoEditar = false;
       this.permisoEditarInfoBasica = false;
     }
-  
-   this.getActividades();
+
+    this.getActividades();
 
     this.configuracion.disparadorActualizar.subscribe(
       response => {
@@ -393,14 +398,14 @@ export class RequerimientoComponent implements OnInit {
         this.getFechas(this.tmpReq.id);
       })
 
-      this.creaService.getAllCCEnabled().subscribe(
-        response => {
-          this.mCatCC = response;
-        },
-        error => {
-        }
-      ) 
-  
+    this.creaService.getAllCCEnabled().subscribe(
+      response => {
+        this.mCatCC = response;
+      },
+      error => {
+      }
+    )
+
 
   }
 
@@ -422,25 +427,25 @@ export class RequerimientoComponent implements OnInit {
             console.log("Fail load Actividades por Req");
           }
         );
-    
+
       },
       error => {
       }
     )
   }
 
- 
-  getActividad(event) : string{
-    for (var i = 0; i < this.actividades.length; i++){
-      if(this.actividades[i].id == event){
+
+  getActividad(event): string {
+    for (var i = 0; i < this.actividades.length; i++) {
+      if (this.actividades[i].id == event) {
         this.mActividad = this.actividades[i].comentario;
-      }else{
-      
+      } else {
+
       }
     }
     return this.mActividad;
-   }
-  
+  }
+
 
   getMunicipioIni() {
     this.creaService.getUbicacionMunicipio(parseInt(this.tmpReq.ubicacion)).subscribe(
@@ -530,7 +535,7 @@ export class RequerimientoComponent implements OnInit {
       }
 
       case "ROLE_AUTORIZACION": {
-        this.updateReqAddon(); 
+        this.updateReqAddon();
         break;
       }
       default: {
@@ -1121,11 +1126,11 @@ export class RequerimientoComponent implements OnInit {
     this.message = '';
     for (let i = 0; i < this.selectedFiles.length; i++) {
       this.upload(i, this.selectedFiles[i]);
-    
+
     }
   }
 
-  refreshFiles(){
+  refreshFiles() {
     this.uploadFilesService.getFiles(this.id.id).subscribe(
       response => {
         this.mArchivos = response;
@@ -1219,6 +1224,29 @@ export class RequerimientoComponent implements OnInit {
     }
   }
 
+  detectExtensionFiles(mFile: ArchivosResponse) {
+   console.log(mFile.url);
+    switch (mFile.typeFile) {
+      case "image/png":
+        this.previewIMG(mFile);
+        break
+
+      case "text/xml":
+        this.previewXML(mFile);
+        break
+
+      case "image/jpeg":
+        this.previewIMG(mFile);
+        break
+
+      case "application/pdf":
+        this.previewPDF(mFile);
+        break
+
+      default: break
+    }
+  }
+
   previewPDF(mArchivos: ArchivosResponse) {
     const dialogRef = this.dialog.open(AlertComponent, {
       disableClose: true,
@@ -1235,6 +1263,16 @@ export class RequerimientoComponent implements OnInit {
       disableClose: true,
       data: {
         tipo: 15,
+        file: mArchivos
+      }
+    })
+  }
+
+  previewXML(mArchivos: ArchivosResponse) {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      disableClose: true,
+      data: {
+        tipo: 16,
         file: mArchivos
       }
     })
@@ -1317,24 +1355,24 @@ export class RequerimientoComponent implements OnInit {
     })
   }
 
-  loadFechaVigencia(){
+  loadFechaVigencia() {
     const dialogRef = this.dialog.open(AlertComponent, {
       disableClose: true,
       data: {
         tipo: 11,
         title: "",
-        req: {id:this.id.id}
+        req: { id: this.id.id }
       }
     })
   }
 
-  getFechas(idReq:any){
+  getFechas(idReq: any) {
     console.log("Listado de Fechas")
 
     this.creaService.getFechasVigencia(idReq).subscribe(
       response => {
         this.mFechasVigencia = response;
-        if(this.mFechasVigencia != null){
+        if (this.mFechasVigencia != null) {
           console.log("Listado de Fechas success")
           this.mHasFechas = true;
         }
@@ -1344,10 +1382,10 @@ export class RequerimientoComponent implements OnInit {
     )
   }
 
-  getDescription(mUnidad):string{
-    var mDescrip : string = "";
-    for(var i=0;i<this.unidad.length;i++){
-      if(this.unidad[i].id==mUnidad){
+  getDescription(mUnidad): string {
+    var mDescrip: string = "";
+    for (var i = 0; i < this.unidad.length; i++) {
+      if (this.unidad[i].id == mUnidad) {
         mDescrip = this.unidad[i].descripcion;
       }
     }
@@ -1357,7 +1395,7 @@ export class RequerimientoComponent implements OnInit {
 
   public onDate(event) {
     console.log(event.target.value);
-    this.calculateDate(this.mUnidad,this.mCantidad, event.target.value);
+    this.calculateDate(this.mUnidad, this.mCantidad, event.target.value);
   }
 
   calculateDate(mUnidad: string, mCantidad: number, mFirstDateSelected: Date) {
@@ -1365,24 +1403,24 @@ export class RequerimientoComponent implements OnInit {
     this.mNewDate = mFirstDateSelected;
     switch (mUnidad) {
       case "1":
-        this.mNewDate.setDate( this.mNewDate.getMilliseconds() + 1 );
+        this.mNewDate.setDate(this.mNewDate.getMilliseconds() + 1);
         break
 
       case "2":
-        this.mNewDate.setDate( this.mNewDate.getDay() + 7 );
+        this.mNewDate.setDate(this.mNewDate.getDay() + 7);
         break
 
       case "3":
-        this.mNewDate.setDate( this.mNewDate.getMonth() + mCantidad );
+        this.mNewDate.setDate(this.mNewDate.getMonth() + mCantidad);
         break
 
       case "4":
-        this.mNewDate.setDate( this.mNewDate.getFullYear() + mCantidad );
+        this.mNewDate.setDate(this.mNewDate.getFullYear() + mCantidad);
         break
     }
   }
 
-  deleteFechaVigencia(idReq:string){
+  deleteFechaVigencia(idReq: string) {
 
     this.creaService.deleteFechaVigencia(idReq).subscribe(
       response => {
@@ -1394,23 +1432,23 @@ export class RequerimientoComponent implements OnInit {
     )
     console.log(idReq);
   }
-  
-  addActividadesCheck(item:Catalogo){
-    var mTempActividades : Catalogo [] = [];
-    var isNewItem : Boolean = true;
+
+  addActividadesCheck(item: Catalogo) {
+    var mTempActividades: Catalogo[] = [];
+    var isNewItem: Boolean = true;
     console.log(item);
 
-    if(this.mArrayActividades.length <= 0){
+    if (this.mArrayActividades.length <= 0) {
       this.mArrayActividades.push(item);
-    }else{
-      for(var i=0;i<this.mArrayActividades.length;i++){
-        if(this.mArrayActividades[i].id == item.id){
+    } else {
+      for (var i = 0; i < this.mArrayActividades.length; i++) {
+        if (this.mArrayActividades[i].id == item.id) {
           isNewItem = false;
-        }else{
+        } else {
           mTempActividades.push(this.mArrayActividades[i])
         }
       }
-      if(isNewItem){
+      if (isNewItem) {
         mTempActividades.push(item);
       }
       this.mArrayActividades = mTempActividades;
@@ -1418,36 +1456,36 @@ export class RequerimientoComponent implements OnInit {
 
     console.log(this.mArrayActividades);
   }
-  
-  saveListActividades(idReq){
-    var mListActividades : any[] = []
 
-    for(var i=0; i<this.mArrayActividades.length; i++){
-        this.jsonCrear ={
-          tpgcreqid:idReq,
-          tpgcacid:this.mArrayActividades[i].id
-        }
+  saveListActividades(idReq) {
+    var mListActividades: any[] = []
 
-        mListActividades.push(this.jsonCrear);
+    for (var i = 0; i < this.mArrayActividades.length; i++) {
+      this.jsonCrear = {
+        tpgcreqid: idReq,
+        tpgcacid: this.mArrayActividades[i].id
+      }
+
+      mListActividades.push(this.jsonCrear);
     }
 
     console.log("Save Actividades");
     console.log(mListActividades);
     this.creaService.setActividades(mListActividades).subscribe(
-      response=>{
-       console.log("Succces Save Actviidades")
-      },error =>{
+      response => {
+        console.log("Succces Save Actviidades")
+      }, error => {
         console.log("Error Save Actviidades");
       }
     )
   }
 
-  detectSelectedCheck(){
+  detectSelectedCheck() {
     console.log("Actividades DETECT");
     console.log(this.mArrayActividadesWS);
-    for(var i=0; i<this.mArrayActividadesWS.length;i++){
-      for(var j=0;j<this.actividades.length;j++){
-        if(this.actividades[j].id == this.mArrayActividadesWS[i].id){
+    for (var i = 0; i < this.mArrayActividadesWS.length; i++) {
+      for (var j = 0; j < this.actividades.length; j++) {
+        if (this.actividades[j].id == this.mArrayActividadesWS[i].id) {
           this.actividades[j].selected = true;
         }
       }
@@ -1455,5 +1493,9 @@ export class RequerimientoComponent implements OnInit {
     console.log("Actividades DETECT");
     console.log(this.actividades);
   }
+
+
+  
+
 
 }

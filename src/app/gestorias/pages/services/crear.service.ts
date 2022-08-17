@@ -526,5 +526,17 @@ export class CrearService {
     });
     return this.http.post<CentroCModel>(url,formdata,{headers});
   }
+
+
+  getListRequerimientoByUser(id: any): Observable<RequerimientoGeneric[]>{
+    const url = `${this.baseurlreq}/requerimiento/add/getListRequerimientoByUser/`+id
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
+    });
+    return this.http.get<RequerimientoGeneric[]>(url,{headers});
+  }
+
+
 }
 

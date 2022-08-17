@@ -6,7 +6,6 @@ import { ConfiguracionService } from '../../services/configuracion.service';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
-import { timingSafeEqual } from 'crypto';
 import { CrearService } from '../../services/crear.service';
 
 @Component({

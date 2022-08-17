@@ -9,6 +9,12 @@ import { CrearService } from '../pages/services/crear.service';
 import { Router } from '@angular/router';
 import { plantillaCorreo } from '../pages/services/constantes.service';
 import {MailService} from '../pages/services/mail.service'
+import { parseString } from 'xml2js';
+import * as XLSX from 'xlsx'; 
+import * as FileSaver from 'file-saver';
+
+import xml2js from 'xml2js';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-alert',
@@ -56,6 +62,13 @@ export class AlertComponent {
 
   mListIdEstados :Catalogo[] = [];
 
+  mListRequerimientosByUser : RequerimientoGeneric[];
+
+  fileName= 'Gestorias.xlsx';  
+
+  public xmlItems: any;
+
+
   constructor(
     private router: Router,
     private configuracion: ConfiguracionService,
@@ -63,6 +76,7 @@ export class AlertComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<AlertComponent>, private creaService: CrearService,
     private serviceMail: MailService,
+    private http: HttpClient
   ) {
     this.token = JSON.parse(sessionStorage.getItem('token'));
     this.datosUser = JSON.parse(atob(this.token.split('.')[1]));
@@ -167,12 +181,43 @@ export class AlertComponent {
     )
 
     try {
+      this.getReqByUser();
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
       this.getUserByAdmin();
     } catch (e) {
       console.log(e);
     }
 
+    this.creaService.getListRequerimientoByUser("").subscribe(
+      response => {
+        if(this.rol == "ROLE_OPERACIONES"){
+          this.mListRequerimientosByUser = response;
+        }
+      },
+      error => {
+
+      }
+    )
    
+    this.loadXML();
+  }
+  
+  getReqByUser(){
+    console.log(this.data.req.id);
+    this.creaService.getListRequerimientoByUser(this.data.req.id).subscribe(
+      response => {
+        this.mListRequerimientosByUser = response;
+        console.log(this.mListRequerimientosByUser);
+        console.log("Success Load Employed Owned")
+      },
+      error => {
+        console.log("Error Load Employed Owned")
+      }
+    )
   }
 
   getRequerimientoBase(){
@@ -921,7 +966,6 @@ export class AlertComponent {
     console.log(this.mListIdEstados);
   }
 
-  
 
   saveNewEstados(){
     this.creaService.setEstadosRegion(this.mListIdEstados).subscribe(
@@ -944,5 +988,72 @@ export class AlertComponent {
     )
   }
 
+  exportExcel() {
+    if (this.mListRequerimientosByUser.length > 0) {
+      import("xlsx").then(xlsx => {
+        const worksheet = xlsx.utils.json_to_sheet(this.mListRequerimientosByUser);
+        const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+        const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, "Gestorias");
+      });
+    }
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+
+  loadXML() {
+    /*Read Data*/
+    this.http.get(this.data.file.url,
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'text/xml')
+          .append('Access-Control-Allow-Methods', 'GET')
+          .append('Access-Control-Allow-Origin', '*')
+          .append('Access-Control-Allow-Headers', "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method"),
+        responseType: 'text'
+      })
+      .subscribe((data) => {
+        this.parseXML(data)
+          .then((data) => {
+            this.xmlItems = data;
+            console.log("MY ITEMS ON XML")
+            console.log(this.xmlItems);
+          });
+      });
+    /*Read Data*/
+  }
+  //store xml data into array variable
+  parseXML(data) {
+    return new Promise(resolve => {
+      var k: string | number,
+        arr = [],
+        parser = new xml2js.Parser(
+          {
+            trim: true,
+            explicitArray: true
+          });
+      parser.parseString(data, function (err, result) {
+        var obj = result.Gestorias;
+        for (k in obj.cuenta) {
+          var item = obj.cuenta[k];
+          arr.push({
+            folio: item.folio[0],
+            monto: item.monto[0],
+            nombre: item.nombre[0],
+
+          });
+        }
+        resolve(arr);
+      });
+    });
+  }
 
 }

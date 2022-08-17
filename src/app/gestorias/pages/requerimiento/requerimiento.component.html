@@ -337,18 +337,20 @@
               </mat-icon>
               <!--<input type="text" class="form-control" formControlName="cc" style="width: 90%;"
                 *ngIf="permisoEditarInfoBasica" value="{{requerimientoForm.value.cc}}">-->
-               <select  *ngIf="permisoEditarInfoBasica" name="" formControlName="cc" style="margin-top: 17px; width: 90%;" >
-                  <option selected value=""></option>
-                  <option value="{{item.cc}}" *ngFor="let item of mCatCC">{{item.cc}}</option>
-                </select>
+              <select *ngIf="permisoEditarInfoBasica" name="" formControlName="cc"
+                style="margin-top: 17px; width: 90%;">
+                <option selected value=""></option>
+                <option value="{{item.cc}}" *ngFor="let item of mCatCC">{{item.cc}}</option>
+              </select>
 
               <!--<input type="text" class="form-control" formControlName="cc" style="width: 90%;"
                 *ngIf="!permisoEditarInfoBasica" value="{{requerimientoForm.value.cc}}" disabled="true">-->
 
-                <select  *ngIf="!permisoEditarInfoBasica" name="" formControlName="cc" style="margin-top: 17px; width: 90%;"  disabled="true">
-                  <option selected value=""></option>
-                  <option value="{{item.cc}}" *ngFor="let item of mCatCC">{{item.cc}}</option>
-                </select>
+              <select *ngIf="!permisoEditarInfoBasica" name="" formControlName="cc"
+                style="margin-top: 17px; width: 90%;" disabled="true">
+                <option selected value=""></option>
+                <option value="{{item.cc}}" *ngFor="let item of mCatCC">{{item.cc}}</option>
+              </select>
             </div>
 
             <div class="mb-3 col-3 form-control-sm">
@@ -356,23 +358,25 @@
               <mat-icon matTooltip="Nombre del Centro de Costos">
                 help_outline
               </mat-icon>
-             <!-- <input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;"
+              <!-- <input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;"
                 *ngIf="permisoEditarInfoBasica" value="{{requerimientoForm.value.nombreCc}}">-->
-               
-                <select  *ngIf="permisoEditarInfoBasica" name="" formControlName="nombreCc" style="margin-top: 17px; width: 90%;" >
-                  <option selected value=""></option>
-                  <option value="{{item.nombreCC}}" *ngFor="let item of mCatCC">{{item.nombreCC}}</option>
-                </select> 
-           
-           
-               <!--<input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;"
+
+              <select *ngIf="permisoEditarInfoBasica" name="" formControlName="nombreCc"
+                style="margin-top: 17px; width: 90%;">
+                <option selected value=""></option>
+                <option value="{{item.nombreCC}}" *ngFor="let item of mCatCC">{{item.nombreCC}}</option>
+              </select>
+
+
+              <!--<input type="text" class="form-control" formControlName="nombreCc" style="width: 90%;"
                 *ngIf="!permisoEditarInfoBasica" value="{{requerimientoForm.value.nombreCc}}" disabled="true">-->
 
 
-                <select  *ngIf="!permisoEditarInfoBasica" name="" formControlName="nombreCc" style="margin-top: 17px; width: 90%;" disabled="true">
-                  <option selected value=""></option>
-                  <option value="{{item.nombreCC}}" *ngFor="let item of mCatCC">{{item.nombreCC}}</option>
-                </select> 
+              <select *ngIf="!permisoEditarInfoBasica" name="" formControlName="nombreCc"
+                style="margin-top: 17px; width: 90%;" disabled="true">
+                <option selected value=""></option>
+                <option value="{{item.nombreCC}}" *ngFor="let item of mCatCC">{{item.nombreCC}}</option>
+              </select>
             </div>
 
 
@@ -381,8 +385,8 @@
               <mat-icon matTooltip="Ingresar si es Permiso o Negociación">
                 help_outline
               </mat-icon>
-             <!-- <input type="text" class="form-control" formControlName="perNeg" value="{{requerimientoForm.value.perNeg}}">-->
-              <select name="" formControlName="perNeg" style="margin-top: 17px; width: 90%;" >
+              <!-- <input type="text" class="form-control" formControlName="perNeg" value="{{requerimientoForm.value.perNeg}}">-->
+              <select name="" formControlName="perNeg" style="margin-top: 17px; width: 90%;">
                 <option selected value=""></option>
                 <option value="{{item}}" *ngFor="let item of mComboPermiso">{{item}}</option>
               </select>
@@ -392,12 +396,12 @@
               <mat-icon matTooltip="Ingresar si es Permiso o Negociación">
                 help_outline
               </mat-icon>
-             <!--- <input type="text" class="form-control" value="{{requerimientoForm.value.perNeg}}" disabled="true">-->
+              <!--- <input type="text" class="form-control" value="{{requerimientoForm.value.perNeg}}" disabled="true">-->
 
-             <select name="" formControlName="perNeg" style="margin-top: 17px; width: 90%;" disabled="true" >
-              <option selected value=""></option>
-              <option value="{{item}}" *ngFor="let item of mComboPermiso">{{item}}</option>
-            </select>
+              <select name="" formControlName="perNeg" style="margin-top: 17px; width: 90%;" disabled="true">
+                <option selected value=""></option>
+                <option value="{{item}}" *ngFor="let item of mComboPermiso">{{item}}</option>
+              </select>
             </div>
 
 
@@ -408,9 +412,9 @@
               </mat-icon>
               <div class="grid3" style="margin-top: 0px;">
                 <select id="appt" name="appt" formControlName="appt" style="margin-top: 17px; width: 90%;">
-                <option disabled selected value=""></option>
-                <option value="{{item}}" *ngFor="let item of rangoHorario">{{item}}</option>
-              </select>
+                  <option disabled selected value=""></option>
+                  <option value="{{item}}" *ngFor="let item of rangoHorario">{{item}}</option>
+                </select>
                 <!--<input type="time" id="appt" name="appt"  value="{{requerimientoForm.value.horario}}" formControlName="horario" required>
                 <select id="inputState" class="form-select grid-col-6" formControlName="horario">
                       <option selected>Seleccionar</option>
@@ -428,11 +432,11 @@
                 help_outline
               </mat-icon>
               <div class="grid3">
-                <select id="appt" name="appt" formControlName="appt" style="margin-top: 17px; width: 90%;" 
-                disabled="true">
-                <option disabled selected value=""></option>
-                <option value="{{item}}" *ngFor="let item of rangoHorario">{{item}}</option>
-              </select>
+                <select id="appt" name="appt" formControlName="appt" style="margin-top: 17px; width: 90%;"
+                  disabled="true">
+                  <option disabled selected value=""></option>
+                  <option value="{{item}}" *ngFor="let item of rangoHorario">{{item}}</option>
+                </select>
                 <!-- <input type="time" id="appt" class="form-select grid-col-3" name="appt"
                   value="{{requerimientoForm.value.horario}}" disabled>
                 <select id="inputState" class="form-select grid-col-6" value="{{requerimientoForm.value.horario}}" disabled="true">
@@ -658,7 +662,7 @@
 
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
               <label for="exampleInputEmail1" class="form-label">Folio egresos</label>
-              <mat-icon matTooltip="Folio emitido" >
+              <mat-icon matTooltip="Folio emitido">
                 help_outline
               </mat-icon>
               <input type="text" class="form-control" formControlName="folioEgreso">
@@ -780,7 +784,7 @@
                 </select>
               </div>
             </div>
-           
+
             <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
               <label for="exampleInputEmail1" class="form-label">Forma de pago</label>
               <mat-icon matTooltip="Forma de pago que se emitio">
@@ -802,7 +806,7 @@
 
 
 
-           <!-- <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
+            <!-- <div class="mb-3 col-3 form-control-sm" *ngIf="permisoEditar">
               <label for="exampleInputEmail1" class="form-label" style="color: #7A4CF6;">Cantidad de permisos</label>
               <mat-icon matTooltip="texto">
                 help_outline
@@ -816,8 +820,8 @@
               </mat-icon>
               <input type="text" class="form-control" value="{{requerimientoForm.value.catidad}}" disabled="true">
             </div>-->
-    
-            
+
+
           </div>
 
 
@@ -1011,43 +1015,57 @@
           <div class="mt-5 row">
             <div id="body" class="style-scope ytd-comment-renderer"
               style="position: relative;display: flex;flex-direction: row; margin-top: -50px;">
-              
-                    <div #widgetsContent class="custom-slider-main" *ngFor="let file of mArchivos; let i = index;">
-                      <!--<button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
+
+              <div #widgetsContent class="custom-slider-main" *ngFor="let file of mArchivos; let i = index;">
+                <!--<button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
                       <button style="background-color: transparent; border: none; text-decoration: underline;"
                         (click)="previewPDF(file)"> {{file.name}}</button>-->
-                       
 
-                        <div class="card" style="width: 200px; height: 200px; margin-right: 5px;">
-                          
-                          <div class="card-body"  *ngIf="file.typeFile==='application/pdf'">
-                            <button style="width: 100%;height: 100%; background-color:transparent; border: transparent; float: inline-start;"
-                          (click)="previewPDF(file)">
-                            <label style="align-content: center; font-size: 9px;" class="card-title"> {{file.name}}</label>
 
-                            <pdf-viewer [src]="file.url" [rotation]="0"
-                             [fit-to-page]="true" [zoom]="1" [zoom-scale]="'page-width'"
-                            [stick-to-page]="true" [render-text]="true" [external-link-target]="'blank'" [autoresize]="true"
-                            [show-borders]="true" style="width: 100%;height: 100%; object-fit:contain" ></pdf-viewer>
-                          </button>
+                <div class="card" style="width: 200px; height: 200px; margin-right: 5px;">
 
-                          </div>
+                  <div class="card-body" *ngIf="file.typeFile==='application/pdf'">
+                    <button
+                      style="width: 100%;height: 100%; background-color:transparent; border: transparent; float: inline-start;"
+                      (click)="previewPDF(file)">
+                      <label style="align-content: center; font-size: 9px;" class="card-title"> {{file.name}}</label>
 
-                          <div class="card-body">
-                            <button style="width: 100%;height: 100%; background-color:transparent; border: transparent; float: inline-start;"
-                          (click)="previewIMG(file)">
-                            <label style="align-content: center; font-size: 9px;" class="card-title"> {{file.name}}</label>
-                            <img src="{{file.url}}"  style="width: 100%;height: 100%; object-fit:contain">
-                         </button>
-                          </div>
+                      <pdf-viewer [src]="file.url" [rotation]="0" [fit-to-page]="true" [zoom]="1"
+                        [zoom-scale]="'page-width'" [stick-to-page]="true" [render-text]="true"
+                        [external-link-target]="'blank'" [autoresize]="true" [show-borders]="true"
+                        style="width: 100%;height: 100%; object-fit:contain"></pdf-viewer>
+                    </button>
 
-                        </div>
+                  </div>
 
-                        
-                    </div>
-                   
-                  
+
+                  <div class="card-body" *ngIf="file.typeFile==='text/xml'">
+                    <button
+                      style="width: 100%;height: 100%; background-color:transparent; border: transparent; float: inline-start;"
+                      (click)="previewXML(file)">
+                      <label style="align-content: center; font-size: 9px;" class="card-title"> {{file.name}}</label>
+                      <img src="{{file.url}}" style="width: 100%;height: 100%; object-fit:contain">
+                    </button>
+                  </div>
+
+                  <div class="card-body" *ngIf="file.typeFile==='image/png' || file.typeFile==='image/jpeg'">
+                    <button
+                      style="width: 100%;height: 100%; background-color:transparent; border: transparent; float: inline-start;"
+                      (click)="previewIMG(file)">
+                      <label style="align-content: center; font-size: 9px;" class="card-title"> {{file.name}}</label>
+                      <img src="{{file.url}}" style="width: 100%;height: 100%; object-fit:contain">
+                    </button>
+                  </div>
+
                  
+
+                </div>
+
+
+              </div>
+
+
+
             </div>
           </div>
         </blockquote>
@@ -1089,12 +1107,12 @@
                         <td class="form-label">
                           <button class="btnDelt" (click)="confirmDeleteFiles(i)"></button>
                           <button style="background-color: transparent; border: none; text-decoration: underline;"
-                            (click)="previewPDF(file)"> {{file.name}}</button>
+                            (click)="detectExtensionFiles(file)"> {{file.name}}</button>
                         </td>
                       </small>
                     </small>
                   </small>
-                <!--<tr *ngFor="let file of selectedFiles; let i = index;" class="form-label">
+                  <!--<tr *ngFor="let file of selectedFiles; let i = index;" class="form-label">
                   <small>
                     <small>
                       <small>

@@ -568,3 +568,91 @@
   </div>
   
 </div>
+
+
+<div class="modal-2 radiu-tp" *ngIf="data.tipo === 16" style="height: 350px;">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">Formato XML</h2>
+
+
+    </div>
+    <div class="mt-5 row">
+      <div class="mb-3 col-4 form-control-sm">
+        <label  class="form-label"><strong>Foliio</strong></label>
+
+        <p>
+        <input type="text" class="form-control"
+       style="margin-top: 10.5px;" disabled value="{{xmlItems[0].folio}}"/>
+        </p>
+      </div>
+
+      <div class="mb-3 col-4 form-control-sm">
+        <label  class="form-label"><strong>Monto</strong></label>
+
+        <p>
+        <input type="text" class="form-control" 
+         style="margin-top: 10.5px;" disabled value="{{xmlItems[0].monto}}"/>
+        </p>
+      </div>
+
+      <div class="mb-3 col-4 form-control-sm">
+        <label class="form-label"><strong>Nombre</strong></label>
+
+        <p>
+        <input type="text" class="form-control"
+         style="margin-top: 10.5px;" disabled value="{{xmlItems[0].nombre}}"/>
+        </p>
+      </div>
+
+      
+    </div>
+    <div class="text-center mt-5">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button"
+        style="margin-right: 15px;" (click)="cerrarReq()">
+        <span class="mat-button-wrapper">Continuar</span>
+      </button>
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button">
+        <span class="mat-button-wrapper">Cerrar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-2 radiu-tp" *ngIf="data.tipo === 17" style="height: 350px;width: 550px;">
+  <div class="text-center mt-4">
+    <div class="modal-header">
+      <h2 class="text-gris mb-3" style="width: 100%;">Exportar Requerimientos</h2>
+
+    </div>
+    <div class="mt-5 row">
+      <table class="table table-striped table-hover">
+        <thead>
+          <th>Seleccionar</th>
+          <th>Folio</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of mListRequerimientosByUser">
+            <td><input type="checkbox"></td>
+            <td><strong>{{item.idRequerimiento}}</strong></td>
+      
+          </tr>
+
+        </tbody>
+      </table>
+      
+    </div>
+
+
+    <div class="text-center mt-5" style="position:relative;">
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-4" type="button"
+        style="margin-right: 15px;" (click)="exportExcel()">
+        <span class="mat-button-wrapper">Exportar</span>
+      </button>
+      <button mat-button="" mat-dialog-close="" class="btn-tp radiu-tp btn-alert mt-1" type="button">
+        <span class="mat-button-wrapper">Cerrar</span>
+      </button>
+    </div>
+  </div>
+</div>
+

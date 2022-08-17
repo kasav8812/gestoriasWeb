@@ -342,12 +342,13 @@ export class CrearComponent implements OnInit {
       medida: this.medidaAddon,
       formaPago: "",
       cobertura: "1",
-      actividad:"41",
+      actividad:this.mAct,
       descripcion: this.mDescrip,
       foliosap: "",
       folioseg: "",
       idUserAdmon: "",
-      idUserAut: ""
+      idUserAut: "",
+      mIdUser : this.datosUser.sub
     }
 
     console.log("uiipp");

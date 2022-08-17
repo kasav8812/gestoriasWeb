@@ -3,33 +3,40 @@
 <div class="card-body">
 
   <style>
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      border-bottom: 1px dotted black;
-    }
-    
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 220px;
-      background-color: black;
-      color: black;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
-    
-      /* Position the tooltip */
-      position: absolute;
-      z-index: 1;
-    }
-    
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-    }
+   .tooltip-container {
+    text-align: center;
+    z-index: 100;
+    position: fixed;
+    padding: 6px 12px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    line-height: initial;
+    color: white;
+    width: auto;
+    background: #111111ee;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translate(-50%, -30%);
+    animation: tooltip-slide 0.18s ease-out 0.5s;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+}
+
+@keyframes tooltip-slide {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -30%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
     </style>
   <table class="table table-striped" >
     <thead>
       <tr>
+        <th class="text-gris">Seguimiento</th>
         <th class="text-gris">Folio</th>
         <th class="text-gris">Tipo de permiso</th>
         <th class="text-gris">Estado</th>
@@ -40,11 +47,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of requerimientos;">
-        
-        
-        <th >
+        <th> 
+              <svg id="Component_1_2" xmlns="http://www.w3.org/2000/svg" width="18.485" height="12.461" viewBox="0 0 18.485 12.461">
+                  <path id="Icon_ionic-md-eye" data-name="Icon ionic-md-eye" d="M11.493,7.383a9.939,9.939,0,0,0-9.243,6.23,9.971,9.971,0,0,0,18.485,0A9.939,9.939,0,0,0,11.493,7.383Zm0,10.386a4.155,4.155,0,1,1,4.2-4.155A4.19,4.19,0,0,1,11.493,17.768Zm0-6.647a2.492,2.492,0,1,0,2.521,2.492A2.515,2.515,0,0,0,11.493,11.121Z" transform="translate(-2.25 -7.383)" fill="#9b9b9b"/>
+              </svg>
+        </th>
+        <th > 
             <a [routerLink]="['/gestorias/requerimiento']" (click)="editRequrimineto(item)">{{item.id}}</a>
-
           </th>
         <th>{{item.permiso}}</th>
         <th>{{item.ubicacion}} </th>

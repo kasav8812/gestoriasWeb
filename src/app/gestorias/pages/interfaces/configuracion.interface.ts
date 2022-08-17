@@ -42,7 +42,8 @@ export interface RequerimientoGeneric{
 	actividad: string;
 	descripcion: string;
 	idUserAdmon:string;
-	idUserAut:string ;
+	idUserAut:string;
+	mIdUser:string;
 }
 
 export interface ActividadesModel{
